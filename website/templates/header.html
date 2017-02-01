@@ -13,6 +13,7 @@
   {% url 'find_single_knockdown_url' as find_single_knockdown_url %}
   {% url 'find_double_knockdown_url' as find_double_knockdown_url %}
   {% url 'find_secondary_scores_url' as find_secondary_scores_url %}
+  {% url 'score_experiment_wells_url' as score_experiment_wells_url %}
 
 
   <a href="{{ worms_url }}"
@@ -70,4 +71,12 @@
       {% endifequal %}>
     Secondary Scores
   </a>
+
+  <a href="{{ score_experiment_wells_url }}"
+      {% ifequal request.path score_experiment_wells_url %}
+      class="active"
+      {% endifequal %}>
+    Score Secondary
+  </a>
+
 </div>
