@@ -295,7 +295,8 @@ class FilterExperimentWellsForm(_FilterExperimentsBaseForm):
 
         return experiments
 
-
+# This inherits the plate__pk, plate__date, plate__temperature,
+# plate__screen_stage, and worm strain from the base form.
 class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
     """Form for filtering experiment wells to score."""
 
@@ -328,10 +329,13 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
 
     randomize_order = forms.BooleanField(required=False, initial=True)
 
+    score_only_4_reps = forms.BooleanField(
+    required=False, initial=True, label='Score only 4 replicates')
+
     field_order = [
         'score_form_key', 'scoring_list', 'images_per_page',
         'unscored_by_user',
-        'randomize_order', 'exclude_l4440', 'exclude_no_clone', 'is_junk',
+        'randomize_order', 'score_only_4_reps', 'exclude_l4440', 'exclude_no_clone', 'is_junk',
         'plate__screen_stage', 'plate__date', 'screen_type',
         'plate__temperature', 'worm_strain',
         'pk', 'plate__pk',
@@ -361,6 +365,7 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
         unscored_by_user = cleaned_data.pop('unscored_by_user')
         screen_type = cleaned_data.pop('screen_type')
         randomize_order = cleaned_data.pop('randomize_order')
+        score_only_4_reps = cleaned_data.pop('score_only_4_reps')
 
         _remove_empties_and_none(cleaned_data)
         experiments = Experiment.objects.filter(**cleaned_data)
@@ -379,6 +384,20 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
                 .filter(experiment__in=experiments, scorer=self.user)
                 .values_list('experiment_id', flat=True))
             experiments = experiments.exclude(id__in=score_ids)
+
+        '''
+        If this button is selected, exclude those plates that have four or more scored plates.
+        The way I intend on doing it will be to scan all of the experiments and count how many
+        of them have a manual score of <4 and pass those through.
+
+        The problem with this is that it will does not consider if > 4 replicates have been marked as junk
+        for that session and will need to be executed again.
+        '''
+        if score_only_4_reps:
+            pass
+                # experiments.filter(pk=i).exclude(worm_strain_id="N2").values_list('pk', flat=True).order_by('?')[:4]
+            # print experiments.filter(library_stock_id='b1-E1_A01').exclude(worm_strain_id="N2").values_list('pk', flat=True).order_by('?')[:4]
+            # print "Only scoring four"
 
         # Special case for Malcolm to score subset defined in a file
         if filename:
@@ -400,7 +419,7 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
 
         # Must be done last, since it post-processes the query
         if screen_type:
-            experiments = _limit_to_screen_type(experiments, screen_type)
+            experiments = _limit_to_screen_type(experiments, screen_type, score_only_4_reps)
 
         return {
             'experiments': experiments,
@@ -422,7 +441,7 @@ def _remove_empties_and_none(d):
             del d[k]
 
 
-def _limit_to_screen_type(experiments, screen_type):
+def _limit_to_screen_type(experiments, screen_type, score_only_4_reps):
     '''
     Post-process experiments QuerySet such that each experiment was done at its
     worm's SUP or ENH temperature. Since N2 does not have a SUP or ENH

@@ -362,6 +362,15 @@ class Experiment(models.Model):
         self.save()
 
     @classmethod
+    def get_experiment_replicate_plates(cls, filters):
+        """
+        Gets the plates that this specific experiment is replicated across
+        """
+        return (cls.objects.filter(**filters).exclude(worm_strain_id="N2")
+                .order_by('?')
+                .values_list('pk', flat=True)[:4])
+
+    @classmethod
     def get_distinct_dates(cls, filters):
         """Get list of dates of the Experiments that match filters."""
         return (cls.objects.filter(**filters)

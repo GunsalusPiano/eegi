@@ -247,6 +247,7 @@ def score_experiment_wells(request):
 
         # Check if all POSTs are valid
         for experiment in Experiment.objects.filter(pk__in=pks):
+            # gets the form form either enhancer or Suppressor
             f = get_score_form(request.GET.get('score_form_key'))
             experiment.score_form = f(request.POST, user=request.user,
                                       prefix=experiment.pk)
