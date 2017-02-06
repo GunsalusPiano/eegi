@@ -4,6 +4,7 @@ from experiments.forms import FilterExperimentWellsToScoreForm
 from experiments.models import Experiment, ExperimentPlate, ManualScoreCode, ManualScore
 from worms.tests.base import WormTestCase
 from worms.models import WormStrain
+from library.models import LibraryPlate, LibraryStock
 
 # Create your tests here.
 
@@ -24,6 +25,39 @@ class UserTestCase(TestCase):
 
     def test_user(self):
         pass
+
+
+
+class LibraryPlateTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        LibraryPlate.objects.create(
+            id="library_plate_1",
+            number_of_wells=96,
+            screen_stage=2
+        )
+
+        cls.library_plate = LibraryPlate.objects.all()
+
+    def test_library_plate(self):
+        pass
+
+class LibraryStockTestCase(LibraryPlateTestCase):
+    @classmethod
+    def setUpTestData(cls):
+        super(LibraryStockTestCase,cls).setUpTestData()
+
+        LibraryStock.objects.create(
+            id="library_stock_1",
+            plate=cls.library_plate.get(id="library_plate_1"),
+            well="A01",
+        )
+
+        cls.library_stock = LibraryStock.objects.all()
+
+    def test_library_stock(self):
+        pass
+
 #####################
 # Experiment Plates #
 #####################
@@ -45,27 +79,34 @@ class ExperimentPlateTestCase(TestCase):
 # Experiment wells #
 ####################
 
-class ExperimentTestCase(ExperimentPlateTestCase):
+class ExperimentTestCase(ExperimentPlateTestCase, WormTestCase, LibraryStockTestCase):
     # Setting up the actual experiments, making 8 replicates
     # across the 8 mock plates.
     @classmethod
     def setUpTestData(cls):
         # Need to call this in order to inherit parent database
         # There is a teardown command issued at the end of it.
+        super(ExperimentTestCase,cls).setUpTestData()
 
-        ExperimentPlateTestCase.setUpTestData()
+        # initializing the worm db
         WormTestCase.setUpTestData()
+
+        LibraryStockTestCase.setUpTestData()
 
         # n2, dnc1, glp1, emb8 = super(ExperimentTestCase,cls).get_worms()
         # print n2
-        # for i in range(1,9):
-        #
-        #     Experiment.objects.create(
-        #         id=i, plate=Experiment.objects.filter(pk=i), well="A01",
-        #         worm_strain=emb8, library_stock="test_stock"
-        #     )
-        # cls.experiments = Experiment.object.all()
+        for i in range(1,9):
 
+            Experiment.objects.create(
+                id=i, plate=cls.plates.get(pk=i), well="A01",
+                worm_strain=WormTestCase.worms.get(id='MJ69'),
+                library_stock=LibraryStockTestCase.library_stock.get(id="library_stock_1")
+            )
+        cls.experiments = Experiment.objects.all()
+        # print cls.experiments
+
+    def test_experiment(self):
+        pass
     #
     # def test_worm_strain(self):
     #     print self.get_worms()
@@ -76,17 +117,22 @@ class ExperimentTestCase(ExperimentPlateTestCase):
     # def test_get_experiments(self):
     #     return self.experiments
 
-"""
+
 ######################
 # Manual Score Codes #
 ######################
 class ManualScoreCodeTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        ManualScoreCode.object.create(
+        ManualScoreCode.objects.create(
             id=1,
             description="unscored"
         )
+
+        cls.manual_score_codes = ManualScoreCode.objects.all()
+
+    def test_manual_score_code(self):
+        pass
 
 #################
 # Manual Scores #
@@ -94,21 +140,26 @@ class ManualScoreCodeTestCase(TestCase):
 class ManualScoreTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
-        experiments = cls.get_experiments()
-        for e in experiments:
+        ExperimentTestCase.setUpTestData()
+        ManualScoreCodeTestCase.setUpTestData()
+        UserTestCase.setUpTestData()
+
+        for e in ExperimentTestCase.experiments:
             ManualScore.objects.create(
                 experiment=e,
-                score_code=ManualScoreCodeTestCase.objects.filter(descritpion="unscored"),
-                scorer=User.objects.filter(username="Test")
+                score_code=ManualScoreCodeTestCase.manual_score_codes.get(description="unscored"),
+                scorer=User.objects.get(username="Test")
             )
-    #
-    # def print_manual_scores(self):
-    #
+
+        cls.manual_scores = ManualScore.objects.all()
+
+    def test_manual_score(self):
+        pass
 
 
-class TestForm(TestCase):
-
-    def testform_data(self):
+class FilterExperimentWellsToScoreFormTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
 
         form_data={
             # LEVELS is for enhancer, since it's scored with LEVELS
@@ -122,7 +173,10 @@ class TestForm(TestCase):
             'images_per_page': 10
         }
 
-        form = FilterExperimentWellsToScoreForm(form_data)
-        self.assertTrue(form.is_valid())
-        query = form.process()
-"""
+        cls.form = FilterExperimentWellsToScoreForm(form_data)
+
+        # cls.assertTrue(form.is_valid())
+        # query = form.process()
+
+    def test_filter_experiment_wells_to_score_form(self):
+        self.assertTrue(self.form.is_valid())
