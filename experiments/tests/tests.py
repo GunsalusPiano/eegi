@@ -38,16 +38,6 @@ class ExperimentTestCase(ExperimentPlateTestCase):
                 worm_strain=emb8, library_stock="test_stock"
             )
 
-    # def get_experiments(self):
-    #     exps = []
-    #     for i in range(1,9):
-    #         print i
-
-# class ExperimentModelTestCase(ExperimentTestCase):
-#     # def test_get_row(self):
-#     def test_get_experiments(self):
-#         self.get_experiments()
-
 
 class TestForm(TestCase):
 
@@ -66,6 +56,5 @@ class TestForm(TestCase):
         }
 
         form = FilterExperimentWellsToScoreForm(form_data)
-        print form
         self.assertTrue(form.is_valid())
-        return form
+        query = form.process()

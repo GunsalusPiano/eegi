@@ -239,6 +239,10 @@ def score_experiment_wells(request):
     redo_post = False
 
     # If there was a previous submit
+    # post is submitting the database
+    # This is passing through all the same get paramters (the filtering params)
+    # keeping him on the same page
+    # GET and POST both happen every time
     if request.POST:
         exp = '^[0-9]+_[A-H][0-1][0-9]-.*_scores?$'
         pattern = re.compile(exp)
@@ -258,6 +262,8 @@ def score_experiment_wells(request):
                 redo_post = True
 
         # If all POSTs valid, process and redirect
+        # this saves scores and brings back to the same page and
+        # resets the POST data so that there's not a double submit
         if not redo_post:
             for experiment in post_experiments:
                 # This actually submits the scores to the database
@@ -267,6 +273,8 @@ def score_experiment_wells(request):
             return HttpResponseRedirect(url)
 
     # Bind filter form with GET params
+    # If there's stuff to limit on
+    # .GET parameters is taken from the input form
     if request.GET:
         filter_form = FilterExperimentWellsToScoreForm(
             request.GET, user=request.user)

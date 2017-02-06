@@ -345,6 +345,7 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
         self.user = kwargs.pop('user', None)
         super(FilterExperimentWellsToScoreForm, self).__init__(*args, **kwargs)
 
+    # this gets called automatically by the is_valid
     def clean(self):
         cleaned_data = super(FilterExperimentWellsToScoreForm, self).clean()
         if (cleaned_data.get('randomize_order') and
@@ -354,9 +355,12 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
                 'scoring images you have already scored.')
         return cleaned_data
 
+    # this is a user defined method.
+    # process is making the queries to score
     def process(self):
         cleaned_data = self.cleaned_data
 
+        # removing parameters that can not be used to filter the django way
         score_form_key = cleaned_data.pop('score_form_key')
         filename = cleaned_data.pop('scoring_list')
         images_per_page = cleaned_data.pop('images_per_page')
@@ -366,6 +370,7 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
         screen_type = cleaned_data.pop('screen_type')
         randomize_order = cleaned_data.pop('randomize_order')
         score_only_4_reps = cleaned_data.pop('score_only_4_reps')
+
 
         _remove_empties_and_none(cleaned_data)
         experiments = Experiment.objects.filter(**cleaned_data)
@@ -400,6 +405,7 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
             # print "Only scoring four"
 
         # Special case for Malcolm to score subset defined in a file
+        # Trash it or make it able to upload file
         if filename:
             path = os.path.join(settings.BASE_DIR_SCORING_LISTS, filename)
 
@@ -558,7 +564,7 @@ class ScoreForm(forms.Form):
         self.user = kwargs.pop('user', None)
         super(ScoreForm, self).__init__(*args, **kwargs)
 
-
+# THis is the suppressor scoring form
 class SuppressorScoreForm(ScoreForm):
 
     sup_score = SingleScoreField(key='SUP', required=True)
@@ -584,6 +590,7 @@ class SuppressorScoreForm(ScoreForm):
             save_score(code)
 
 
+# This is the secondary scoring form (the one where you actually score)
 class LevelsScoreForm(ScoreForm):
 
     emb_score = SingleScoreField(key='EMB_LEVEL', required=True)
@@ -620,6 +627,8 @@ def _get_save_score(form):
     time = timezone.now()
 
     def save_score(score_code):
+        # If it's completely emb, ste is impossible to judge
+        # likewise for ste
         if score_code == IMPOSSIBLE:
             return
 
