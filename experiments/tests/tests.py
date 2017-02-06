@@ -10,6 +10,7 @@ from library.models import LibraryPlate, LibraryStock
 
 ###################################################
 # IMPORTANT: tests methods MUST start with 'test' #
+# in order to be implicitly executed.             #
 ###################################################
 
 ##############
@@ -19,12 +20,12 @@ class UserTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.user = User.objects.create(
-            username="Test",
-            password="blah"
+            username="Test"
         )
 
-    def test_user(self):
-        pass
+    def test_username(self):
+        self.assertEquals(self.user.get_username(),"Test")
+
 
 
 
@@ -107,15 +108,7 @@ class ExperimentTestCase(ExperimentPlateTestCase, WormTestCase, LibraryStockTest
 
     def test_experiment(self):
         pass
-    #
-    # def test_worm_strain(self):
-    #     print self.get_worms()
-    #
-    # def test_print_experiments(self):
-    #     print self.experiments
-    #
-    # def test_get_experiments(self):
-    #     return self.experiments
+
 
 
 ######################
