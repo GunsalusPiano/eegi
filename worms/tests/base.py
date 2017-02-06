@@ -4,7 +4,8 @@ from worms.models import WormStrain
 
 
 class WormTestCase(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         # Control worm strain
         WormStrain.objects.create(id='N2')
 
@@ -26,6 +27,11 @@ class WormTestCase(TestCase):
             genotype='emb-8(hc69) III',
             permissive_temperature=17.5,
             restrictive_temperature=25.0)
+
+        cls.worms = WormStrain.objects.all()
+
+    def test_worm_test_case(self):
+        pass
 
     def get_worms(self):
         n2 = WormStrain.objects.get(id='N2')
