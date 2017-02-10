@@ -13,6 +13,7 @@ from library.models import LibraryPlate, LibraryStock
 # in order to be implicitly executed.             #
 ###################################################
 
+
 ##############
 # Test Users #
 ##############
@@ -25,9 +26,6 @@ class UserTestCase(TestCase):
 
     def test_username(self):
         self.assertEquals(self.user.get_username(),"Test")
-
-
-
 
 class LibraryPlateTestCase(TestCase):
     @classmethod
@@ -96,13 +94,46 @@ class ExperimentTestCase(ExperimentPlateTestCase, WormTestCase, LibraryStockTest
 
         # n2, dnc1, glp1, emb8 = super(ExperimentTestCase,cls).get_worms()
         # print n2
+
+        plate = {1:"A",
+                 2:"B",
+                 3:"C",
+                 4:"D",
+                 5:"E",
+                 6:"F",
+                 7:"G",
+                 8:"H"}
+
         for i in range(1,9):
 
             Experiment.objects.create(
-                id=i, plate=cls.plates.get(pk=i), well="A01",
+                id=str(i)+"_"+plate[i]+"01", plate=cls.plates.get(pk=i), well=plate[i]+"01",
                 worm_strain=WormTestCase.worms.get(id='MJ69'),
-                library_stock=LibraryStockTestCase.library_stock.get(id="library_stock_1")
+                library_stock=LibraryStockTestCase.library_stock.get(id="library_stock_1"),
+                comment="These are scored four times."
             )
+
+            Experiment.objects.create(
+                id=str(i+8)+"_"+plate[i]+"02", plate=cls.plates.get(pk=i), well=plate[i]+"02",
+                worm_strain=WormTestCase.worms.get(id='N2'),
+                library_stock=LibraryStockTestCase.library_stock.get(id="library_stock_1"),
+                comment="These are not scored at all."
+            )
+
+            Experiment.objects.create(
+                id=str(i+16)+"_"+plate[i]+"03", plate=cls.plates.get(pk=i), well=plate[i]+"03",
+                worm_strain=WormTestCase.worms.get(id='EU552'),
+                library_stock=LibraryStockTestCase.library_stock.get(id="library_stock_1"),
+                comment="These are scored once."
+            )
+
+            Experiment.objects.create(
+                id=str(i+24)+"_"+plate[i]+"04", plate=cls.plates.get(pk=i), well=plate[i]+"04",
+                worm_strain=WormTestCase.worms.get(id='EU1006'),
+                library_stock=LibraryStockTestCase.library_stock.get(id="library_stock_1"),
+                comment="These are scored all 8 times."
+            )
+
         cls.experiments = Experiment.objects.all()
         # print cls.experiments
 
@@ -137,7 +168,24 @@ class ManualScoreTestCase(TestCase):
         ManualScoreCodeTestCase.setUpTestData()
         UserTestCase.setUpTestData()
 
-        for e in ExperimentTestCase.experiments:
+        # Score only 4 MJ69
+        for e in ExperimentTestCase.experiments.filter(worm_strain="MJ69")[:4]:
+            ManualScore.objects.create(
+                experiment=e,
+                score_code=ManualScoreCodeTestCase.manual_score_codes.get(description="unscored"),
+                scorer=User.objects.get(username="Test")
+            )
+
+        # Score all 8 EU1006
+        for e in ExperimentTestCase.experiments.filter(worm_strain="EU1006"):
+            ManualScore.objects.create(
+                experiment=e,
+                score_code=ManualScoreCodeTestCase.manual_score_codes.get(description="unscored"),
+                scorer=User.objects.get(username="Test")
+            )
+
+        # Score only 1 EU552
+        for e in ExperimentTestCase.experiments.filter(worm_strain="EU552")[:1]:
             ManualScore.objects.create(
                 experiment=e,
                 score_code=ManualScoreCodeTestCase.manual_score_codes.get(description="unscored"),
@@ -150,9 +198,14 @@ class ManualScoreTestCase(TestCase):
         pass
 
 
+################################################
+# Example Input Form to Filter Images to Score #
+################################################
 class FilterExperimentWellsToScoreFormTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
+
+        ManualScoreTestCase.setUpTestData()
 
         form_data={
             # LEVELS is for enhancer, since it's scored with LEVELS
@@ -171,5 +224,13 @@ class FilterExperimentWellsToScoreFormTestCase(TestCase):
         # cls.assertTrue(form.is_valid())
         # query = form.process()
 
-    def test_filter_experiment_wells_to_score_form(self):
+    def test_filter_experiment_wells_to_score_form_is_valid(self):
         self.assertTrue(self.form.is_valid())
+
+    def test_score_only_4_reps(self):
+        self.assertTrue(self.form.cleaned_data['score_only_4_reps'])
+
+        print ManualScoreTestCase.manual_scores.filter(
+            experiment__in=ExperimentTestCase.experiments,
+            experiment__is_junk=False,
+            scorer=UserTestCase.user).values('experiment')
