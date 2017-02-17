@@ -399,10 +399,33 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
         for that session and will need to be executed again.
         '''
         if score_only_4_reps:
-            pass
-                # experiments.filter(pk=i).exclude(worm_strain_id="N2").values_list('pk', flat=True).order_by('?')[:4]
-            # print experiments.filter(library_stock_id='b1-E1_A01').exclude(worm_strain_id="N2").values_list('pk', flat=True).order_by('?')[:4]
-            # print "Only scoring four"
+
+            print "grabbing distinct experiment attributes"
+
+            replicate_plates = (
+                experiments
+                .values('well', 'worm_strain_id','library_stock_id',
+                'plate__date','plate__temperature')
+                .order_by('well', 'worm_strain_id', 'library_stock_id',
+                'plate__date', 'plate__temperature').distinct())
+
+
+            score_ids = []
+            for rep in replicate_plates:
+                rep_set = experiments.filter(**rep)
+
+                print "counting replicates"
+
+                if rep_set.count() > 4:
+                    score_ids.extend(rep_set
+                        .order_by('?')[:4]
+                        .values_list('id', flat=True))
+                else:
+                    score_ids.extend(rep_set
+                        .values_list('id', flat=True))
+
+            print "grabbing only four replicates"
+            experiments = experiments.filter(id__in=score_ids)
 
         # Special case for Malcolm to score subset defined in a file
         # Trash it or make it able to upload file

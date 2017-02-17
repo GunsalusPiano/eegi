@@ -95,43 +95,41 @@ class ExperimentTestCase(ExperimentPlateTestCase, WormTestCase, LibraryStockTest
         # n2, dnc1, glp1, emb8 = super(ExperimentTestCase,cls).get_worms()
         # print n2
 
-        plate = {1:"A",
-                 2:"B",
-                 3:"C",
-                 4:"D",
-                 5:"E",
-                 6:"F",
-                 7:"G",
-                 8:"H"}
-
         for i in range(1,9):
 
             Experiment.objects.create(
-                id=str(i)+"_"+plate[i]+"01", plate=cls.plates.get(pk=i), well=plate[i]+"01",
+                id=str(i)+"_"+"A01", plate=cls.plates.get(pk=i), well="A01",
                 worm_strain=WormTestCase.worms.get(id='MJ69'),
                 library_stock=LibraryStockTestCase.library_stock.get(id="library_stock_1"),
                 comment="These are scored four times."
             )
 
             Experiment.objects.create(
-                id=str(i+8)+"_"+plate[i]+"02", plate=cls.plates.get(pk=i), well=plate[i]+"02",
+                id=str(i+8)+"_"+"A02", plate=cls.plates.get(pk=i), well="A02",
                 worm_strain=WormTestCase.worms.get(id='N2'),
                 library_stock=LibraryStockTestCase.library_stock.get(id="library_stock_1"),
                 comment="These are not scored at all."
             )
 
             Experiment.objects.create(
-                id=str(i+16)+"_"+plate[i]+"03", plate=cls.plates.get(pk=i), well=plate[i]+"03",
+                id=str(i+16)+"_"+"A03", plate=cls.plates.get(pk=i), well="A03",
                 worm_strain=WormTestCase.worms.get(id='EU552'),
                 library_stock=LibraryStockTestCase.library_stock.get(id="library_stock_1"),
                 comment="These are scored once."
             )
 
             Experiment.objects.create(
-                id=str(i+24)+"_"+plate[i]+"04", plate=cls.plates.get(pk=i), well=plate[i]+"04",
+                id=str(i+24)+"_"+"A04", plate=cls.plates.get(pk=i), well="A04",
                 worm_strain=WormTestCase.worms.get(id='EU1006'),
                 library_stock=LibraryStockTestCase.library_stock.get(id="library_stock_1"),
                 comment="These are scored all 8 times."
+            )
+
+            Experiment.objects.create(
+                id=str(i+32)+"_"+"A05", plate=cls.plates.get(pk=i), well="A05",
+                worm_strain=WormTestCase.worms.get(id='EU1006'),
+                library_stock=LibraryStockTestCase.library_stock.get(id="library_stock_1"),
+                comment="These are scored 6 times."
             )
 
         cls.experiments = Experiment.objects.all()
@@ -168,24 +166,34 @@ class ManualScoreTestCase(TestCase):
         ManualScoreCodeTestCase.setUpTestData()
         UserTestCase.setUpTestData()
 
-        # Score only 4 MJ69
-        for e in ExperimentTestCase.experiments.filter(worm_strain="MJ69")[:4]:
+        # Score only 4 A01
+        for e in ExperimentTestCase.experiments.filter(well="A01")[:4]:
             ManualScore.objects.create(
                 experiment=e,
                 score_code=ManualScoreCodeTestCase.manual_score_codes.get(description="unscored"),
                 scorer=User.objects.get(username="Test")
             )
 
-        # Score all 8 EU1006
-        for e in ExperimentTestCase.experiments.filter(worm_strain="EU1006"):
+        # A02 isn't scored at all
+
+        # Score only 1 A03
+        for e in ExperimentTestCase.experiments.filter(well="A03")[:1]:
             ManualScore.objects.create(
                 experiment=e,
                 score_code=ManualScoreCodeTestCase.manual_score_codes.get(description="unscored"),
                 scorer=User.objects.get(username="Test")
             )
 
-        # Score only 1 EU552
-        for e in ExperimentTestCase.experiments.filter(worm_strain="EU552")[:1]:
+        # Score all 8 A04
+        for e in ExperimentTestCase.experiments.filter(well="A04"):
+            ManualScore.objects.create(
+                experiment=e,
+                score_code=ManualScoreCodeTestCase.manual_score_codes.get(description="unscored"),
+                scorer=User.objects.get(username="Test")
+            )
+
+        # Score all 8 A05
+        for e in ExperimentTestCase.experiments.filter(well="A05")[:6]:
             ManualScore.objects.create(
                 experiment=e,
                 score_code=ManualScoreCodeTestCase.manual_score_codes.get(description="unscored"),
@@ -230,7 +238,57 @@ class FilterExperimentWellsToScoreFormTestCase(TestCase):
     def test_score_only_4_reps(self):
         self.assertTrue(self.form.cleaned_data['score_only_4_reps'])
 
-        print ManualScoreTestCase.manual_scores.filter(
+        """
+        May have to add ExperimentGroup_id to experiment Table
+        to group replicates together to speed up query.
+        The replicates are identified by the exact well, wormstrain, and
+        library stock while the plate id inrciments until there are 8 replicates
+
+        Otherwise, it would have to search for adjacent plate numbers
+        with the same well and make sure that they have the same:
+            worm strain
+            library stock
+            well
+            date
+            temperature
+            screen stage
+
+        Unless there is some offset that I could use to partition the different
+        screen stages. I think this will be the fastest way, I could make a lookup
+        table which would speed things up exponentially.
+        """
+
+        score_ids = (ManualScoreTestCase.manual_scores.filter(
             experiment__in=ExperimentTestCase.experiments,
-            experiment__is_junk=False,
-            scorer=UserTestCase.user).values('experiment')
+            scorer=UserTestCase.user)
+            .values_list('experiment_id', flat=True)
+        )
+
+        # Grabbing the fields that won't are universal for the enh sec screen_type
+        unscored = (ExperimentTestCase.experiments.exclude(id__in=score_ids)
+            .filter(is_junk=False, plate__screen_stage=2)
+        )
+
+        # This gets the uniqe entries based on the criteria above
+        replicates_plates = (unscored
+            .values('well', 'worm_strain_id','library_stock_id','plate__date','plate__temperature')
+            .order_by('well', 'worm_strain_id', 'library_stock_id',
+            'plate__date', 'plate__temperature').distinct())
+
+
+        score_ids = []
+        for rep in replicates_plates:
+            rep_set = unscored.filter(**rep)
+            if rep_set.count() > 4:
+                score_ids.extend(rep_set
+                    .values_list('id', flat=True)[:4])
+                # print rep_set.order_by('?')[:4]
+            else:
+                score_ids.extend(rep_set
+                    .values_list('id', flat=True))
+
+        print ExperimentTestCase.experiments.filter(id__in=score_ids)
+            # print "criteria:",rep
+            # print "replicates:",
+            # print unscored.filter(**rep)
+            # print '***********'
