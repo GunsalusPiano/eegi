@@ -330,12 +330,15 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
     randomize_order = forms.BooleanField(required=False, initial=True)
 
     score_only_4_reps = forms.BooleanField(
-    required=False, initial=True, label='Score only 4 replicates')
+        required=False, initial=True, label='Score only 4 replicates')
+
+    exclude_n2 = forms.BooleanField(
+        required=False, initial=True, label='Exclude N2')
 
     field_order = [
         'score_form_key', 'scoring_list', 'images_per_page',
-        'unscored_by_user',
-        'randomize_order', 'score_only_4_reps', 'exclude_l4440', 'exclude_no_clone', 'is_junk',
+        'unscored_by_user', 'randomize_order', 'score_only_4_reps',
+        'exclude_n2', 'exclude_l4440', 'exclude_no_clone', 'is_junk',
         'plate__screen_stage', 'plate__date', 'screen_type',
         'plate__temperature', 'worm_strain',
         'pk', 'plate__pk',
@@ -370,6 +373,7 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
         screen_type = cleaned_data.pop('screen_type')
         randomize_order = cleaned_data.pop('randomize_order')
         score_only_4_reps = cleaned_data.pop('score_only_4_reps')
+        exclude_n2 = cleaned_data.pop('exclude_n2')
 
 
         _remove_empties_and_none(cleaned_data)
@@ -382,6 +386,11 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
         if exclude_l4440:
             experiments = experiments.exclude(
                 library_stock__intended_clone='L4440')
+
+        if exclude_n2:
+            experiments = experiments.exclude(
+                worm_strain="N2"
+            )
 
         if unscored_by_user:
             score_ids = (
@@ -402,30 +411,64 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
 
             print "grabbing distinct experiment attributes"
 
+
+            #This is the working query
             replicate_plates = (
                 experiments
+                # .exclude(worm_strain_id="N2")
                 .values('well', 'worm_strain_id','library_stock_id',
                 'plate__date','plate__temperature')
                 .order_by('well', 'worm_strain_id', 'library_stock_id',
-                'plate__date', 'plate__temperature').distinct())
+                'plate__date', 'plate__temperature')
+                .distinct()
+            )
+                # .order_by('well', 'worm_strain_id', 'library_stock_id',
+                # 'plate__date', 'plate__temperature').distinct())
 
+            '''
+            # test set
+            replicate_plates = (
+                experiments.filter(plate__date="2012-10-03",
+                plate__temperature=25,
+                worm_strain="KK418",
+                well="A01",
+                library_stock="universal-F1_A01")
+                .values('well', 'worm_strain_id','library_stock_id',
+                'plate__date','plate__temperature')
+                .order_by()
+                .distinct()
+            )
+            '''
+            # print "replicate_plates",replicate_plates
+            # print replicate_plates.query
+
+            print "counting replicates"
 
             score_ids = []
-            for rep in replicate_plates:
-                rep_set = experiments.filter(**rep)
 
-                print "counting replicates"
+            for rep in replicate_plates:
+
+                rep_set = experiments.filter(**rep)
+                print "rep_set",rep_set
+                print "count",rep_set.count()
+
+                # print rep_set.query
 
                 if rep_set.count() > 4:
                     score_ids.extend(rep_set
-                        .order_by('?')[:4]
+                        # .order_by('?')[:4]
                         .values_list('id', flat=True))
+
+                    if rep_set.count() < 8:
+                        print rep_set.count(),rep
                 else:
                     score_ids.extend(rep_set
                         .values_list('id', flat=True))
+                    # print rep_set.count(),rep
 
             print "grabbing only four replicates"
-            experiments = experiments.filter(id__in=score_ids)
+
+            experiments = experiments.filter(id__in=score_ids).order_by('well','plate')
 
         # Special case for Malcolm to score subset defined in a file
         # Trash it or make it able to upload file
@@ -448,7 +491,7 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
 
         # Must be done last, since it post-processes the query
         if screen_type:
-            experiments = _limit_to_screen_type(experiments, screen_type, score_only_4_reps)
+            experiments = _limit_to_screen_type(experiments, screen_type)
 
         return {
             'experiments': experiments,
@@ -470,7 +513,7 @@ def _remove_empties_and_none(d):
             del d[k]
 
 
-def _limit_to_screen_type(experiments, screen_type, score_only_4_reps):
+def _limit_to_screen_type(experiments, screen_type):
     '''
     Post-process experiments QuerySet such that each experiment was done at its
     worm's SUP or ENH temperature. Since N2 does not have a SUP or ENH
@@ -504,6 +547,8 @@ def _limit_to_screen_type(experiments, screen_type, score_only_4_reps):
 
     for experiment in experiments.prefetch_related('worm_strain', 'plate'):
         temperature = experiment.plate.temperature
+        # print "plate temperature",temperature
+        # print "worm strain temperature",to_temperature[experiment.worm_strain]
 
         if temperature == to_temperature[experiment.worm_strain]:
             filtered.append(experiment)
