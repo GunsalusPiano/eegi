@@ -279,6 +279,10 @@ class FilterExperimentWellsToScoreFormTestCase(TestCase):
         score_ids = []
         for rep in replicates_plates:
             rep_set = unscored.filter(**rep)
+
+            print "rep_set count",rep_set.count()
+            print "rep_set len",len(rep_set)
+
             if rep_set.count() > 4:
                 score_ids.extend(rep_set
                     .values_list('id', flat=True)[:4])

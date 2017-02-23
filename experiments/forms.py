@@ -14,6 +14,8 @@ from worms.forms import (MutantKnockdownField, WormChoiceField,
                          clean_mutant_query_and_screen_type)
 from worms.models import WormStrain
 
+import time
+
 SCORE_DEFAULT_PER_PAGE = 50
 
 SCREEN_STAGE_CHOICES = [
@@ -377,7 +379,11 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
 
 
         _remove_empties_and_none(cleaned_data)
-        experiments = Experiment.objects.filter(**cleaned_data)
+        experiments = (Experiment.objects
+            .filter(**cleaned_data)
+            .select_related('library_stock','plate','worm_strain')
+            .prefetch_related('manualscore_set')
+        )
 
         if exclude_no_clone:
             experiments = experiments.exclude(
@@ -409,66 +415,93 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
         '''
         if score_only_4_reps:
 
+            print "grabbing manual score ids"
+
+            score_ids = ManualScore.objects.all().values_list('experiment_id', flat=True)
+
             print "grabbing distinct experiment attributes"
-
-
             #This is the working query
-            replicate_plates = (
-                experiments
-                # .exclude(worm_strain_id="N2")
-                .values('well', 'worm_strain_id','library_stock_id',
-                'plate__date','plate__temperature')
-                .order_by('well', 'worm_strain_id', 'library_stock_id',
-                'plate__date', 'plate__temperature')
-                .distinct()
-            )
+
+            # replicate_plates = (
+            #     experiments
+            #     # .exclude(worm_strain_id="N2")
+            #     .values('well', 'worm_strain_id','library_stock_id',
+            #     'plate__date','plate__temperature')
+            #     .order_by('well', 'worm_strain_id', 'library_stock_id',
+            #     'plate__date', 'plate__temperature')
+            #     .distinct()
+            # )
                 # .order_by('well', 'worm_strain_id', 'library_stock_id',
                 # 'plate__date', 'plate__temperature').distinct())
 
-            '''
+
             # test set
             replicate_plates = (
-                experiments.filter(plate__date="2012-10-03",
-                plate__temperature=25,
-                worm_strain="KK418",
+                experiments
+                .filter(
+                plate__date="2015-05-20",
+                plate__temperature=15,
+                worm_strain="AR1",
                 well="A01",
-                library_stock="universal-F1_A01")
+                library_stock="mr17-E1_A01")
                 .values('well', 'worm_strain_id','library_stock_id',
                 'plate__date','plate__temperature')
                 .order_by()
                 .distinct()
             )
-            '''
+
             # print "replicate_plates",replicate_plates
             # print replicate_plates.query
 
             print "counting replicates"
 
-            score_ids = []
+            to_score = []
 
-            for rep in replicate_plates:
+            for rep in replicate_plates[:1000]:
 
-                rep_set = experiments.filter(**rep)
-                print "rep_set",rep_set
-                print "count",rep_set.count()
+                # rep_set = experiments.filter(**rep)
+
+                rep_set = (experiments
+                    .filter(**rep)
+                    .select_related('worm_strain','plate','library_stock')
+                    .prefetch_related('manualscore_set')
+                )
+
+                reps_scored_already = rep_set.exclude(id__in=score_ids).values('pk')
+                count = reps_scored_already.count()
+                if count <= 4:
+                    continue
+                elif count == 8:
+                    to_score.extend(rep_set
+                        .order_by('?')[:4]
+                        .values_list('id', flat=True))
+                else:
+                    count = count - 4
+                    to_score.extend(rep_set
+                        .order_by('?')[:count]
+                        .values_list('id', flat=True))
+
+                # start_time = time.time()
+                # print "rep_set",rep_set
+                # print "print rep_set:",time.time() - start_time
 
                 # print rep_set.query
 
-                if rep_set.count() > 4:
-                    score_ids.extend(rep_set
-                        # .order_by('?')[:4]
-                        .values_list('id', flat=True))
-
-                    if rep_set.count() < 8:
-                        print rep_set.count(),rep
-                else:
-                    score_ids.extend(rep_set
-                        .values_list('id', flat=True))
+                # if count > 4:
+                #     to_score.extend(rep_set
+                #         .order_by('?')[:4]
+                #         .values_list('id', flat=True))
+                #
+                #     # if count < 8:
+                #     #     print count,rep
+                # else:
+                #     to_score.extend(rep_set
+                #         .values_list('id', flat=True))
                     # print rep_set.count(),rep
 
             print "grabbing only four replicates"
 
-            experiments = experiments.filter(id__in=score_ids).order_by('well','plate')
+            experiments = experiments.filter(id__in=to_score).order_by('well','plate')
 
         # Special case for Malcolm to score subset defined in a file
         # Trash it or make it able to upload file
