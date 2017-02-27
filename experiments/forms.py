@@ -422,19 +422,16 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
             print "grabbing distinct experiment attributes"
             #This is the working query
 
-            # replicate_plates = (
-            #     experiments
-            #     # .exclude(worm_strain_id="N2")
-            #     .values('well', 'worm_strain_id','library_stock_id',
-            #     'plate__date','plate__temperature')
-            #     .order_by('well', 'worm_strain_id', 'library_stock_id',
-            #     'plate__date', 'plate__temperature')
-            #     .distinct()
-            # )
-                # .order_by('well', 'worm_strain_id', 'library_stock_id',
-                # 'plate__date', 'plate__temperature').distinct())
+            replicate_plates = (
+                experiments
+                .values('well', 'worm_strain_id','library_stock_id',
+                'plate__date','plate__temperature')
+                .order_by('well', 'worm_strain_id', 'library_stock_id',
+                'plate__date', 'plate__temperature')
+                .distinct()
+            )
 
-
+            '''
             # test set
             replicate_plates = (
                 experiments
@@ -449,17 +446,13 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
                 .order_by()
                 .distinct()
             )
-
-            # print "replicate_plates",replicate_plates
-            # print replicate_plates.query
+            '''
 
             print "counting replicates"
 
             to_score = []
 
-            for rep in replicate_plates[:1000]:
-
-                # rep_set = experiments.filter(**rep)
+            for rep in replicate_plates.order_by('?')[:1000]:
 
                 rep_set = (experiments
                     .filter(**rep)
@@ -481,27 +474,9 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
                         .order_by('?')[:count]
                         .values_list('id', flat=True))
 
-                # start_time = time.time()
-                # print "rep_set",rep_set
-                # print "print rep_set:",time.time() - start_time
-
-                # print rep_set.query
-
-                # if count > 4:
-                #     to_score.extend(rep_set
-                #         .order_by('?')[:4]
-                #         .values_list('id', flat=True))
-                #
-                #     # if count < 8:
-                #     #     print count,rep
-                # else:
-                #     to_score.extend(rep_set
-                #         .values_list('id', flat=True))
-                    # print rep_set.count(),rep
-
             print "grabbing only four replicates"
 
-            experiments = experiments.filter(id__in=to_score).order_by('well','plate')
+            experiments = experiments.filter(id__in=to_score)
 
         # Special case for Malcolm to score subset defined in a file
         # Trash it or make it able to upload file
