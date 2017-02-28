@@ -310,6 +310,15 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
     pk = forms.CharField(required=False, help_text='e.g. 32412_A01',
                          label='Experiment ID')
 
+    plate__pk__range = RangeField(
+        forms.IntegerField, required=False, label='Plate ID range')
+
+    plate__date__range = RangeField(
+        forms.DateField, required=False, label='Date range')
+
+    plate__temperature__range = RangeField(
+        forms.DecimalField, required=False, label='Temperature range')
+
     screen_type = ScreenTypeChoiceFieldWithEmpty(required=False)
 
     is_junk = forms.NullBooleanField(
@@ -341,9 +350,9 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
         'score_form_key', 'scoring_list', 'images_per_page',
         'unscored_by_user', 'randomize_order', 'score_only_4_reps',
         'exclude_n2', 'exclude_l4440', 'exclude_no_clone', 'is_junk',
-        'plate__screen_stage', 'plate__date', 'screen_type',
-        'plate__temperature', 'worm_strain',
-        'pk', 'plate__pk',
+        'plate__screen_stage', 'plate__date', 'plate__date__range',
+        'screen_type', 'plate__temperature', 'plate__temperature__range',
+        'worm_strain', 'pk', 'plate__pk', 'plate__pk__range',
     ]
 
     def __init__(self, *args, **kwargs):
@@ -377,6 +386,7 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
         score_only_4_reps = cleaned_data.pop('score_only_4_reps')
         exclude_n2 = cleaned_data.pop('exclude_n2')
 
+        print cleaned_data
 
         _remove_empties_and_none(cleaned_data)
         experiments = (Experiment.objects
