@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 
 from experiments.helpers.data_entry import parse_batch_data_entry_gdoc
-from experiments.models import Experiment, ExperimentPlate
+from experiments.models import Experiment, ExperimentPlate, ManualScore
 from experiments.forms import (
     FilterExperimentWellsForm, FilterExperimentPlatesForm,
     FilterExperimentWellsToScoreForm, get_score_form,
@@ -16,6 +16,8 @@ from experiments.forms import (
 )
 from utils.http import http_response_ok, build_url
 from utils.pagination import get_paginated
+
+from chartit import DataPool, Chart
 
 EXPERIMENT_PLATES_PER_PAGE = 30
 EXPERIMENT_WELLS_PER_PAGE = 30
@@ -316,3 +318,30 @@ def score_experiment_wells(request):
     }
 
     return render(request, 'score_experiment_wells.html', context)
+
+# plot scoring statistics
+def manual_score_chart_view(request):
+    exp_data = DataPool(
+        series=[{
+            'options':{'source': ManualScore.objects.all()},
+            'terms':['experiment','score_code']
+        }]
+    )
+
+    chart = Chart(
+        datasource = exp_data,
+        series_options=[{
+            'options':{'type':'line', 'stacking':False},
+            'terms':{'experiment':['score_code']}
+        }]
+        # chart_options={
+        #     'title':{'text':'Manual Scores'},
+        #     'xAxis':{'title':{'text':'plates'}}
+        # }
+    )
+
+    # print chart
+
+    context = {'chart':chart}
+
+    return render(request, 'manual_score_charts.html', context)

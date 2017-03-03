@@ -53,4 +53,7 @@ urlpatterns = [
         name='image_categories_url'),
     url(r'^image-category/([^/]+)/$', views.image_category,
         name='image_category_url'),
+
+    url(r'^manual_score_charts', views.manual_score_chart_view,
+        name='manual_score_charts_url'),
 ]
