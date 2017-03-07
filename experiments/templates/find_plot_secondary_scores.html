@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+
+{% block body_id %}secondary-scores-search{% endblock %}
+
+
+{% block page_title %}Browse All Secondary Scores{% endblock %}
+
+
+{% block content %}
+<form action="" method="post">
+  {% csrf_token %}
+
+  <table>{{ form.as_table }}</table>
+
+  <button type="submit" class="submit">Submit</button>
+</form>
+{% endblock %}

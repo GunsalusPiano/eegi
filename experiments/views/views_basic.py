@@ -320,7 +320,7 @@ def score_experiment_wells(request):
     return render(request, 'score_experiment_wells.html', context)
 
 # plot scoring statistics
-def manual_score_chart_view(request):
+def manual_score_charts(request):
     exp_data = DataPool(
         series=[{
             'options':{'source': ManualScore.objects.all()},
