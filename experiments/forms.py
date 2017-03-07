@@ -386,8 +386,6 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
         score_only_4_reps = cleaned_data.pop('score_only_4_reps')
         exclude_n2 = cleaned_data.pop('exclude_n2')
 
-        print cleaned_data
-
         _remove_empties_and_none(cleaned_data)
         experiments = (Experiment.objects
             .filter(**cleaned_data)
@@ -425,11 +423,8 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
         '''
         if score_only_4_reps:
 
-            print "grabbing manual score ids"
-
             score_ids = ManualScore.objects.all().values_list('experiment_id', flat=True)
 
-            print "grabbing distinct experiment attributes"
             #This is the working query
 
             replicate_plates = (
@@ -458,7 +453,6 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
             )
             '''
 
-            print "counting replicates"
 
             to_score = []
 
@@ -484,7 +478,6 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
                         .order_by('?')[:count]
                         .values_list('id', flat=True))
 
-            print "grabbing only four replicates"
 
             experiments = experiments.filter(id__in=to_score)
 
