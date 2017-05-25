@@ -70,11 +70,25 @@ class Command(BaseCommand):
 
             gene.functional_description = info['concise_description']
             gene.gene_class_description = info['gene_class_description']
+            del descriptions[gene.id]
             gene.save()
 
         if num_mismatches:
             self.stderr.write('Total number mismatches: {}'
                               .format(num_mismatches))
+
+        for description in descriptions.keys():
+            gene = Gene.objects.get_or_create(id=description,
+                                cosmid_id=descriptions[description]['molecular_name'],
+                                locus=descriptions[description]['public_name'],
+                                gene_type="",
+                                gene_class_description=descriptions[description]['gene_class_description'],
+                                functional_description=descriptions[description]['concise_description'])
+
+            gene.save()
+
+        for gene in Gene.objects.all():
+            print gene.id
 
 
 def _parse_wormbase_file(f):

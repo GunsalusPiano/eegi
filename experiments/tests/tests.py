@@ -41,7 +41,7 @@ class LibraryPlateTestCase(TestCase):
     def test_library_plate(self):
         pass
 
-class LibraryStockTestCase(LibraryPlateTestCase):
+class LibraryStockTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         super(LibraryStockTestCase,cls).setUpTestData()
@@ -256,6 +256,18 @@ class FilterExperimentWellsToScoreFormTestCase(TestCase):
         Unless there is some offset that I could use to partition the different
         screen stages. I think this will be the fastest way, I could make a lookup
         table which would speed things up exponentially.
+
+        Query to check if Noah has scored duplicates or > 4 replicates.
+        NOTE: Divide this number by two since there are two scored per assay:
+        select library_stock_id, worm_strain_id, experiment.well,count(*) from Experiment
+        	join ManualScore on Experiment.id = ManualScore.experiment_id
+        	join ExperimentPlate on Experiment.plate_id = ExperimentPlate.id
+        	where timestamp > "2017-1-28"
+        	and screen_stage = 2
+        	and worm_strain_id != 'N2'
+        	and is_junk = 0
+        	group by library_stock_id, worm_strain_id, experiment.well
+        	order by count(*) desc
         """
 
         score_ids = (ManualScoreTestCase.manual_scores.filter(
