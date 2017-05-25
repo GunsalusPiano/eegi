@@ -87,9 +87,6 @@ class Command(BaseCommand):
 
             gene.save()
 
-        for gene in Gene.objects.all():
-            print gene.id
-
 
 def _parse_wormbase_file(f):
     # Skip header
