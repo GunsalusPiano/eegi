@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load extra_tags %}
+{% load staticfiles %}
+{% block body_id %}wormbase_gene_descs{% endblock %}
+{% block page_title %}Wormbase Gene Descriptions{% endblock %}
+WormBase version: WS250
+
+{% block content %}
+<table id='reagent_table'
+  class='display compact cell-border'>
+  <thead>
+    <tr>
+      <th>gene_id</th>
+      <th>public_name</th>
+      <th>molecular_name</th>
+      <th>concise_description</th>
+      <th>provisional_description</th>
+      <th>detailed_description</th>
+      <th>automated_description</th>
+      <th>gene_class_description</th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr>
+      <th>gene_id</th>
+      <th>public_name</th>
+      <th>molecular_name</th>
+      <th>concise_description</th>
+      <th>provisional_description</th>
+      <th>detailed_description</th>
+      <th>automated_description</th>
+      <th>gene_class_description</th>
+    </tr>
+  </tfoot>
+</table>
+<script>
+  $(document).ready(function() {
+    var table = $('#reagent_table').DataTable({
+      'ajax': '/static/wbm_gene_descs.json',
+      'deferRender': true,
+      'scrollX':'500px',
+      'scrollY':true
+    });
+
+
+    table.on('draw', function() {
+      var body = $(table.table().body());
+
+      body.unhighlight();
+      body.highlight(table.search());
+    });
+
+  });
+</script>
+{% endblock %}

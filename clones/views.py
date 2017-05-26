@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-
+from django.core import serializers
 from clones.forms import CloneSearchForm
-from clones.models import Clone
+from clones.models import Clone, Gene
 from utils.pagination import get_paginated
 
 
@@ -43,3 +43,9 @@ def clone(request, id):
     }
 
     return render(request, 'clone.html', context)
+
+# def descriptions(request):
+#     descList = Gene.objects.all()
+#     json = serializers.serialize('json', descList)
+#     return render(request, json, content_type='application/json')
+#

@@ -2,9 +2,10 @@ import argparse
 import csv
 
 from django.core.management.base import BaseCommand, CommandError
-
+from django.core import serializers
 from clones.models import Gene
 from utils.scripting import require_db_write_acknowledgement
+from django.conf import settings
 
 
 class Command(BaseCommand):
@@ -86,6 +87,18 @@ class Command(BaseCommand):
                                 functional_description=descriptions[description]['concise_description'])
 
             gene.save()
+        _genes_to_json()
+
+
+"""
+Writes wormbase files to JSON document for faster rendering.
+"""
+def _genes_to_json():
+    descritptions = Gene.objects.all()
+    json = serializers.serialize('json', descritptions)
+
+    with open(settings.BASE_DIR+'/website/static/wbm_gene_descs.json', 'w') as f:
+        f.write(json)
 
 
 def _parse_wormbase_file(f):
