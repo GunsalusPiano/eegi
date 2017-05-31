@@ -1,6 +1,6 @@
 import argparse
 import csv
-
+import json
 from django.core.management.base import BaseCommand, CommandError
 from django.core import serializers
 from clones.models import Gene
@@ -93,13 +93,24 @@ class Command(BaseCommand):
 """
 Writes wormbase files to JSON document for faster rendering.
 """
+# def _genes_to_json():
+#     descritptions = Gene.objects.all()
+#     json = serializers.serialize('json', descritptions)
+#
+#     with open(settings.BASE_DIR+'/website/static/wbm_gene_descs.json', 'w') as f:
+#         f.write(json)
+
 def _genes_to_json():
-    descritptions = Gene.objects.all()
-    json = serializers.serialize('json', descritptions)
+
+    descritptions = Gene.objects.values('id','cosmid_id','locus','gene_type','gene_class_description','functional_description')
+    descJson = '['
+    for d in descritptions:
+        descJson += json.dumps(d)+','
+
+    descJson += ']'
 
     with open(settings.BASE_DIR+'/website/static/wbm_gene_descs.json', 'w') as f:
-        f.write(json)
-
+        f.write(descJson)
 
 def _parse_wormbase_file(f):
     # Skip header

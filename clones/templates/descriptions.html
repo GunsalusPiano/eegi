@@ -10,26 +10,22 @@ WormBase version: WS250
   class='display compact cell-border'>
   <thead>
     <tr>
-      <th>gene_id</th>
-      <th>public_name</th>
-      <th>molecular_name</th>
-      <th>concise_description</th>
-      <th>provisional_description</th>
-      <th>detailed_description</th>
-      <th>automated_description</th>
-      <th>gene_class_description</th>
+      <th>id</th>
+      <th>cosmid_id</th>
+      <th>locus</th>
+      <th>gene_type</th>
+      <th>gene_class</th>
+      <th>functional_description</th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th>gene_id</th>
-      <th>public_name</th>
-      <th>molecular_name</th>
-      <th>concise_description</th>
-      <th>provisional_description</th>
-      <th>detailed_description</th>
-      <th>automated_description</th>
-      <th>gene_class_description</th>
+      <th>id</th>
+      <th>cosmid_id</th>
+      <th>locus</th>
+      <th>gene_type</th>
+      <th>gene_class_description
+      <th>functional_description</th>
     </tr>
   </tfoot>
 </table>
@@ -37,9 +33,21 @@ WormBase version: WS250
   $(document).ready(function() {
     var table = $('#reagent_table').DataTable({
       'ajax': '/static/wbm_gene_descs.json',
+      'columns':[
+        {'data':'id'},
+        {'data':'cosmid_id'},
+        {'data':'locus'},
+        {'data':'gene_type'},
+        {'data':'gene_class_description'},
+        {'data':'functional_description'}
+      ],
       'deferRender': true,
-      'scrollX':'500px',
-      'scrollY':true
+      'scrollY':'500px',
+      'smart':true,
+      'dom': 'Bfrtip',
+      'buttons': [
+          'copy', 'csv', 'excel', 'pdf', 'print'
+      ]
     });
 
 
