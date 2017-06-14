@@ -6,12 +6,10 @@
 WormBase version: WS250
 
 {% block content %}
-<input type="file" id="geneFile" multiple size="50">
-<button id='searchFile' type='button'>Search</button>
-
-<!-- <input id='test' type='text'> -->
-
-<p id="demo">My contents are:</p>
+<div class='geneDescFileSearch'>
+    <input type='file' id='geneFile'>
+    <button id='searchFile' type='button'>Search</button>
+</div>
 
 <table id='gene_table'
   class='display compact cell-border'>
@@ -54,6 +52,7 @@ WormBase version: WS250
       'scrollY':'500px',
       'smart':true,
       'dom': 'Bfrtip',
+      'searchHighlight': true,
       'buttons': [
           'copy', 'csv', 'excel', 'pdf', 'print'
       ]
@@ -64,7 +63,11 @@ WormBase version: WS250
       var body = $(table.table().body());
 
       body.unhighlight();
-      body.highlight(table.search());
+
+        if ( table.rows( { filter: 'applied' } ).data().length ) {
+            body.highlight( table.search() );
+        }
+
     });
 
     $('#searchFile').on('click', function(){
@@ -78,19 +81,12 @@ WormBase version: WS250
             var reader = new FileReader();
             reader.onload = function(event) {
               var content = event.target.result;
-              var lines = content.split('\n');
+              var lines = content.replace(/,/g, '|').trim();
 
-              table.search('the|and', true, false).draw();
-              // for (var i = 0, f; f = lines[i]; i++){
-              //   console.log(lines[i]);
-              //   table.search(lines[i]).draw();
-              // }
+              table.search(lines, true, false).draw();
+
             }
             reader.readAsText(file);
-          // console.log(reader);
-
-            // console.log(data.type());
-            // console.log(data.split(/\n/));
 
           }
       }
@@ -102,7 +98,7 @@ WormBase version: WS250
               txt  += "<br>The path of the selected file: " + file.value; // If the browser does not support the files property, it will return the path of the selected file instead.
           }
       }
-      // document.getElementById("demo").innerHTML = txt;
+
     });
 
   });
