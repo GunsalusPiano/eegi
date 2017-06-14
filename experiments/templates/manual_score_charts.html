@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load extra_tags %}
+{% load chartit %}
+
+{% block content %}
+
+{{ chart|load_charts:"test_chart" }}
+<div id='test_chart'></div>
+
+{% endblock %}

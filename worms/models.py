@@ -122,6 +122,9 @@ class WormStrain(models.Model):
             scores = scores.filter(
                 experiment__plate__temperature=self.restrictive_temperature)
 
+        # _set returns a queryset for a foreignkey
+        # i.e. clone_target_id points to clone
+        # so _set can grab the clone targets from clon
         scores = (
             scores
             .select_related(

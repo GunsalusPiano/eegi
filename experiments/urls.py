@@ -53,4 +53,13 @@ urlpatterns = [
         name='image_categories_url'),
     url(r'^image-category/([^/]+)/$', views.image_category,
         name='image_category_url'),
+
+    url(r'^manual-score-charts/$', views.manual_score_charts,
+        name='manual_score_charts_url'),
+    url(r'^find-plot-secondary-scores/$', views.find_plot_secondary_scores,
+        name='find_plot_secondary_scores_url'),
+    url(r'^plot-secondary-scores/([^/]+)/([^/]+)/$', views.plot_secondary_scores,
+        name='plot_secondary_scores_url'),
+    url(r'^plot-secondary-scores/([^/]+)/([^/]+)/([^/]+)$',
+        views.plot_secondary_scores, name='plot_secondary_scores_url'),
 ]

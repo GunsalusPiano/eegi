@@ -41,7 +41,7 @@ class LibraryPlateTestCase(TestCase):
     def test_library_plate(self):
         pass
 
-class LibraryStockTestCase(LibraryPlateTestCase):
+class LibraryStockTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
         super(LibraryStockTestCase,cls).setUpTestData()
@@ -256,6 +256,18 @@ class FilterExperimentWellsToScoreFormTestCase(TestCase):
         Unless there is some offset that I could use to partition the different
         screen stages. I think this will be the fastest way, I could make a lookup
         table which would speed things up exponentially.
+
+        Query to check if Noah has scored duplicates or > 4 replicates.
+        NOTE: Divide this number by two since there are two scored per assay:
+        select library_stock_id, worm_strain_id, experiment.well,count(*) from Experiment
+        	join ManualScore on Experiment.id = ManualScore.experiment_id
+        	join ExperimentPlate on Experiment.plate_id = ExperimentPlate.id
+        	where timestamp > "2017-1-28"
+        	and screen_stage = 2
+        	and worm_strain_id != 'N2'
+        	and is_junk = 0
+        	group by library_stock_id, worm_strain_id, experiment.well
+        	order by count(*) desc
         """
 
         score_ids = (ManualScoreTestCase.manual_scores.filter(
@@ -280,8 +292,8 @@ class FilterExperimentWellsToScoreFormTestCase(TestCase):
         for rep in replicates_plates:
             rep_set = unscored.filter(**rep)
 
-            print "rep_set count",rep_set.count()
-            print "rep_set len",len(rep_set)
+            # print "rep_set count",rep_set.count()
+            # print "rep_set len",len(rep_set)
 
             if rep_set.count() > 4:
                 score_ids.extend(rep_set
@@ -291,8 +303,51 @@ class FilterExperimentWellsToScoreFormTestCase(TestCase):
                 score_ids.extend(rep_set
                     .values_list('id', flat=True))
 
-        print ExperimentTestCase.experiments.filter(id__in=score_ids)
+        # print ExperimentTestCase.experiments.filter(id__in=score_ids)
             # print "criteria:",rep
             # print "replicates:",
             # print unscored.filter(**rep)
             # print '***********'
+
+    def test_manual_score_chart_view(self):
+        '''
+        This is the query that will render the necessary data to view
+        completeness of genes scored.
+
+        select distinct ExperimentPlate.id,
+        	Experiment.id,
+        	ManualScore.experiment_id, ManualScore.`score_code_id`,
+        	WormStrain.id, WormStrain.`genotype`,
+        	LibraryStock.id
+        	from Experiment
+        	join ManualScore on Experiment.id=ManualScore.`experiment_id`
+        	join ExperimentPlate on Experiment.`plate_id`=ExperimentPlate.id
+        	join WormStrain on WormStrain.`id`=Experiment.`worm_strain_id`
+        	join LibraryStock on Experiment.`library_stock_id`=LibraryStock.id
+        	where ExperimentPlate.`screen_stage`=2
+        	and Experiment.id in (select ManualScore.experiment_id from ManualScore)
+        	and WormStrain.`id` != "N2";
+        '''
+
+        exp = (ExperimentTestCase.experiments
+            .select_related()
+            .prefetch_related()
+            .filter(
+                id__in=ManualScoreTestCase.manual_scores,
+                plate__screen_stage=2
+            )
+            .exclude(worm_strain="N2")
+            .values(
+                'pk',
+                'plate__id',
+                'worm_strain',
+                'worm_strain__genotype',
+                'manualscore',
+                'manualscore__score_code_id__description',
+                'library_stock'
+            )
+            .order_by()
+            .distinct()
+        )
+
+        print exp

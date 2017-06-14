@@ -1,10 +1,11 @@
 import argparse
 import csv
-
+import json
 from django.core.management.base import BaseCommand, CommandError
-
+from django.core import serializers
 from clones.models import Gene
 from utils.scripting import require_db_write_acknowledgement
+from django.conf import settings
 
 
 class Command(BaseCommand):
@@ -70,12 +71,46 @@ class Command(BaseCommand):
 
             gene.functional_description = info['concise_description']
             gene.gene_class_description = info['gene_class_description']
+            del descriptions[gene.id]
             gene.save()
 
         if num_mismatches:
             self.stderr.write('Total number mismatches: {}'
                               .format(num_mismatches))
 
+        for description in descriptions.keys():
+            gene = Gene.objects.get_or_create(id=description,
+                                cosmid_id=descriptions[description]['molecular_name'],
+                                locus=descriptions[description]['public_name'],
+                                gene_type="",
+                                gene_class_description=descriptions[description]['gene_class_description'],
+                                functional_description=descriptions[description]['concise_description'])
+
+            gene.save()
+        _genes_to_json()
+
+
+"""
+Writes wormbase files to JSON document for faster rendering.
+"""
+# def _genes_to_json():
+#     descritptions = Gene.objects.all()
+#     json = serializers.serialize('json', descritptions)
+#
+#     with open(settings.BASE_DIR+'/website/static/wbm_gene_descs.json', 'w') as f:
+#         f.write(json)
+
+def _genes_to_json():
+
+    descritptions = Gene.objects.values('id','cosmid_id','locus','gene_type','gene_class_description','functional_description')
+    descJson = '['
+    for d in descritptions:
+        descJson += json.dumps(d)+','
+
+    descJson += ']'
+
+    with open(settings.BASE_DIR+'/website/static/wbm_gene_descs.json', 'w') as f:
+        f.write(descJson)
 
 def _parse_wormbase_file(f):
     # Skip header

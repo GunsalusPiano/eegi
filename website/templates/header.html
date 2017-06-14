@@ -14,7 +14,7 @@
   {% url 'find_double_knockdown_url' as find_double_knockdown_url %}
   {% url 'find_secondary_scores_url' as find_secondary_scores_url %}
   {% url 'score_experiment_wells_url' as score_experiment_wells_url %}
-
+  {% url 'descriptions_url' as descriptions_url %}
 
   <a href="{{ worms_url }}"
       {% ifequal request.path worms_url %}
@@ -79,4 +79,37 @@
     Score Secondary
   </a>
 
+  <div class='dropdown'>
+
+    <button onclick='dropdown()' class='dropbtn'>Tools</button>
+    <div id='dropdownList' class='dropdown-content'>
+      <a href="{{descriptions_url}}">Gene Descriptions</a>
+    </div>
+
+  </div>
+
 </div>
+
+
+<script>
+  /* When the user clicks on the button,
+  toggle between hiding and showing the dropdown content */
+  function dropdown() {
+      document.getElementById("dropdownList").classList.toggle("show");
+  }
+
+  // Close the dropdown menu if the user clicks outside of it
+  window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      var i;
+      for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
+        }
+      }
+    }
+  }
+</script>
