@@ -1246,6 +1246,9 @@ div.dt-button.processing:after {
   -webkit-animation: dtb-spinner 1500ms infinite linear;
   -moz-animation: dtb-spinner 1500ms infinite linear; }
 
+div.gene_table {
+  min-height: 500px; }
+
 #clones #results-header, #clones table {
   width: 100%;
   max-width: 700px; }
@@ -1591,4 +1594,7 @@ table#image-category .image-frame {
         .carousel .individual-image .image-frame .image-frame-next span {
           right: 5%; }
 
+html{
+  height: 100%;
+}
 /*# sourceMappingURL=styles.css.map */
