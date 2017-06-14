@@ -105,7 +105,7 @@ def _genes_to_json():
     descritptions = Gene.objects.values('id','cosmid_id','locus','gene_type','gene_class_description','functional_description')
     descJson = '['
     for d in descritptions:
-        descJson += json.dumps(d)+','
+        descJson += json.dumps(d)
 
     descJson += ']'
 
