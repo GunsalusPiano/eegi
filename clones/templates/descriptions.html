@@ -9,6 +9,7 @@ WormBase version: WS250
 <div class='geneDescFileSearch'>
     <input type='file' id='geneFile'>
     <button id='searchFile' type='button'>Search</button>
+    <button id='reset' type='button'>Reset</button>
 </div>
 
 <table id='gene_table'
@@ -98,6 +99,13 @@ WormBase version: WS250
               txt  += "<br>The path of the selected file: " + file.value; // If the browser does not support the files property, it will return the path of the selected file instead.
           }
       }
+
+    });
+
+    $('#reset').on('click', function(){
+
+      table.search('').draw();
+      $('#geneFile').val('');
 
     });
 
