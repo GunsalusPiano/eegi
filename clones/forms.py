@@ -2,6 +2,28 @@ from django import forms
 
 from clones.models import Clone
 
+class GeneSearchField(forms.CharField):
+    """
+    Field to query for a clone, by clone.pk or its gene targets.
+
+    Since this is meant as generic search field for finding clones,
+    if no value is entered, all clones are returned.
+
+    If a value is supplied, only matching clones are returned.
+    This match is defined as:
+        - the clone whose pk matches the search term
+        - if no clone.pk match, any clones with a gene target matching
+          the search term (on locus, cosmid, or pk)
+        - if no clone.pk match and no target match, an empty list
+    """
+
+    def __init__(self, **kwargs):
+        if 'help_text' not in kwargs:
+            kwargs['help_text'] = 'WB Gene ID, clone id, or stock id'
+
+
+        super(GeneSearchField, self).__init__(**kwargs)
+
 
 class CloneSearchField(forms.CharField):
     """
@@ -58,3 +80,20 @@ class CloneSearchForm(forms.Form):
     """Form to search for clones."""
 
     clone_query = CloneSearchField(required=False)
+
+class GeneSearchForm(forms.Form):
+    """Form to search for clones."""
+
+    SEARCH_CHOICES=(
+        ('wb_gene_id', 'WB Gene ID'),
+        ('locus', 'Locus'),
+        ('clone_id','Clone'),
+        ('stock_id', 'Stock'),
+    )
+
+    choice_field = forms.ChoiceField(widget=forms.RadioSelect, choices=SEARCH_CHOICES)
+
+    gene_query = GeneSearchField(required=False)
+
+class GeneSearchFileFieldForm(forms.Form):
+    file_field = forms.FileField(required=False)

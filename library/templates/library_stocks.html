@@ -1,24 +1,18 @@
-{% extends 'base.html' %} {% load extra_tags %} {% load staticfiles %} {% block body_id %}wormbase_gene_descs{% endblock %} {% block page_title %}Wormbase Gene Descriptions{% endblock %} WormBase version: WS250 {% block content %}
+{% extends 'base.html' %}
+{% load extra_tags %}
+{% load staticfiles %}
+{% block body_id %}library_stocks{% endblock %}
+{% block page_title %}Library Stocks{% endblock %}
 
-<div class='geneDescFileSearch'>
-  <input type='file' id='geneFile'>
+{% block content %}
+
+<div class='stockFileSearch'>
+  <input type='file' id='stockFile'>
   <button id='searchFile' type='button'>Search</button>
   <button id='reset' type='button'>Reset</button>
 </div>
 
-<form action="" method="get">
-  <table>{{ form.as_table }}</table>
-  <button type="submit" class="submit">Search</button>
-</form>
-
-<!-- <form action="" method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  <table>{{ form.as_table }}</table>
-  <table>{{ file_field.as_table }}</table>
-  <button type="submit" class="submit">Search</button>
-</form> -->
-
-<table id='gene_table' class='display compact cell-border'>
+<table id='stock_table' class='display compact cell-border'>
   <!-- <thead>
     <tr>
       <th>pk</th>
@@ -41,34 +35,26 @@
   </tfoot> -->
 </table>
 
+
 <script>
   $(document).ready(function() {
     var jsonString = '{{ data | safe }}';
     // console.log(jsonString);
     var d1 = JSON.stringify(jsonString);
-    console.log(JSON.parse(d1));
-    var table = $('#gene_table').DataTable({
+    // console.log(JSON.parse(d1));
+    var table = $('#stock_table').DataTable({
       'paging': false,
       'ordering': false,
       'data': {{ data | safe }},
       'columns':[
-        {'title': 'gene'},
-        {'title': 'locus'},
-        {'title': 'cosmid'},
-        {'title': 'gene_type'},
-        {'title': 'gene_class_description'},
-        {'title': 'functional_description'},
-        {'title': 'clone'},
-        {'title': 'transcript_isoform'},
-        {'title': 'stock'},
+        {'title': 'location'},
+        {'title': 'parent_stock'},
+        {'title': 'intended_clone'},
       ],
       'scrollY': 500,
-      'scrollX': true,
-      'searching': false,
-      'scrollCollapse':true,
-      // 'smart': true,
+      'smart': true,
       'dom': 'Bfrtip',
-      // 'searchHighlight': true,
+      'searchHighlight': true,
       'buttons': [
         'copy', 'csv', 'excel', 'pdf', 'print'
       ]
@@ -89,7 +75,7 @@
     });
 
     $('#searchFile').on('click', function() {
-      var file = document.getElementById("geneFile").files[0];
+      var file = document.getElementById("stockFile").files[0];
       var txt = "";
       if (file) {
         if (file.length == 0 || file.length > 1) {
@@ -121,7 +107,7 @@
     $('#reset').on('click', function() {
 
       table.search('').draw();
-      $('#geneFile').val('');
+      $('#stockFile').val('');
 
     });
 

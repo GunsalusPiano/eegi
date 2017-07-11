@@ -2,7 +2,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db import models
 
-
 class Clone(models.Model):
     """An RNAi clone used in the screen."""
 
@@ -95,6 +94,9 @@ class Gene(models.Model):
 
     def get_wormbase_url(self):
         return 'http://www.wormbase.org/species/c_elegans/gene/' + self.id
+
+    def get_clone_targets(self):
+        return ClonesTarget.objects.filter(gene=self.id)
 
 
 class CloneTarget(models.Model):
