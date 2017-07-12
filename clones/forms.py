@@ -95,5 +95,7 @@ class GeneSearchForm(forms.Form):
 
     gene_query = GeneSearchField(required=False)
 
-class GeneSearchFileFieldForm(forms.Form):
+    file_field = forms.FileField(required=False)
+
+# class GeneSearchFileFieldForm(forms.Form):
     file_field = forms.FileField(required=False)

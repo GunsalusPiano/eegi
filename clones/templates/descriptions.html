@@ -1,22 +1,22 @@
 {% extends 'base.html' %} {% load extra_tags %} {% load staticfiles %} {% block body_id %}wormbase_gene_descs{% endblock %} {% block page_title %}Wormbase Gene Descriptions{% endblock %} WormBase version: WS250 {% block content %}
 
-<div class='geneDescFileSearch'>
+<!-- <div class='geneDescFileSearch'>
   <input type='file' id='geneFile'>
   <button id='searchFile' type='button'>Search</button>
   <button id='reset' type='button'>Reset</button>
-</div>
+</div> -->
 
-<form action="" method="get">
+<!-- <form action="" method="get">
   <table>{{ form.as_table }}</table>
-  <button type="submit" class="submit">Search</button>
-</form>
-
-<!-- <form action="" method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  <table>{{ form.as_table }}</table>
-  <table>{{ file_field.as_table }}</table>
   <button type="submit" class="submit">Search</button>
 </form> -->
+
+<form action="" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <table>{{ form.as_table }}</table>
+  <!-- <table>{{ file_field.as_table }}</table> -->
+  <button type="submit" class="submit">Search</button>
+</form>
 
 <table id='gene_table' class='display compact cell-border'>
   <!-- <thead>
@@ -45,8 +45,8 @@
   $(document).ready(function() {
     var jsonString = '{{ data | safe }}';
     // console.log(jsonString);
-    var d1 = JSON.stringify(jsonString);
-    console.log(JSON.parse(d1));
+    // var d1 = JSON.stringify(jsonString);
+    // console.log(JSON.parse(d1));
     var table = $('#gene_table').DataTable({
       'paging': false,
       'ordering': false,
@@ -62,10 +62,10 @@
         {'title': 'transcript_isoform'},
         {'title': 'stock'},
       ],
-      'scrollY': 500,
-      'scrollX': true,
+      // 'scrollY': 500,
+      // 'scrollX': true,
       'searching': false,
-      'scrollCollapse':true,
+      // 'scrollCollapse':true,
       // 'smart': true,
       'dom': 'Bfrtip',
       // 'searchHighlight': true,

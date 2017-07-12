@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load extra_tags %}
+{% load staticfiles %}
+{% block body_id %}blast{% endblock %}
+{% block page_title %}C. elegans Blast{% endblock %}
+
+{% block content %}
+<div class='geneQuery'>
+    <input type='file' id='geneFile'>
+    <button id='searchFile' type='button'>Search</button>
+    <button id='reset' type='button'>Reset</button>
+</div>
+
+<textarea>
+
+</textarea>
+
+<script>
+  $(document).ready(function() {
+
+    $('#searchFile').on('click', function(){
+      var file = document.getElementById("geneFile").files[0];
+      var txt = "";
+      if (file) {
+          if (file.length == 0 || file.length > 1) {
+              txt = "Please select a file.";
+          } else {
+
+            var reader = new FileReader();
+            reader.onload = function(event) {
+              var content = event.target.result;
+              var lines = content.replace(/,/g, '|').trim();
+
+              table.search(lines, true, false).draw();
+
+            }
+            reader.readAsText(file);
+
+          }
+      }
+      else {
+          if (file.value == "") {
+              txt += "Please select a file.";
+          } else {
+              txt += "The file property is not supported by your browser!";
+              txt  += "<br>The path of the selected file: " + file.value; // If the browser does not support the files property, it will return the path of the selected file instead.
+          }
+      }
+
+    });
+
+    $('#reset').on('click', function(){
+
+      $('#geneFile').val('');
+
+    });
+
+  });
+
+</script>
+
+{% endblock %}
