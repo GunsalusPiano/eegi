@@ -90,7 +90,6 @@ def render_table(choice_field, query):
         genes = Gene.objects.filter(locus__in=query)
         clone_targets = CloneTarget.objects.filter(gene__in=genes.values('id'))
         stocks = LibraryStock.objects.filter(intended_clone__in = clone_targets.values('clone'))
-        print genes
 
     elif choice_field == 'clone_id':
         clone_targets = CloneTarget.objects.filter(clone__in=query)
