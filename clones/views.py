@@ -104,7 +104,7 @@ def render_table(choice_field, query):
 
     for gene in genes:
         row = [ \
-            gene.id, \
+            '<a href="'+gene.get_wormbase_url()+'">'+gene.id+'</a>', \
             gene.cosmid_id, \
             gene.locus, \
             gene.gene_type, \
@@ -116,7 +116,7 @@ def render_table(choice_field, query):
             for clone_target in clone_targets.filter(gene=gene):
                 stockStr = ""
                 for stock in stocks.filter(intended_clone=clone_target.clone):
-                    stockStr = stock.id+','
+                    stockStr += stock.id+',\n'
                 row.extend((
                     clone_target.clone_id,\
                     clone_target.transcript_isoform,\

@@ -8,5 +8,4 @@ urlpatterns = [
         name='library_plates_url'),
     url(r'^library-plate/([^/]*)/$', views.library_plate,
         name='library_plate_url'),
-    # url(r'^library_stocks/', views.get_stocks, name='library_stocks_url'),
 ]
