@@ -307,6 +307,8 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
     scoring_list = ScoringListChoiceField(required=False,
                                           label='Limit to file?')
 
+    gene =  forms.CharField(required=False, help_text = 'Gene symbol, e.g. mbk-2', label='Limit to gene?')
+
     pk = forms.CharField(required=False, help_text='e.g. 32412_A01',
                          label='Experiment ID')
 
@@ -377,6 +379,7 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
         # removing parameters that can not be used to filter the django way
         score_form_key = cleaned_data.pop('score_form_key')
         filename = cleaned_data.pop('scoring_list')
+        gene = cleaned_data.pop('gene')
         images_per_page = cleaned_data.pop('images_per_page')
         exclude_no_clone = cleaned_data.pop('exclude_no_clone')
         exclude_l4440 = cleaned_data.pop('exclude_l4440')
@@ -392,6 +395,9 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
             .select_related('library_stock','plate','worm_strain')
             .prefetch_related('manualscore_set')
         )
+
+        if gene:
+            experiments = experiments.filter(worm_strain__gene=gene)
 
         if exclude_no_clone:
             experiments = experiments.exclude(
