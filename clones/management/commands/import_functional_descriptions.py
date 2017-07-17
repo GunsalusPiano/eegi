@@ -79,7 +79,7 @@ class Command(BaseCommand):
                               .format(num_mismatches))
 
         for description in descriptions.keys():
-            gene = Gene.objects.get_or_create(id=description,
+            gene, created = Gene.objects.get_or_create(id=description,
                                 cosmid_id=descriptions[description]['molecular_name'],
                                 locus=descriptions[description]['public_name'],
                                 gene_type="",
