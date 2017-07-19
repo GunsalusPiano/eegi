@@ -1,11 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from django.core import serializers
+from django.conf import settings
 from clones.forms import CloneSearchForm, GeneSearchForm, BlastForm
 from clones.models import Clone, Gene, CloneTarget
 from library.models import LibraryStock
 from utils.pagination import get_paginated
 import json
 from subprocess import Popen, PIPE
+
 
 CLONES_PER_PAGE = 20
 
@@ -156,7 +158,7 @@ def blast(request):
             blast_out, blast_err = Popen([
                 'blastn',
                 '-query',query.temporary_file_path(),
-                '-db','/Users/alan/projects/gunsiano/eegi/c_elegans.PRJNA275000.WS260.genomic.fa',
+                '-db', settings.BASE_DIR+'/analysis_files/c_elegans.PRJNA13758.WS260.genomic.fa',
                 '-outfmt','6',
                 '-max_target_seqs','1',
                 '-culling_limit','1',
@@ -166,32 +168,35 @@ def blast(request):
                 stderr=PIPE
             ).communicate()
 
+            print blast_out
+
             for hit in blast_out.rstrip().split('\n'):
                 hit = hit.split('\t')
                 region = hit[1]+':'+hit[8]+'-'+hit[9]
                 tabix_out, tabix_err = Popen([
                     'tabix',
-                    '/Users/alan/projects/gunsiano/eegi/c_elegans.PRJNA13758.WS260.annotations.sorted.gff2.gz',
+                    settings.BASE_DIR+'/analysis_files/c_elegans.PRJNA13758.WS260.annotations.sorted.gff2.gz',
                     region],
                     stdout=PIPE,
                     stderr=PIPE
                 ).communicate()
 
                 for tabix in tabix_out.rstrip().split('\n'):
+                    print 'tabix',tabix
                     if tabix:
                         tabix = tabix.split('\t')
-                        if tabix[1] == 'gene':
-                            l = []
-                            l.extend((
-                                hit[0],   # query name
-                                hit[1],   # subject name
-                                tabix[1], # source i.e. blastx, gene
-                                tabix[2], # method, i.e. cds
-                                tabix[3], # start position
-                                tabix[4], # stop position
-                                tabix[8]  # features
-                            ))
-                            j.append(l)
+                        # if tabix[1] == 'gene':
+                        l = []
+                        l.extend((
+                            hit[0],   # query name
+                            hit[1],   # subject name
+                            tabix[1], # source i.e. blastx, gene
+                            tabix[2], # method, i.e. cds
+                            tabix[3], # start position
+                            tabix[4], # stop position
+                            tabix[8]  # features
+                        ))
+                        j.append(l)
             data = json.dumps(j)
 
 

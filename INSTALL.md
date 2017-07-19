@@ -197,6 +197,10 @@ virtualenv --python=/usr/bin/python2.7 eegivirtualenv
 source /opt/local/eegi/eegivirtualenv/bin/activate
 pip install -r /opt/local/eegi/eegi/requirements.txt
 
+# install and index analysis software and databases
+
+cd /opt/local/eegi/eegi/analysis_files
+
 wget ftp://ftp.wormbase.org/pub/wormbase/species/c_elegans/sequence/genomic/c_elegans.PRJNA13758.WS260.genomic.fa.gz
 
 wget ftp://ftp.wormbase.org/pub/wormbase/species/c_elegans/sequence/genomic/c_elegans.PRJNA13758.WS260.genomic.fa.gz
