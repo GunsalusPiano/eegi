@@ -70,6 +70,34 @@ And to start the gulp build script, run the following in the project root:
 gulp
 ```
 
+#### Other Dependencies
+
+A blast feature of the requires a local [blastn](https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Download)
+and [tabix](http://www.htslib.org/) executable that have been added to the path.
+
+This also requires a C. elegans database to be built from a fasta file, and its
+corresponding gff annotation file. The sequence names of the fasta file also need
+to match those of the annotation file, so 'CHROMOSOME_' has been appended to the
+fasta file sequence names.
+ ```
+wget ftp://ftp.wormbase.org/pub/wormbase/species/c_elegans/sequence/genomic/c_elegans.PRJNA13758.WS260.genomic.fa.gz
+
+wget ftp://ftp.wormbase.org/pub/wormbase/species/c_elegans/sequence/genomic/c_elegans.PRJNA13758.WS260.genomic.fa.gz
+
+gunzip c_elegans.PRJNA13758.WS260.genomic.fa.gz
+
+perl -i.orig -pe 's/^>([A-Za-z]+)/>$1/g' c_elegans.PRJNA13758.WS260.genomic.fa
+
+makeblastdb -in c_elegans.PRJNA13758.WS260.genomic.fa -dbtype nucl
+
+# This was for macOS
+sort -V -k1,1 -k4,4 -k5,5 c_elegans.PRJNA13758.WS260.annotations.gff2 > c_elegans.PRJNA13758.WS260.annotations.sorted.gff2
+
+bgzip c_elegans.PRJNA13758.WS260.annotations.sorted.gff2
+
+tabix c_elegans.PRJNA13758.WS260.annotations.sorted.gff2.gz
+ ```
+
 
 #### Running Django's Built-In Development Server
 
@@ -95,6 +123,8 @@ This sysadmin steps includes the following:
 - installing Python and virtualenv
 - installing Apache and modwsgi
 - installing git
+- installing blastn (blast suite)
+- installing tabix (samtools)
 - installing MySQL
 - creating a UNIX user for this project (named eegi)
 - creating the project directory at /opt/local/eegi, owned by eegi
@@ -166,8 +196,24 @@ virtualenv --python=/usr/bin/python2.7 eegivirtualenv
 
 source /opt/local/eegi/eegivirtualenv/bin/activate
 pip install -r /opt/local/eegi/eegi/requirements.txt
-```
 
+wget ftp://ftp.wormbase.org/pub/wormbase/species/c_elegans/sequence/genomic/c_elegans.PRJNA13758.WS260.genomic.fa.gz
+
+wget ftp://ftp.wormbase.org/pub/wormbase/species/c_elegans/sequence/genomic/c_elegans.PRJNA13758.WS260.genomic.fa.gz
+
+gunzip c_elegans.PRJNA13758.WS260.genomic.fa.gz
+
+perl -i.orig -pe 's/^>([A-Za-z]+)/>$1/g' c_elegans.PRJNA13758.WS260.genomic.fa
+
+makeblastdb -in c_elegans.PRJNA13758.WS260.genomic.fa -dbtype nucl
+
+# This was for macOS
+sort -V -k1,1 -k4,4 -k5,5 c_elegans.PRJNA13758.WS260.annotations.gff2 > c_elegans.PRJNA13758.WS260.annotations.sorted.gff2
+
+bgzip c_elegans.PRJNA13758.WS260.annotations.sorted.gff2
+
+tabix c_elegans.PRJNA13758.WS260.annotations.sorted.gff2.gz
+```
 
 #### Static Files
 
