@@ -74,6 +74,10 @@ ROOT_URLCONF = 'eegi.urls'
 
 WSGI_APPLICATION = 'eegi.wsgi.application'
 
+FILE_UPLOAD_HANDLERS = (
+    'django.core.files.uploadhandler.TemporaryFileUploadHandler',
+)
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/

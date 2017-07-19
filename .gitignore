@@ -68,3 +68,6 @@ Thumbs.db
 *.sql
 *.sqlite
 *.csv
+
+# Sequence and annotation information
+c_elegans.PRJNA*

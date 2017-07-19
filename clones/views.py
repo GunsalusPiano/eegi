@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from django.core import serializers
-# from clones.forms import CloneSearchForm, GeneSearchForm, GeneSearchFileFieldForm
-from clones.forms import CloneSearchForm, GeneSearchForm
+from clones.forms import CloneSearchForm, GeneSearchForm, BlastForm
 from clones.models import Clone, Gene, CloneTarget
 from library.models import LibraryStock
 from utils.pagination import get_paginated
 import json
+from subprocess import Popen, PIPE
 
 CLONES_PER_PAGE = 20
 
@@ -126,3 +126,81 @@ def render_table(choice_field, query):
 
 
     return json.dumps(d)
+
+def blast(request):
+
+    """
+    This method runs blast locally on a user uploaded fasta file.
+    it searches the WS260 version of the C. elegans genome with each query
+    and then runs the ouput against its gff annotation file.
+    """
+
+    #TODO: Make a management script that downloads a specific version of this
+    # and updates it.
+
+    data = ''
+    query = ''
+    j = []
+    if request.method == 'POST':
+        form = BlastForm(request.POST, request.FILES)
+
+        if request.FILES:
+            query = request.FILES['file_field']
+            filepath = query.temporary_file_path()
+            """
+            This is handled by TemporaryFileUploadHandler, which writes to disk
+            and is assigned a randomly generated filepath. The uploader is defined
+            in settings.py
+            """
+            # runs blast on local server
+            blast_out, blast_err = Popen([
+                'blastn',
+                '-query',query.temporary_file_path(),
+                '-db','/Users/alan/projects/gunsiano/eegi/c_elegans.PRJNA275000.WS260.genomic.fa',
+                '-outfmt','6',
+                '-max_target_seqs','1',
+                '-culling_limit','1',
+                '-num_threads','4',
+                '-evalue','0.00005'],
+                stdout=PIPE,
+                stderr=PIPE
+            ).communicate()
+
+            for hit in blast_out.rstrip().split('\n'):
+                hit = hit.split('\t')
+                region = hit[1]+':'+hit[8]+'-'+hit[9]
+                tabix_out, tabix_err = Popen([
+                    'tabix',
+                    '/Users/alan/projects/gunsiano/eegi/c_elegans.PRJNA13758.WS260.annotations.sorted.gff2.gz',
+                    region],
+                    stdout=PIPE,
+                    stderr=PIPE
+                ).communicate()
+
+                for tabix in tabix_out.rstrip().split('\n'):
+                    if tabix:
+                        tabix = tabix.split('\t')
+                        if tabix[1] == 'gene':
+                            l = []
+                            l.extend((
+                                hit[0],   # query name
+                                hit[1],   # subject name
+                                tabix[1], # source i.e. blastx, gene
+                                tabix[2], # method, i.e. cds
+                                tabix[3], # start position
+                                tabix[4], # stop position
+                                tabix[8]  # features
+                            ))
+                            j.append(l)
+            data = json.dumps(j)
+
+
+    else:
+        form = BlastForm()
+
+    context = {
+        'data':data,
+        'form':form,
+    }
+
+    return render(request, 'blast.html', context)
