@@ -15,6 +15,7 @@
   {% url 'find_secondary_scores_url' as find_secondary_scores_url %}
   {% url 'score_experiment_wells_url' as score_experiment_wells_url %}
   {% url 'descriptions_url' as descriptions_url %}
+  {% url 'blast_url' as blast_url %}
 
   <a href="{{ worms_url }}"
       {% ifequal request.path worms_url %}
