@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'experiments',
 
     # Must be listed after website
-    # 'lockdown',
+    'lockdown',
 ]
 
 MIDDLEWARE_CLASSES = (
@@ -67,7 +67,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'lockdown.middleware.LockdownMiddleware',
+    'lockdown.middleware.LockdownMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
@@ -141,4 +141,4 @@ LOGIN_REDIRECT_URL = '/'
 
 # Site password protection
 
-# LOCKDOWN_FORM = 'lockdown.forms.LockdownForm'
+LOCKDOWN_FORM = 'lockdown.forms.LockdownForm'
