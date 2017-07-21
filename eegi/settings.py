@@ -15,7 +15,8 @@ from localsettings import (
     BASE_DIR_DEVSTAR_OUTPUT, BASE_DIR_IMAGE_CATEGORIES, BASE_DIR_SCORING_LISTS,
     BASE_URL_IMG, BASE_URL_THUMBNAIL, BASE_URL_DEVSTAR,
     GOOGLE_ANALYTICS_ID, GOOGLE_API_KEY,
-    BATCH_DATA_ENTRY_GDOC_NAME, BATCH_DATA_ENTRY_GDOC_URL)
+    BATCH_DATA_ENTRY_GDOC_NAME, BATCH_DATA_ENTRY_GDOC_URL,
+    LOCKDOWN_URL_EXCEPTIONS)
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -56,7 +57,7 @@ INSTALLED_APPS = [
     'experiments',
 
     # Must be listed after website
-    'lockdown',
+    # 'lockdown',
 ]
 
 MIDDLEWARE_CLASSES = (
@@ -66,7 +67,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'lockdown.middleware.LockdownMiddleware',
+    # 'lockdown.middleware.LockdownMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
@@ -140,4 +141,4 @@ LOGIN_REDIRECT_URL = '/'
 
 # Site password protection
 
-LOCKDOWN_FORM = 'lockdown.forms.LockdownForm'
+# LOCKDOWN_FORM = 'lockdown.forms.LockdownForm'

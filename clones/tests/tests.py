@@ -1,5 +1,11 @@
-from django.test import TestCase
+import os.path
+
+# from django.urls import reverse
+from django.contrib.auth.models import User
+from django.test import TestCase, Client
+from django.conf import settings
 from clones.models import Clone, Gene, CloneTarget
+from clones.forms import BlastForm
 
 
 class CloneTestCase(TestCase):
@@ -67,3 +73,28 @@ class CloneTestCase(TestCase):
         self.assertNotIn(Gene.objects.get(pk='WBGene1'), genes_b)
         self.assertIn(Gene.objects.get(pk='WBGene2'), genes_b)
         self.assertIn(Gene.objects.get(pk='WBGene3'), genes_b)
+
+
+class SubmitBlastFormTestCase(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        client = Client()
+        cls.credentials = {
+            'username':'test',
+            'password': 'test',
+        }
+
+        User.objects.create(**cls.credentials)
+
+
+    def test_no_file(self):
+        # response = self.client.post('/', {'id_password':'wormsRus'})
+        # print response
+        response = self.client.post('/blast/')
+        print response.status_code
+
+    def test_file_upload(self):
+        with open (settings.BASE_DIR+'/test.fa') as f:
+            response = self.client.post('/blast/', {'file_field':f})
+            print response.status_code
