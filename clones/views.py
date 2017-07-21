@@ -168,7 +168,7 @@ def blast(request):
                 stderr=PIPE
             ).communicate()
 
-            print blast_out
+            # print blast_out
 
             for hit in blast_out.rstrip().split('\n'):
                 hit = hit.split('\t')
@@ -182,7 +182,7 @@ def blast(request):
                 ).communicate()
 
                 for tabix in tabix_out.rstrip().split('\n'):
-                    print 'tabix',tabix
+                    # print 'tabix',tabix
                     if tabix:
                         tabix = tabix.split('\t')
                         # if tabix[1] == 'gene':
