@@ -1650,4 +1650,7 @@ table#image-category .image-frame {
   color: red;
   font-weight: 600; }
 
+.add-object-link {
+  float: right; }
+
 /*# sourceMappingURL=styles.css.map */
