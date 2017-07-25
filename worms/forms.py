@@ -89,3 +89,19 @@ def clean_mutant_query_and_screen_type(form, cleaned_data):
             form.add_error('mutant_query', 'No mutant match')
 
     return cleaned_data
+
+class AddStrain(forms.ModelForm):
+    """
+    Form to add worm strain.
+    """
+
+    class Meta:
+        model=WormStrain
+        fields = '__all__'
+
+    # strain = forms.CharField(label='Worm Strain', required=True)
+    # gene = forms.CharField(label='Gene')
+    # allele = forms.CharField(label='Allele')
+    # genotype = forms.CharField(label='Genotype')
+    # permissive = forms.DecimalField(label='Permissive Temperature')
+    # restrictive = forms.DecimalField(label='Restrictive Temperature')

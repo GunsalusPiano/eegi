@@ -1638,4 +1638,16 @@ table#image-category .image-frame {
 .show {
   display: block; }
 
+.add_strain_form {
+  border-collapse: collapse; }
+
+.messages {
+  text-align: center;
+  font-weight: 900;
+  color: #58bb62; }
+
+.errorlist {
+  color: red;
+  font-weight: 600; }
+
 /*# sourceMappingURL=styles.css.map */
