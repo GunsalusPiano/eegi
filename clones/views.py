@@ -7,7 +7,8 @@ from library.models import LibraryStock
 from utils.pagination import get_paginated
 import json
 from subprocess import Popen, PIPE
-
+from time import sleep
+import os
 
 CLONES_PER_PAGE = 20
 
@@ -147,45 +148,43 @@ def blast(request):
         form = BlastForm(request.POST, request.FILES)
 
         if request.FILES:
-            query = request.FILES['file_field']
-            filepath = query.temporary_file_path()
+            query = request.FILES['file_field'].read()
+	    with open('/home/eegi/.django-tmp/blah', 'w') as f:
+		f.write(query)
             """
             This is handled by TemporaryFileUploadHandler, which writes to disk
             and is assigned a randomly generated filepath. The uploader is defined
             in settings.py
             """
+
             # runs blast on local server
             blast_out, blast_err = Popen([
-                'blastn',
-                '-query',query.temporary_file_path(),
-                '-db', settings.BASE_DIR+'/analysis_files/c_elegans.PRJNA13758.WS260.genomic.fa',
+                '/home/eegi/software/ncbi-blast-2.6.0+/bin/blastn',
+		'-query','/home/eegi/.django-tmp/blah',
+		'-db', '/home/eegi/django-files/c_elegans_blast_db/c_elegans.PRJNA13758.WS260.genomic.fa',
                 '-outfmt','6',
                 '-max_target_seqs','1',
                 '-culling_limit','1',
                 '-num_threads','4',
                 '-evalue','0.00005'],
                 stdout=PIPE,
-                stderr=PIPE
+                stderr=PIPE,
             ).communicate()
-
-            # print blast_out
 
             for hit in blast_out.rstrip().split('\n'):
                 hit = hit.split('\t')
                 region = hit[1]+':'+hit[8]+'-'+hit[9]
                 tabix_out, tabix_err = Popen([
-                    'tabix',
-                    settings.BASE_DIR+'/analysis_files/c_elegans.PRJNA13758.WS260.annotations.sorted.gff2.gz',
-                    region],
+                    '/home/lg/code/build/bin/tabix',
+                    '/home/eegi/django-files/c_elegans_blast_db/c_elegans.PRJNA13758.WS260.annotations.sorted.gff2.gz',
+		     region],
                     stdout=PIPE,
                     stderr=PIPE
                 ).communicate()
 
                 for tabix in tabix_out.rstrip().split('\n'):
-                    # print 'tabix',tabix
                     if tabix:
                         tabix = tabix.split('\t')
-                        # if tabix[1] == 'gene':
                         l = []
                         l.extend((
                             hit[0],   # query name

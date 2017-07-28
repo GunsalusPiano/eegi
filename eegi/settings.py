@@ -79,7 +79,6 @@ FILE_UPLOAD_HANDLERS = (
     'django.core.files.uploadhandler.TemporaryFileUploadHandler',
 )
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/
 
