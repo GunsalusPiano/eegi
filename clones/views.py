@@ -7,8 +7,7 @@ from library.models import LibraryStock
 from utils.pagination import get_paginated
 import json
 from subprocess import Popen, PIPE
-from time import sleep
-import os
+from django.contrib.auth.decorators import login_required, permission_required
 
 CLONES_PER_PAGE = 20
 
@@ -79,7 +78,6 @@ def descriptions(request):
 
     return render(request, 'descriptions.html', context)
 
-
 def render_table(choice_field, query):
 
     d = []
@@ -130,6 +128,7 @@ def render_table(choice_field, query):
 
     return json.dumps(d)
 
+@login_required
 def blast(request):
 
     """
