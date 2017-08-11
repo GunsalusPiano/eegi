@@ -153,8 +153,8 @@ def blast(request):
 
         if request.FILES:
             query = request.FILES['file_field'].read()
-	    with open('/home/eegi/.django-tmp/blah', 'w') as f:
-		f.write(query)
+	    with open(settings.FILE_UPLOAD_TEMP_DIR+'/blah.fa', 'w') as f:
+		    f.write(query)
             """
             This is handled by TemporaryFileUploadHandler, which writes to disk
             and is assigned a randomly generated filepath. The uploader is defined
@@ -163,9 +163,9 @@ def blast(request):
 
             # runs blast on local server
             blast_out, blast_err = Popen([
-                '/home/eegi/software/ncbi-blast-2.6.0+/bin/blastn',
-		'-query','/home/eegi/.django-tmp/blah',
-		'-db', '/home/eegi/django-files/c_elegans_blast_db/c_elegans.PRJNA13758.WS260.genomic.fa',
+                settings.BLAST,
+		'-query',settings.FILE_UPLOAD_TEMP_DIR+'/blah.fa',
+		'-db', settings.BLAST_DB_DIR + '/c_elegans.PRJNA13758.WS260.genomic.fa',
                 '-outfmt','6',
                 '-max_target_seqs','1',
                 '-culling_limit','1',
@@ -179,8 +179,8 @@ def blast(request):
                 hit = hit.split('\t')
                 region = hit[1]+':'+hit[8]+'-'+hit[9]
                 tabix_out, tabix_err = Popen([
-                    '/home/lg/code/build/bin/tabix',
-                    '/home/eegi/django-files/c_elegans_blast_db/c_elegans.PRJNA13758.WS260.annotations.sorted.gff2.gz',
+                    settings.TABIX,
+                    settings.TABIX_DB_DIR+'/c_elegans.PRJNA13758.WS260.annotations.sorted.gff2.gz',
 		     region],
                     stdout=PIPE,
                     stderr=PIPE
