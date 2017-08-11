@@ -1,3 +1,4 @@
+from django.utils.safestring import mark_safe
 from django import forms
 
 from clones.models import Clone
@@ -62,10 +63,11 @@ class GeneSearchForm(forms.Form):
     """Form to search for clones."""
 
     SEARCH_CHOICES=(
-        ('wb_gene_id', 'WB Gene ID'),
-        ('locus', 'Locus'),
-        ('clone_id','Clone'),
-        ('stock_id', 'Stock'),
+        ('wb_gene_id', mark_safe(u'<strong>WB Gene ID</strong> <em>e.g. \'WBGene00000028\'</em>')),
+        ('locus', mark_safe(u'<strong>Locus</strong> <em>e.g. \'abu-5\'</em>')),
+        ('clone_id',mark_safe(u'<strong>Clone</strong> <em>e.g. \'sjj_Y105C5A.c\'</em>')),
+        ('stock_id', mark_safe(u'<strong>Stock</strong> <em>e.g. \'V-7-B2_B11\'</em>')),
+        ('cosmid_id', mark_safe(u'<strong>Cosmid</strong> <em>e.g. \'Y105C5A.4\'</em>')),
     )
 
     choice_field = forms.ChoiceField(widget=forms.RadioSelect, choices=SEARCH_CHOICES)
