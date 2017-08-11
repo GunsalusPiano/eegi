@@ -80,4 +80,5 @@ class BlastForm(forms.Form):
 
     # sequence_query = forms.CharField(widget=forms.Textarea, required=False, help_text='Sequence in FASTA format.')
 
+    show_all = forms.BooleanField(required=False, label='Show all?')
     file_field = forms.FileField(required=True, help_text='File of fasta sequences.')

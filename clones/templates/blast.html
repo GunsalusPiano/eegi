@@ -33,6 +33,19 @@
       ]
     });
 
+    if($('#id_show_all').is(':checked')){
+      table.columns().search('').draw();
+    }else{
+      table.columns(3).search('(^gene$|^CDS$)', true, false).draw();
+    }
+
+    $('#id_show_all').on('change', function(){
+      if($('#id_show_all').is(':checked')){
+        table.columns().search('').draw();
+      }else{
+        table.columns(3).search('(^gene$|^CDS$)', true, false).draw();
+      }
+    });
 
     table.on('draw', function() {
       var body = $(table.table().body());
@@ -47,35 +60,38 @@
 
     });
 
-    $('#searchFile').on('click', function() {
-      var file = document.getElementById("geneFile").files[0];
-      var txt = "";
-      if (file) {
-        if (file.length == 0 || file.length > 1) {
-          txt = "Please select a file.";
-        } else {
 
-          var reader = new FileReader();
-          reader.onload = function(event) {
-            var content = event.target.result;
-            var lines = content.replace(/,/g, '|').trim();
 
-            table.search(lines, true, false).draw();
-
-          }
-          reader.readAsText(file);
-
-        }
-      } else {
-        if (file.value == "") {
-          txt += "Please select a file.";
-        } else {
-          txt += "The file property is not supported by your browser!";
-          txt += "<br>The path of the selected file: " + file.value; // If the browser does not support the files property, it will return the path of the selected file instead.
-        }
-      }
-
-    });
+    // $('#searchFile').on('click', function() {
+    //   var file = document.getElementById("geneFile").files[0];
+    //   var txt = "";
+    //   if (file) {
+    //     if (file.length == 0 || file.length > 1) {
+    //       txt = "Please select a file.";
+    //     } else {
+    //
+    //       var reader = new FileReader();
+    //       reader.onload = function(event) {
+    //         var content = event.target.result;
+    //         var lines = content.replace(/,/g, '|').trim();
+    //         console.log(lines);
+    //
+    //         table.search(lines, true, false).draw();
+    //
+    //       }
+    //       reader.readAsText(file);
+    //       console.log(file);
+    //     }
+    //   } else {
+    //     if (file.value == "") {
+    //       txt += "Please select a file.";
+    //     } else {
+    //       txt += "The file property is not supported by your browser!";
+    //       txt += "<br>The path of the selected file: " + file.value; // If the browser does not support the files property, it will return the path of the selected file instead.
+    //     }
+    //   }
+    //
+    // });
 
     $('#reset').on('click', function() {
 
