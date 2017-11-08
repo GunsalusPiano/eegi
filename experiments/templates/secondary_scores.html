@@ -71,14 +71,16 @@ Browse {{ screen_type }} Secondary Scores for
       <th>Passes A?</th>
       <th>Passes B?</th>
       <th>Passes C?</th>
-      <!-- <th>Average Score</th> -->
+      <th>Average Score</th>
       <th colspan="{{ num_experiment_columns }}">
         Scores
       </th>
-      <!-- <th>Average Score 2</th> -->
+      <th>Average Score 2</th>
       <th colspan="{{ num_experiment_columns }}">
           Scores 2
       </th>
+      <th>WB Gene Descritption</th>
+      <th>Gene Class Description</th>
     </tr>
   </thead>
 
@@ -97,7 +99,7 @@ Browse {{ screen_type }} Secondary Scores for
 
       <td>
         {% if intended_clone %}
-        {{ intended_clone|get_comma_separated_targets|safe }}
+        {{ intended_clone|get_comma_separated_targets:True|safe }}
 
         {% else %}
         n/a
@@ -149,14 +151,40 @@ Browse {{ screen_type }} Secondary Scores for
       </td>
       {% endfor %}
 
-      {% with experiments2=data2|get_dict_item:library_stock %}
-        {% for experiment, score in experiments2.iteritems %}
-          <td class="experiment-score {{ score.get_category }}">
-            <a href="{{ experiment.get_absolute_url }}"></a>
-          </td>
-        {% endfor %}
-      {% endwith %}
+      <td></td>
 
+      {% with experiments2=data2_scores|get_dict_item:library_stock %}
+
+        {% if experiments2|length > 1 %}
+          {% for experiment, score in experiments2.items %}
+            <td class="experiment-score {{ score.get_category }}">
+              <a href="{{ experiment.get_absolute_url }}"></a>
+            </td>
+          {% endfor %}
+          {% else %}
+            {% for i in '12345678' %}
+              <td></td>
+            {% endfor %}
+          {% endif %}
+      {% endwith %}
+      <td>
+        {% if intended_clone %}
+          {% with gene=intended_clone|get_comma_separated_targets:False %}
+            {{ gene|get_gene_desc }}
+          {% endwith %}
+        {% else %}
+          n/a
+        {% endif %}
+      </td>
+      <td>
+        {% if intended_clone %}
+          {% with gene=intended_clone|get_comma_separated_targets:False %}
+            {{ gene|get_gene_class_desc }}
+          {% endwith %}
+        {% else %}
+          n/a
+        {% endif %}
+      </td>
     </tr>
     {% endwith %}
 

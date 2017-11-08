@@ -8,7 +8,7 @@
 
   <a href="{{ clone.get_absolute_url }}">{{ clone.id }}</a>
   &nbsp;
-  (targets {{ clone|get_comma_separated_targets|safe }})
+  (targets {{ clone|get_comma_separated_targets:True|safe }})
 </span>
 
 {% else %}

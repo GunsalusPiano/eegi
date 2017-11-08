@@ -7,11 +7,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from experiments.forms import SecondaryScoresForm
 
-# from experiments.helpers.criteria import (
-#     passes_sup_secondary_percent,
-#     passes_sup_secondary_count,
-#     passes_sup_secondary_stringent)
-
 from experiments.helpers.scores import get_average_score_weight, calculate_average_scores
 
 from worms.models import WormStrain
@@ -62,52 +57,6 @@ def secondary_scores(request, worm, worm2, temperature, username=None):
     data_stats = calculate_average_scores(data)
     data2_stats = calculate_average_scores(data2)
 
-
-
-    # for stock, expts in data.iteritems():
-    #     scores = expts.values()
-    #     stock.avg = get_average_score_weight(scores)
-    #
-    #     stock.passes_stringent = passes_sup_secondary_stringent(scores)
-    #     stock.passes_percent = passes_sup_secondary_percent(
-    #         scores)
-    #     stock.passes_count = passes_sup_secondary_count(scores)
-    #
-    #     if stock.passes_stringent:
-    #         num_passes_stringent += 1
-    #
-    #     if stock.passes_percent:
-    #         num_passes_percent += 1
-    #
-    #     if stock.passes_count:
-    #         num_passes_count += 1
-    #
-    #     if len(expts) > num_experiment_columns:
-    #         num_experiment_columns = len(expts)
-
-
-
-    # for stock, expts in data2.iteritems():
-    #     scores = expts.values()
-    #     stock.avg = get_average_score_weight(scores)
-    #
-    #     stock.passes_stringent = passes_sup_secondary_stringent(scores)
-    #     stock.passes_percent = passes_sup_secondary_percent(
-    #         scores)
-    #     stock.passes_count = passes_sup_secondary_count(scores)
-    #
-    #     if stock.passes_stringent:
-    #         num_passes_stringent2 += 1
-    #
-    #     if stock.passes_percent:
-    #         num_passes_percent2 += 1
-    #
-    #     if stock.passes_count:
-    #         num_passes_count2 += 1
-    #
-    #     if len(expts) > num_experiment_columns:
-    #         num_experiment_columns2 = len(expts)
-
     data = OrderedDict(sorted(
         data.iteritems(),
         key=lambda x: (x[0].passes_stringent,
@@ -123,14 +72,6 @@ def secondary_scores(request, worm, worm2, temperature, username=None):
         else:
             data2_scores[stock] = ""
 
-    # data2 = OrderedDict(sorted(
-    #     data2.iteritems(),
-    #     key=lambda x: (x[0].passes_stringent2,
-    #                    x[0].passes_percent2,
-    #                    x[0].passes_count2,
-    #                    x[0].avg2),
-    #     reverse=True))
-
     context = {
         'worm': worm,
         'screen_type': screen_type,
@@ -140,7 +81,7 @@ def secondary_scores(request, worm, worm2, temperature, username=None):
         'num_passes_count': data_stats['num_passes_count'],
         'num_passes_stringent': data_stats['num_passes_stringent'],
         'num_experiment_columns': data_stats['num_experiment_columns'],
-        'data2': data2_scores,
+        'data2_scores': data2_scores,
     }
 
     return render(request, 'secondary_scores.html', context)

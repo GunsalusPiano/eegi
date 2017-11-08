@@ -2,6 +2,7 @@ from django import template
 from django.utils.timezone import localtime
 
 from utils.well_tile_conversion import well_to_tile
+from clones.models import Gene
 
 register = template.Library()
 
@@ -45,7 +46,7 @@ def get_comma_separated_ids(l):
 
 
 @register.filter(is_safe=True)
-def get_comma_separated_strings(l, add_links=False):
+def get_comma_separated_strings(l, add_links):
     """
     Get a comma-separated string of the items of l.
 
@@ -84,7 +85,7 @@ def get_comma_separated_strings(l, add_links=False):
 
 
 @register.filter
-def get_comma_separated_targets(clone):
+def get_comma_separated_targets(clone, add_link):
     """
     Get a comma-separated string of clone's targets.
 
@@ -92,7 +93,7 @@ def get_comma_separated_targets(clone):
     """
     genes = [x.gene for x in clone.get_targets()]
     if genes:
-        return get_comma_separated_strings(genes, add_links=True)
+        return get_comma_separated_strings(genes, add_link)
     else:
         return "None (according to Firoz's database)"
 
@@ -200,3 +201,19 @@ def get_devstar_score_summary(experiment):
 @register.filter
 def get_dict_item(dictionary, key):
     return dictionary.get(key)
+
+@register.filter
+def get_gene_desc(gene_id):
+    try:
+        desc = Gene.objects.get(locus=gene_id).functional_description
+    except Gene.DoesNotExist:
+        desc = 'NA'
+    return desc
+
+@register.filter
+def get_gene_class_desc(gene_id):
+    try:
+        desc = Gene.objects.get(locus=gene_id).gene_class_description
+    except Gene.DoesNotExist:
+        desc = 'NA'
+    return desc
