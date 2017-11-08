@@ -71,9 +71,13 @@ Browse {{ screen_type }} Secondary Scores for
       <th>Passes A?</th>
       <th>Passes B?</th>
       <th>Passes C?</th>
-      <th>Average Score</th>
+      <!-- <th>Average Score</th> -->
       <th colspan="{{ num_experiment_columns }}">
         Scores
+      </th>
+      <!-- <th>Average Score 2</th> -->
+      <th colspan="{{ num_experiment_columns }}">
+          Scores 2
       </th>
     </tr>
   </thead>
@@ -144,6 +148,14 @@ Browse {{ screen_type }} Secondary Scores for
         <a href="{{ experiment.get_absolute_url }}"></a>
       </td>
       {% endfor %}
+
+      {% with experiments2=data2|get_dict_item:library_stock %}
+        {% for experiment, score in experiments2.iteritems %}
+          <td class="experiment-score {{ score.get_category }}">
+            <a href="{{ experiment.get_absolute_url }}"></a>
+          </td>
+        {% endfor %}
+      {% endwith %}
 
     </tr>
     {% endwith %}

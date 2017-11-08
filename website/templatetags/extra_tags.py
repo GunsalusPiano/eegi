@@ -196,3 +196,7 @@ def get_devstar_score_summary(experiment):
         output.append(o)
 
     return '; '.join(str(item) for item in output)
+
+@register.filter
+def get_dict_item(dictionary, key):
+    return dictionary.get(key)

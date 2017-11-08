@@ -77,13 +77,31 @@ def clean_mutant_query_and_screen_type(form, cleaned_data):
     Returns the modified cleaned_data.
     """
     mutant_query = cleaned_data.get('mutant_query')
+    secondary_mutant_query = cleaned_data.get('secondary_mutant_query')
     screen_type = cleaned_data.get('screen_type')
 
-    if mutant_query and screen_type:
+    if mutant_query and screen_type and secondary_mutant_query:
+
+        worm_and_temp = WormStrain.get_worm_and_temperature_from_search_term(
+            mutant_query, screen_type)
+
+        worm_and_temp2 = WormStrain.get_worm_and_temperature_from_search_term(
+            secondary_mutant_query, screen_type)
+        print worm_and_temp2
+
+        if worm_and_temp and worm_and_temp2:
+            cleaned_data['worm'] = worm_and_temp[0]
+            cleaned_data['worm2'] = worm_and_temp2[0]
+            cleaned_data['temperature'] = worm_and_temp[1]
+        else:
+            form.add_error('mutant_query', 'No mutant match')
+
+    elif mutant_query and screen_type:
         worm_and_temp = WormStrain.get_worm_and_temperature_from_search_term(
             mutant_query, screen_type)
         if worm_and_temp:
             cleaned_data['worm'] = worm_and_temp[0]
+            cleaned_data['worm2'] = secondary_mutant_query
             cleaned_data['temperature'] = worm_and_temp[1]
         else:
             form.add_error('mutant_query', 'No mutant match')

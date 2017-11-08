@@ -623,6 +623,7 @@ class SecondaryScoresForm(forms.Form):
     """Form for getting all secondary scores for a worm/screen combo."""
 
     mutant_query = MutantKnockdownField()
+    secondary_mutant_query = MutantKnockdownField()
     screen_type = ScreenTypeChoiceField()
 
     def clean(self):

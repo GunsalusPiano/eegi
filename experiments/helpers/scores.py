@@ -1,6 +1,11 @@
 from __future__ import division
 from collections import OrderedDict
 
+from experiments.helpers.criteria import (
+    passes_sup_secondary_percent,
+    passes_sup_secondary_count,
+    passes_sup_secondary_stringent)
+
 from worms.models import WormStrain
 
 
@@ -66,6 +71,39 @@ def organize_manual_scores(scores, most_relevant_only=False):
                 data[lstock][experiment] = score
 
     return data
+
+# pass in the organized scores from views_secondary_scores
+def calculate_average_scores(data):
+
+    data_stats = {}
+
+    data_stats['num_passes_stringent'] = 0
+    data_stats['num_passes_percent'] = 0
+    data_stats['num_passes_count'] = 0
+    data_stats['num_experiment_columns'] = 0
+
+    for stock, expts in data.iteritems():
+        scores = expts.values()
+        stock.avg = get_average_score_weight(scores)
+
+        stock.passes_stringent = passes_sup_secondary_stringent(scores)
+        stock.passes_percent = passes_sup_secondary_percent(
+            scores)
+        stock.passes_count = passes_sup_secondary_count(scores)
+
+        if stock.passes_stringent:
+            data_stats['num_passes_stringent'] += 1
+
+        if stock.passes_percent:
+            data_stats['num_passes_percent'] += 1
+
+        if stock.passes_count:
+            data_stats['num_passes_count'] += 1
+
+        if len(expts) > data_stats['num_experiment_columns']:
+            data_stats['num_experiment_columns'] = len(expts)
+
+    return data_stats
 
 
 def get_positives_any_worm(screen_type, screen_stage, criteria, **kwargs):
