@@ -22,14 +22,17 @@ GISELLE_ID = 3
 IDS = [NOAH_ID, MALCOLM_ID, SHERLY_ID]
 
 
-def secondary_scores(request, worm, worm2, temperature, username=None):
+# def secondary_scores(request, worm, worm2, temperature, username=None):
+def secondary_scores(request, worm, temperature, worm2=None, username=None):
     """
     Render the page to display secondary scores for a mutant/screen.
 
     Results show strongest positives on top.
     """
     worm = get_object_or_404(WormStrain, pk=worm)
-    worm2 = get_object_or_404(WormStrain, pk=worm2)
+    if worm2:
+        worm2 = get_object_or_404(WormStrain, pk=worm2)
+
     try:
         screen_type = worm.get_screen_type(temperature)
     except Exception:
@@ -40,8 +43,8 @@ def secondary_scores(request, worm, worm2, temperature, username=None):
         data = worm.get_organized_scores(screen_type, screen_stage=2,
                                          most_relevant_only=True,
                                          scorer=user)
-
-        data2 = worm2.get_organized_scores(screen_type, screen_stage=2,
+        if worm2:
+            data2 = worm2.get_organized_scores(screen_type, screen_stage=2,
                                          most_relevant_only=True,
                                          scorer=user)
 
@@ -49,13 +52,14 @@ def secondary_scores(request, worm, worm2, temperature, username=None):
         data = worm.get_organized_scores(screen_type, screen_stage=2,
                                          most_relevant_only=True,
                                          scorer_id__in=IDS)
-
-        data2 = worm2.get_organized_scores(screen_type, screen_stage=2,
+        if worm2:
+            data2 = worm2.get_organized_scores(screen_type, screen_stage=2,
                                          most_relevant_only=True,
                                          scorer_id__in=IDS)
 
     data_stats = calculate_average_scores(data)
-    data2_stats = calculate_average_scores(data2)
+    if worm2:
+        data2_stats = calculate_average_scores(data2)
 
     data = OrderedDict(sorted(
         data.iteritems(),
@@ -66,11 +70,12 @@ def secondary_scores(request, worm, worm2, temperature, username=None):
         reverse=True))
 
     data2_scores = OrderedDict()
-    for stock, expts in data.iteritems():
-        if stock in data2:
-            data2_scores[stock] = data2[stock]
-        else:
-            data2_scores[stock] = ""
+    if worm2:
+        for stock, expts in data.iteritems():
+            if stock in data2:
+                data2_scores[stock] = data2[stock]
+            else:
+                data2_scores[stock] = ""
 
     context = {
         'worm': worm,
@@ -94,9 +99,12 @@ def find_secondary_scores(request):
         if form.is_valid():
             data = form.cleaned_data
             worm = data['worm']
-            worm2 = data['worm2']
             temperature = data['temperature']
-            return redirect(secondary_scores, worm.pk, worm2.pk, temperature)
+            if data['worm2']:
+                worm2 = data['worm2']
+                return redirect(secondary_scores, worm.pk, temperature, worm2=worm2.pk)
+            else:
+                return redirect(secondary_scores, worm.pk, temperature)
 
     else:
         form = SecondaryScoresForm(initial={'screen_type': 'SUP'})
