@@ -102,7 +102,7 @@ def find_secondary_scores(request):
             temperature = data['temperature']
             if data['worm2']:
                 worm2 = data['worm2']
-                return redirect(secondary_scores, worm.pk, temperature, worm2=worm2.pk)
+                return redirect(secondary_scores, worm.pk, temperature, worm2.pk)
             else:
                 return redirect(secondary_scores, worm.pk, temperature)
 
