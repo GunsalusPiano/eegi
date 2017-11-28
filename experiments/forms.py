@@ -348,9 +348,12 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
     exclude_n2 = forms.BooleanField(
         required=False, initial=True, label='Exclude N2')
 
+    score_abridged_set = forms.BooleanField(required=False, initial=True, label="Score Abridged Set",
+        help_text="Score manually curated set of experiments")
+
     field_order = [
         'score_form_key', 'scoring_list', 'images_per_page',
-        'unscored_by_user', 'randomize_order', 'score_only_4_reps',
+        'unscored_by_user', 'randomize_order', 'score_only_4_reps', 'score_abridged_set'
         'exclude_n2', 'exclude_l4440', 'exclude_no_clone', 'is_junk',
         'plate__screen_stage', 'plate__date', 'plate__date__range',
         'screen_type', 'plate__temperature', 'plate__temperature__range',
@@ -387,6 +390,7 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
         screen_type = cleaned_data.pop('screen_type')
         randomize_order = cleaned_data.pop('randomize_order')
         score_only_4_reps = cleaned_data.pop('score_only_4_reps')
+        score_abridged_set = cleaned_data.pop('score_abridged_set')
         exclude_n2 = cleaned_data.pop('exclude_n2')
 
         _remove_empties_and_none(cleaned_data)
@@ -396,21 +400,131 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
             .prefetch_related('manualscore_set')
         )
 
-        if gene:
-            experiments = experiments.filter(worm_strain__gene=gene)
+        if score_abridged_set:
+            rnai = ['universal-E1_A01',
+                    'universal-E1_A08',
+                    'universal-E1_C07',
+                    'universal-E1_C09',
+                    'universal-E1_D07',
+                    'universal-E1_D12',
+                    'universal-E1_E03',
+                    'universal-E1_E07',
+                    'universal-E1_F03',
+                    'universal-E1_F10',
+                    'universal-E1_G01',
+                    'universal-E1_H03',
+                    'universal-E1_H05',
+                    'universal-E1_H06',
+                    'universal-E1_H07',
+                    'universal-E2_A12',
+                    'universal-E2_C01',
+                    'universal-E2_C05',
+                    'universal-E2_C06',
+                    'universal-E2_D05',
+                    'universal-E2_D08',
+                    'universal-E2_D10',
+                    'universal-E2_E05',
+                    'universal-E2_F10',
+                    'universal-E2_G04',
+                    'universal-E2_H05',
+                    'universal-E2_H07',
+                    'universal-E2_H12',
+                    'universal-E3_A06',
+                    'universal-E3_D04',
+                    'universal-E3_E01',
+                    'universal-E3_E03',
+                    'universal-E3_F05',
+                    'universal-E3_G02',
+                    'universal-E3_G04',
+                    'universal-E3_G05',
+                    'universal-E3_H02',
+                    'universal-E3_H10',
+                    'universal-E4_A06',
+                    'universal-E4_A07',
+                    'universal-E4_A08',
+                    'universal-E4_B08',
+                    'universal-E4_B10',
+                    'universal-E4_C01',
+                    'universal-E4_C12',
+                    'universal-E4_F04',
+                    'universal-E4_F11',
+                    'universal-E4_H05',
+                    'universal-E5_A03',
+                    'universal-E5_A08',
+                    'universal-E5_A09',
+                    'universal-E5_B10',
+                    'universal-E5_C02',
+                    'universal-E5_D01',
+                    'universal-E5_D03',
+                    'universal-E5_D04',
+                    'universal-E5_D09',
+                    'universal-E5_D11',
+                    'universal-E5_H02',
+                    'e2141-E1_F11',
+                    'e2141-E2_F04',
+                    'e2141-E2_H04',
+                    'universal-E10_A02',
+                    'universal-E10_B08',
+                    'universal-E11_A01',
+                    'universal-E11_B05',
+                    'universal-E11_B09',
+                    'universal-E11_B12',
+                    'universal-E11_D12',
+                    'universal-E11_E06',
+                    'universal-E6_A02',
+                    'universal-E6_C02',
+                    'universal-E6_C06',
+                    'universal-E6_D02',
+                    'universal-E6_E01',
+                    'universal-E6_F03',
+                    'universal-E6_F11',
+                    'universal-E6_G03',
+                    'universal-E6_H05',
+                    'universal-E7_E09',
+                    'universal-E7_F10',
+                    'universal-E7_G01',
+                    'universal-E7_G07',
+                    'universal-E7_G08',
+                    'universal-E7_H08',
+                    'universal-E7_H10',
+                    'universal-E8_A05',
+                    'universal-E8_A11',
+                    'universal-E8_C01',
+                    'universal-E8_C11',
+                    'universal-E8_D02',
+                    'universal-E8_D04',
+                    'universal-E8_G07',
+                    'universal-E8_H07',
+                    'universal-E9_A01',
+                    'universal-E9_A09',
+                    'universal-E9_B07',
+                    'universal-E9_B09',
+                    'universal-E9_B12',
+                    'universal-E9_C12',
+                    'universal-E9_E01',
+                    'universal-E9_F03',
+                    'universal-E9_G02',
+                    'universal-E9_G10',
+                    'universal-E9_G11',
+                    'universal-E9_H11']
+            experiments = experiments.filter(plate_id__date__in=['2015-10-09','2015-11-18'], worm_strain_id__gene='glp-1', library_stock__in=rnai)
+        else:
 
-        if exclude_no_clone:
-            experiments = experiments.exclude(
-                library_stock__intended_clone__isnull=True)
+            if gene:
+                experiments = experiments.filter(worm_strain__gene=gene)
 
-        if exclude_l4440:
-            experiments = experiments.exclude(
-                library_stock__intended_clone='L4440')
+            if exclude_no_clone:
+                experiments = experiments.exclude(
+                    library_stock__intended_clone__isnull=True)
 
-        if exclude_n2:
-            experiments = experiments.exclude(
-                worm_strain="N2"
-            )
+            if exclude_l4440:
+                experiments = experiments.exclude(
+                    library_stock__intended_clone='L4440')
+
+            if exclude_n2:
+                experiments = experiments.exclude(
+                    worm_strain="N2"
+                )
 
         if unscored_by_user:
             score_ids = (

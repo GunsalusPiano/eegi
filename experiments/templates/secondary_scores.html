@@ -177,13 +177,15 @@ Browse {{ screen_type }} Secondary Scores for
         {% endif %}
       </td>
       <td>
-        {% if intended_clone %}
-          {% with gene=intended_clone|get_comma_separated_targets:False %}
-            {{ gene|get_gene_class_desc }}
-          {% endwith %}
-        {% else %}
-          n/a
-        {% endif %}
+        <div class="scrollable">
+          {% if intended_clone %}
+            {% with gene=intended_clone|get_comma_separated_targets:False %}
+              {{ gene|get_gene_class_desc }}
+            {% endwith %}
+          {% else %}
+            n/a
+          {% endif %}
+        </div>
       </td>
     </tr>
     {% endwith %}
