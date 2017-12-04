@@ -167,25 +167,31 @@ Browse {{ screen_type }} Secondary Scores for
             {% endfor %}
           {% endif %}
       {% endwith %}
-      <td>
+      <td class="desc">
         {% if intended_clone %}
           {% with gene=intended_clone|get_comma_separated_targets:False %}
-            {{ gene|get_gene_desc }}
+            <div class="expandDesc">
+              <p class="geneDesc seeMore">
+                {{ gene|get_gene_desc }}
+              </p>
+            </div>
           {% endwith %}
         {% else %}
           n/a
         {% endif %}
       </td>
-      <td>
-        <div class="scrollable">
+      <td class="desc">
           {% if intended_clone %}
             {% with gene=intended_clone|get_comma_separated_targets:False %}
-              {{ gene|get_gene_class_desc }}
+              <div class="expandClassDesc">
+                <p class="geneClassDesc seeMore">
+                  {{ gene|get_gene_class_desc }}
+                </p>
+              </div>
             {% endwith %}
           {% else %}
             n/a
           {% endif %}
-        </div>
       </td>
     </tr>
     {% endwith %}

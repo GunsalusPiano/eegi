@@ -270,3 +270,16 @@ function addScoringKeyboardShortcutsModalListener() {
     }
   });
 }
+
+// $(function(){
+//     $(".expandDesc").click(function(event){
+//       event.stopPropagation();
+//         $(".geneDesc").toggleClass("seeMore");
+//     })
+// });
+//
+// $(function(){
+//     $(".expandClassDesc").click(function(){
+//         $(".geneClassDesc").toggleClass("seeMore");
+//     })
+// });

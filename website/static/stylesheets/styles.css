@@ -56,7 +56,7 @@ body {
     float: left;
     margin-bottom: 40px; }
     body #header #site-title {
-      margin-bottom: 13.33333px; }
+      margin-bottom: 13.3333333333px; }
   body #content {
     width: 100%;
     float: left; }
@@ -208,7 +208,7 @@ hr {
   -o-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   padding: 40px;
-  padding-top: 26.66667px;
+  padding-top: 26.6666666667px;
   background: #f8f8f8;
   border-radius: 5px; }
   .modal-title {
@@ -1286,7 +1286,7 @@ div.dt-button.processing:after {
   max-width: 1300px; }
 #experiment #toggle-junk-form {
   display: inline-block;
-  margin-left: 13.33333px; }
+  margin-left: 13.3333333333px; }
 
 #experiment-plate .vertical-links {
   float: left; }
@@ -1497,6 +1497,19 @@ div.dt-button.processing:after {
       left: 0;
       width: 100%;
       height: 100%; }
+
+.desc {
+  max-width: 200px; }
+
+.seeMore {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap; }
+
+.seeMore:hover {
+  overflow: visible;
+  white-space: normal;
+  height: auto; }
 
 .scrolable {
   max-height: 75px;
