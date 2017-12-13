@@ -355,7 +355,9 @@ class Experiment(models.Model):
 
     def get_link_to_exact_n2_control(self):
         filters = self.get_n2_control_filters()
-        return Experiment.objects.filter(**filters).order_by('?')[0]
+        # return Experiment.objects.filter(**filters).order_by('?')[0]
+        return Experiment.objects.filter(**filters).order_by('?')
+
 
     def toggle_junk(self):
         """
@@ -424,6 +426,7 @@ class ManualScoreCode(models.Model):
 
         'EMB_LEVEL': list(range(30, 41)),   # 30-40, 11 levels total
         'STE_LEVEL': list(range(41, 47)),   # 41-46, 6 levels total
+        'ENH_LEVEL': [0, 1, 2, 3],          # w/m/s for enhancer fompare to N2+RNAi
 
         'ENH_LEGACY': [
             0,  # WT
