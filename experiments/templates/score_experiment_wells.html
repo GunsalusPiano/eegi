@@ -59,7 +59,30 @@
       {% endif %}
     </div>
 
+    <!-- <div class="experiment-content">
+      <div class="experiment-content-image">
+        <div class="image-frame loading"
+            data-src="{% get_image_url experiment.get_link_to_exact_n2_control mode %}">
+        </div>
+      </div>
+    </div>
     <div class="experiment-content">
+      <div class="experiment-content-image">
+        <div class="image-frame loading"
+            data-src="{% get_image_url experiment mode %}">
+        </div>
+      </div>
+
+      <div class="experiment-content-buttons">
+        {{ experiment.score_form.as_p }}
+      </div>
+    </div> -->
+    <div class="experiment-content">
+      <div class="experiment-content-image">
+        <div class="image-frame loading"
+            data-src="{% get_image_url experiment.get_link_to_exact_n2_control mode %}">
+        </div>
+      </div>
       <div class="experiment-content-image">
         <div class="image-frame loading"
             data-src="{% get_image_url experiment mode %}">

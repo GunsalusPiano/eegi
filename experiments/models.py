@@ -325,6 +325,8 @@ class Experiment(models.Model):
     def get_n2_control_filters(self):
         """
         Get the N2 + RNAi controls for this experiment.
+        It does this by manually setting the strain as N2 and then applying
+        all the other parameters which are shared by the controls.
 
         To get the actual control experiments from the returned filters,
         simply do Experiment.objects.filter(**filters). Returning
@@ -351,6 +353,10 @@ class Experiment(models.Model):
         filters = self.get_n2_control_filters()
         return build_url('find_experiment_wells_url', get=filters)
 
+    def get_link_to_exact_n2_control(self):
+        filters = self.get_n2_control_filters()
+        return Experiment.objects.filter(**filters).order_by('?')[0]
+
     def toggle_junk(self):
         """
         Toggle the junk state of this experiment.
@@ -366,7 +372,8 @@ class Experiment(models.Model):
         """
         Gets the plates that this specific experiment is replicated across
         """
-        return (cls.objects.filter(**filters).exclude(worm_strain_id="N2")
+        # return (cls.objects.filter(**filters).exclude(worm_strain_id="N2")
+        return (cls.objects.filter(**filters)
                 .order_by('?')
                 .values_list('pk', flat=True)[:4])
 
