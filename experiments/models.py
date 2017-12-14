@@ -426,7 +426,7 @@ class ManualScoreCode(models.Model):
 
         'EMB_LEVEL': list(range(30, 41)),   # 30-40, 11 levels total
         'STE_LEVEL': list(range(41, 47)),   # 41-46, 6 levels total
-        'ENH_LEVEL': [0, 1, 2, 3],          # w/m/s for enhancer fompare to N2+RNAi
+        'ENH_LEVEL': [0, 12, 13, 14, 15],          # w/m/s for enhancer fompare to N2+RNAi
 
         'ENH_LEGACY': [
             0,  # WT

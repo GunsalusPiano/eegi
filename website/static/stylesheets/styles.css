@@ -1385,14 +1385,18 @@ div.dt-button.processing:after {
     float: left;
     margin-right: 40px; }
   #score-experiment-wells .experiment-content {
-    margin-top: 10px; }
+    margin-top: 10px;
+    display: inline-flex; }
     #score-experiment-wells .experiment-content-image, #score-experiment-wells .experiment-content-buttons {
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box;
       float: left; }
-    #score-experiment-wells .experiment-content-image {
-      width: 75%; }
+    #score-experiment-wells .experiment-content-image, #score-experiment-wells .experiment-content-control-image {
+      width: 75%;
+      background: black; }
+    #score-experiment-wells .experiment-content-control-image {
+      display: inline-flex; }
     #score-experiment-wells .experiment-content-buttons {
       padding-left: 40px;
       width: 25%; }
@@ -1413,6 +1417,9 @@ div.dt-button.processing:after {
         #score-experiment-wells .experiment-content-buttons ul.errorlist {
           padding: 0;
           margin-bottom: 5px; }
+  #score-experiment-wells .experiment .image-frame > .experiment-image {
+    width: 94%;
+    padding-top: 9%; }
 #score-experiment-wells .active-keyable-group {
   box-shadow: 0 0 4px #8d54c6;
   border-radius: 4px; }

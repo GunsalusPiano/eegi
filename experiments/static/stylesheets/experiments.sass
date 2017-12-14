@@ -162,14 +162,20 @@ $max-image-width: 1300px
 
     &-content
       margin-top: $whitespace / 4
+      display: inline-flex
 
       &-image,
       &-buttons
         @include box-sizing(border-box)
         float: left
 
-      &-image
+      &-image,
+      &-control-image
         width: 75%
+        background: black
+
+      &-control-image
+        display: inline-flex
 
       &-buttons
         padding-left: $whitespace

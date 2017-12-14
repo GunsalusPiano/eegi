@@ -799,7 +799,7 @@ class LevelsScoreForm(ScoreForm):
 
     emb_score = SingleScoreField(key='EMB_LEVEL', required=True)
     ste_score = SingleScoreField(key='STE_LEVEL', required=True)
-    enh_score = SingleScoreField(key='SUP', required=True)
+    enh_score = SingleScoreField(key='ENH_LEVEL', required=True)
     auxiliary_scores = MultiScoreField(key='AUXILIARY', required=False)
 
     def clean(self):
