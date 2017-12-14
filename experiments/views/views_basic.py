@@ -251,6 +251,7 @@ def score_experiment_wells(request):
 
         pks = [k.split('-')[0] for k in request.POST if pattern.match(k)]
 
+
         # Check if all POSTs are valid
         for experiment in Experiment.objects.filter(pk__in=pks):
             # gets the form form either enhancer or Suppressor
