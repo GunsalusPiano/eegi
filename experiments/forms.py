@@ -768,7 +768,7 @@ class ScoreForm(forms.Form):
         self.user = kwargs.pop('user', None)
         super(ScoreForm, self).__init__(*args, **kwargs)
 
-# THis is the suppressor scoring form
+# THis is the secondary suppressor scoring form
 class SuppressorScoreForm(ScoreForm):
 
     sup_score = SingleScoreField(key='SUP', required=True)
@@ -794,13 +794,14 @@ class SuppressorScoreForm(ScoreForm):
             save_score(code)
 
 
-# This is the secondary scoring form (the one where you actually score)
+# This is the secondary enhancer scoring form (the one where you actually score)
 class LevelsScoreForm(ScoreForm):
 
     emb_score = SingleScoreField(key='EMB_LEVEL', required=True)
     ste_score = SingleScoreField(key='STE_LEVEL', required=True)
     ste_relative_score = SingleScoreField(key='STE_REL_LEVEL', required=True)
     emb_relative_score = SingleScoreField(key='EMB_REL_LEVEL', required=True)
+    n2_rnai_score = SingleScoreField(key='N2_RNAi', required=True)
     auxiliary_scores = MultiScoreField(key='AUXILIARY', required=False)
 
     def clean(self):
@@ -811,6 +812,7 @@ class LevelsScoreForm(ScoreForm):
                 cleaned_data['ste_score'] == IMPOSSIBLE and
                 cleaned_data['ste_relative_score'] == IMPOSSIBLE and
                 cleaned_data['emb_relative_score'] == IMPOSSIBLE and
+                cleaned_data['n2_rnai_score'] == IMPOSSIBLE and
                 not cleaned_data['auxiliary_scores']):
             raise forms.ValidationError('"Impossible to judge" requires '
                                         'some auxiliary score')
@@ -824,14 +826,14 @@ class LevelsScoreForm(ScoreForm):
         save_score(cleaned_data.get('ste_score'))
         save_score(cleaned_data.get('ste_relative_score'))
         save_score(cleaned_data.get('emb_relative_score'))
-
+        save_score(cleaned_data.get('n2_rnai_score'))
         for code in cleaned_data.get('auxiliary_scores'):
             save_score(code)
 
 
 def _get_save_score(form):
     experiment = Experiment.objects.get(pk=form.prefix)
-
+    # print experiment.get_link_to_exact_n2_control()
     # Each simultaneously-scored score for this image should get the same
     # timestamp
     time = timezone.now()
@@ -846,6 +848,15 @@ def _get_save_score(form):
             experiment=experiment, score_code=score_code,
             scorer=form.user, timestamp=time)
         score.save()
+
+        print score_code.short_description
+        if 'n2' in score_code.short_description:
+            for control in experiment.get_link_to_exact_n2_control():
+                control_score = ManualScore(
+                    experiment=control, score_code=score_code,
+                    scorer=form.user, timestamp=time
+                )
+                control_score.save()
 
     return save_score
 

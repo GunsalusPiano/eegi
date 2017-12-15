@@ -237,7 +237,7 @@ def score_experiment_wells(request):
 
     TODO: better handle case of invalid filter_form
     """
-    post_experiments = []
+    post_experiments = [] # list that stores all submitted scores per exp
     redo_post = False
 
     # If there was a previous submit
@@ -250,16 +250,28 @@ def score_experiment_wells(request):
         pattern = re.compile(exp)
 
         pks = [k.split('-')[0] for k in request.POST if pattern.match(k)]
-
+        # print request.POST
+        #
+        # print pks
 
         # Check if all POSTs are valid
         for experiment in Experiment.objects.filter(pk__in=pks):
-            # gets the form form either enhancer or Suppressor
+            # gets the form from either enhancer or Suppressor
             f = get_score_form(request.GET.get('score_form_key'))
             experiment.score_form = f(request.POST, user=request.user,
                                       prefix=experiment.pk)
+            # temp = Experiment.objects.get(pk=experiment.get_link_to_exact_n2_control()[0])
+            # temp.score_form = f(request.POST, user=request.user, prefix=temp.pk)
+
+            # print 'F:',f
+            # print '################'
+            # print 'score_form:',experiment.score_form
+            # print '#### temp ####'
+            # print temp.score_form
 
             post_experiments.append(experiment)
+            # post_experiments.append(temp)
+            # print post_experiments
 
             if not experiment.score_form.is_valid():
                 redo_post = True
@@ -307,9 +319,14 @@ def score_experiment_wells(request):
             display_experiments = get_paginated(request, experiments, per_page)
 
         # Attach a score form to each experiment
+        # the prefix attaches the experiment's pk to each form field which makes it queryable
+        # when posting
+        # This sets the class attribute 'score_form' to the secondary enhacer score forms
+        # which is then called and rendered in the template
         score_form = filter_data['score_form']
         for experiment in display_experiments:
             experiment.score_form = score_form(prefix=experiment.pk)
+
 
     context = {
         'experiments': experiments,
