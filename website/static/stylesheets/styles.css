@@ -1417,7 +1417,7 @@ div.dt-button.processing:after {
           margin-bottom: 5px; }
     #score-experiment-wells .experiment-content .control-image-grid {
       float: left;
-      min-width: 400px;
+      min-width: 450px;
       padding: 1px; }
 #score-experiment-wells .active-keyable-group {
   box-shadow: 0 0 4px #8d54c6;
