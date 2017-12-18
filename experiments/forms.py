@@ -833,11 +833,13 @@ class LevelsScoreForm(ScoreForm):
 
 def _get_save_score(form):
     experiment = Experiment.objects.get(pk=form.prefix)
-    # print experiment.get_link_to_exact_n2_control()
+    
     # Each simultaneously-scored score for this image should get the same
     # timestamp
     time = timezone.now()
 
+    # This overrides the save function, and though it's nested it somehow gets
+    # called by save_score
     def save_score(score_code):
         # If it's completely emb, ste is impossible to judge
         # likewise for ste
@@ -849,8 +851,7 @@ def _get_save_score(form):
             scorer=form.user, timestamp=time)
         score.save()
 
-        print score_code.short_description
-        if 'n2' in score_code.short_description:
+        if score_code.id in [20,47,48,49]:
             for control in experiment.get_link_to_exact_n2_control():
                 control_score = ManualScore(
                     experiment=control, score_code=score_code,

@@ -250,9 +250,6 @@ def score_experiment_wells(request):
         pattern = re.compile(exp)
 
         pks = [k.split('-')[0] for k in request.POST if pattern.match(k)]
-        # print request.POST
-        #
-        # print pks
 
         # Check if all POSTs are valid
         for experiment in Experiment.objects.filter(pk__in=pks):
@@ -260,18 +257,9 @@ def score_experiment_wells(request):
             f = get_score_form(request.GET.get('score_form_key'))
             experiment.score_form = f(request.POST, user=request.user,
                                       prefix=experiment.pk)
-            # temp = Experiment.objects.get(pk=experiment.get_link_to_exact_n2_control()[0])
-            # temp.score_form = f(request.POST, user=request.user, prefix=temp.pk)
 
-            # print 'F:',f
-            # print '################'
-            # print 'score_form:',experiment.score_form
-            # print '#### temp ####'
-            # print temp.score_form
 
             post_experiments.append(experiment)
-            # post_experiments.append(temp)
-            # print post_experiments
 
             if not experiment.score_form.is_valid():
                 redo_post = True

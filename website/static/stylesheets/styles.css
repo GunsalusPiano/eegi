@@ -1395,8 +1395,6 @@ div.dt-button.processing:after {
     #score-experiment-wells .experiment-content-image, #score-experiment-wells .experiment-content-control-image {
       width: 75%;
       background: black; }
-    #score-experiment-wells .experiment-content-control-image {
-      display: inline-flex; }
     #score-experiment-wells .experiment-content-buttons {
       padding-left: 40px;
       width: 25%; }
@@ -1417,9 +1415,10 @@ div.dt-button.processing:after {
         #score-experiment-wells .experiment-content-buttons ul.errorlist {
           padding: 0;
           margin-bottom: 5px; }
-  #score-experiment-wells .experiment .image-frame > .experiment-image {
-    width: 94%;
-    padding-top: 9%; }
+    #score-experiment-wells .experiment-content .control-image-grid {
+      float: left;
+      min-width: 400px;
+      padding: 1px; }
 #score-experiment-wells .active-keyable-group {
   box-shadow: 0 0 4px #8d54c6;
   border-radius: 4px; }
