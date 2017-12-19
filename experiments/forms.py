@@ -16,7 +16,7 @@ from worms.models import WormStrain
 
 import time
 
-SCORE_DEFAULT_PER_PAGE = 50
+SCORE_DEFAULT_PER_PAGE = 15
 
 SCREEN_STAGE_CHOICES = [
     (1, 'Primary'),
@@ -833,7 +833,7 @@ class LevelsScoreForm(ScoreForm):
 
 def _get_save_score(form):
     experiment = Experiment.objects.get(pk=form.prefix)
-    
+
     # Each simultaneously-scored score for this image should get the same
     # timestamp
     time = timezone.now()
