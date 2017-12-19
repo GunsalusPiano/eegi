@@ -1335,7 +1335,7 @@ div.dt-button.processing:after {
     padding-bottom: 12px; }
 
 #find-experiment-wells table {
-  width: 100%;
+  width: 33%;
   float: left;
   margin-bottom: 40px; }
   #find-experiment-wells table td .image-frame {
