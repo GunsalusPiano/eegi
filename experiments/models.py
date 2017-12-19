@@ -322,6 +322,36 @@ class Experiment(models.Model):
         filters = self.get_l4440_control_filters()
         return build_url('find_experiment_wells_url', get=filters)
 
+    def get_n2_l4440_control_filters(self):
+        """
+        Get the filters for the L4440 controls for this experiment.
+
+        To get the actual control experiments from the returned filters,
+        simply do Experiment.objects.filter(**filters). Returning
+        the filters is more flexible for customization, or for inserting
+        into a URL without performing the query.
+
+        L4440 controls for this experiment are restricted to those from
+        the same date, same temperature, same worm.
+
+        If this experiment is itself an L4440 clone, the function works
+        the same way, returning all L4440 experiments from the same
+        date, same worm, same temperature.
+        """
+        filters = {
+            'is_junk': False,
+            'plate__date': self.date(),
+            'plate__temperature': self.temperature(),
+            'worm_strain': WormStrain.get_n2().pk,
+            'library_stock__intended_clone': Clone.get_l4440(),
+        }
+
+        return filters
+
+    def get_link_to_n2_l4440_controls(self):
+        filters = self.get_n2_l4440_control_filters()
+        return build_url('find_experiment_wells_url', get=filters)
+
     def get_n2_control_filters(self):
         """
         Get the N2 + RNAi controls for this experiment.
@@ -355,7 +385,6 @@ class Experiment(models.Model):
 
     def get_link_to_exact_n2_control(self):
         filters = self.get_n2_control_filters()
-        # return Experiment.objects.filter(**filters).order_by('?')[0]
         return Experiment.objects.filter(**filters).order_by('?')
 
 
