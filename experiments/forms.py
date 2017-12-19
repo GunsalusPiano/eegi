@@ -343,7 +343,7 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
     randomize_order = forms.BooleanField(required=False, initial=True)
 
     score_only_4_reps = forms.BooleanField(
-        required=False, initial=True, label='Score only 4 replicates')
+        required=False, initial=False, label='Score only 4 replicates')
 
     exclude_n2 = forms.BooleanField(
         required=False, initial=True, label='Exclude N2')
