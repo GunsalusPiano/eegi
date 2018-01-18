@@ -801,7 +801,8 @@ class LevelsScoreForm(ScoreForm):
     ste_score = SingleScoreField(key='STE_LEVEL', required=True)
     ste_relative_score = SingleScoreField(key='STE_REL_LEVEL', required=True)
     emb_relative_score = SingleScoreField(key='EMB_REL_LEVEL', required=True)
-    n2_rnai_score = SingleScoreField(key='N2_RNAi', required=True)
+    n2_rnai_emb_score = SingleScoreField(key='N2_RNAi_emb', required=True, initial=20)
+    n2_rnai_ste_score = SingleScoreField(key='N2_RNAi_ste', required=True, initial=20)
     auxiliary_scores = MultiScoreField(key='AUXILIARY', required=False)
 
     def clean(self):
@@ -812,7 +813,8 @@ class LevelsScoreForm(ScoreForm):
                 cleaned_data['ste_score'] == IMPOSSIBLE and
                 cleaned_data['ste_relative_score'] == IMPOSSIBLE and
                 cleaned_data['emb_relative_score'] == IMPOSSIBLE and
-                cleaned_data['n2_rnai_score'] == IMPOSSIBLE and
+                cleaned_data['n2_rnai_emb_score'] == IMPOSSIBLE and
+                cleaned_data['n2_rnai_ste_score'] == IMPOSSIBLE and
                 not cleaned_data['auxiliary_scores']):
             raise forms.ValidationError('"Impossible to judge" requires '
                                         'some auxiliary score')
@@ -826,7 +828,8 @@ class LevelsScoreForm(ScoreForm):
         save_score(cleaned_data.get('ste_score'))
         save_score(cleaned_data.get('ste_relative_score'))
         save_score(cleaned_data.get('emb_relative_score'))
-        save_score(cleaned_data.get('n2_rnai_score'))
+        save_score(cleaned_data.get('n2_rnai_ste_score'))
+        save_score(cleaned_data.get('n2_rnai_emb_score'))
         for code in cleaned_data.get('auxiliary_scores'):
             save_score(code)
 

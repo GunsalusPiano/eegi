@@ -1302,6 +1302,8 @@ div.dt-button.processing:after {
 #experiment-plate .plate-96 td, #vertical-experiment-plates .plate-96 td {
   background: black;
   color: #e0e0e0; }
+#experiment-plate .plate-96 td.selected, #vertical-experiment-plates .plate-96 td.selected {
+  border: 3px solid green; }
 #experiment-plate .plate-96 .well-caption a, #vertical-experiment-plates .plate-96 .well-caption a {
   color: #bb99dd; }
   #experiment-plate .plate-96 .well-caption a:hover, #experiment-plate .plate-96 .well-caption a.active, #vertical-experiment-plates .plate-96 .well-caption a:hover, #vertical-experiment-plates .plate-96 .well-caption a.active {

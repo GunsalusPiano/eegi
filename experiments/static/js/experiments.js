@@ -271,6 +271,21 @@ function addScoringKeyboardShortcutsModalListener() {
   });
 }
 
+$(document).ready(function() {
+ $("table:has(td)").mouseover(function(e) {
+   $(this).css("cursor", "pointer");
+ });
+ $("table:has(td)").click(function(e) {
+ $("table td").removeClass("highlight");
+ var clickedCell= $(e.target).closest("td");
+ var link= $(e.target).closest("a")
+ clickedCell.addClass("highlight");
+ console.log(link);
+ // console.log(clickedCell.text());
+ });
+});
+
+
 // $(function(){
 //     $(".expandDesc").click(function(event){
 //       event.stopPropagation();
