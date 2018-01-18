@@ -262,7 +262,6 @@ var ScoringKeyboardShortcuts = {
   },
 };
 
-
 function addScoringKeyboardShortcutsModalListener() {
   $("body").on("keyup", function(e) {
     if (e.which == KEYS.SLASH && e.shiftKey) {

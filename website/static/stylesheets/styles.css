@@ -1302,8 +1302,6 @@ div.dt-button.processing:after {
 #experiment-plate .plate-96 td, #vertical-experiment-plates .plate-96 td {
   background: black;
   color: #e0e0e0; }
-#experiment-plate .plate-96 td.selected, #vertical-experiment-plates .plate-96 td.selected {
-  border: 3px solid green; }
 #experiment-plate .plate-96 .well-caption a, #vertical-experiment-plates .plate-96 .well-caption a {
   color: #bb99dd; }
   #experiment-plate .plate-96 .well-caption a:hover, #experiment-plate .plate-96 .well-caption a.active, #vertical-experiment-plates .plate-96 .well-caption a:hover, #vertical-experiment-plates .plate-96 .well-caption a.active {
@@ -1424,6 +1422,17 @@ div.dt-button.processing:after {
 #score-experiment-wells .active-keyable-group {
   box-shadow: 0 0 4px #8d54c6;
   border-radius: 4px; }
+#score-experiment-wells .image-frame:hover {
+  box-shadow: 0px 0px 150px #000000;
+  z-index: 2;
+  -webkit-transition: all 200ms ease-in;
+  -webkit-transform: scale(2);
+  -ms-transition: all 200ms ease-in;
+  -ms-transform: scale(2);
+  -moz-transition: all 200ms ease-in;
+  -moz-transform: scale(2);
+  transition: all 200ms ease-in;
+  transform: scale(2); }
 
 .knockdown-clone-section h4 {
   width: 100%;

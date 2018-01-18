@@ -457,8 +457,8 @@ class ManualScoreCode(models.Model):
         'STE_LEVEL': list(range(41, 47)),   # 41-46, 6 levels total
         'EMB_REL_LEVEL': [0, 12, 13, 14, 15],          # w/m/s for enhancer compared to N2+RNAi
         'STE_REL_LEVEL': [0, 16, 17, 18, 19],
-        'N2_RNAi_ste': [20,47,48,49], #20 being wildtype 
-        'N2_RNAi_emb': [20,50,51,52], #20 being wildtype
+        'N2_RNAi_ste': [20,47,48,49, 53], #20 being wildtype
+        'N2_RNAi_emb': [20,50,51,52, 53], #20 being wildtype
 
 
         'ENH_LEGACY': [
