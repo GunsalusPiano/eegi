@@ -797,13 +797,13 @@ class SuppressorScoreForm(ScoreForm):
 # This is the secondary enhancer scoring form (the one where you actually score)
 class LevelsScoreForm(ScoreForm):
 
-    emb_score = SingleScoreField(key='EMB_LEVEL', required=True)
-    ste_score = SingleScoreField(key='STE_LEVEL', required=True)
-    ste_relative_score = SingleScoreField(key='STE_REL_LEVEL', required=True)
-    emb_relative_score = SingleScoreField(key='EMB_REL_LEVEL', required=True)
-    n2_rnai_emb_score = SingleScoreField(key='N2_RNAi_emb', required=True, initial=20)
-    n2_rnai_ste_score = SingleScoreField(key='N2_RNAi_ste', required=True, initial=20)
-    auxiliary_scores = MultiScoreField(key='AUXILIARY', required=False)
+    emb_score = SingleScoreField(key='EMB_LEVEL', required=True, label="Emb score")
+    ste_score = SingleScoreField(key='STE_LEVEL', required=True, label="Ste score")
+    ste_relative_score = SingleScoreField(key='STE_REL_LEVEL', required=True, label="Ste relative score:")
+    emb_relative_score = SingleScoreField(key='EMB_REL_LEVEL', required=True, label="Emb relative score:")
+    n2_rnai_emb_score = SingleScoreField(key='N2_RNAi_emb', required=True, label="N2 rnai emb score:")
+    n2_rnai_ste_score = SingleScoreField(key='N2_RNAi_ste', required=True, label="N2 rnai ste score:")
+    auxiliary_scores = MultiScoreField(key='AUXILIARY', required=False, label="Auxiliary scores:")
 
     def clean(self):
         cleaned_data = super(LevelsScoreForm, self).clean()

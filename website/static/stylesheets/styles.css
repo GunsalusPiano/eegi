@@ -1378,7 +1378,6 @@ div.dt-button.processing:after {
   box-sizing: border-box;
   background: #f8f8f8;
   border-radius: 4px;
-  padding: 3%;
   margin-bottom: 80px; }
   #score-experiment-wells .experiment-header a {
     display: block;
@@ -1395,9 +1394,15 @@ div.dt-button.processing:after {
     #score-experiment-wells .experiment-content-image, #score-experiment-wells .experiment-content-control-image {
       width: 75%;
       background: black; }
+      #score-experiment-wells .experiment-content-image .relative-buttons, #score-experiment-wells .experiment-content-control-image .relative-buttons {
+        color: white;
+        display: inline-flex;
+        padding: 1% 0% 1% 25%; }
+        #score-experiment-wells .experiment-content-image .relative-buttons div, #score-experiment-wells .experiment-content-control-image .relative-buttons div {
+          float: left; }
     #score-experiment-wells .experiment-content-buttons {
       padding-left: 40px;
-      width: 25%; }
+      width: 30%; }
       #score-experiment-wells .experiment-content-buttons label {
         display: block; }
       #score-experiment-wells .experiment-content-buttons p, #score-experiment-wells .experiment-content-buttons ul {
@@ -1415,24 +1420,31 @@ div.dt-button.processing:after {
         #score-experiment-wells .experiment-content-buttons ul.errorlist {
           padding: 0;
           margin-bottom: 5px; }
+      #score-experiment-wells .experiment-content-buttons-aggregate, #score-experiment-wells .experiment-content-buttons-absolute {
+        padding: 2%;
+        display: inline-flex; }
+        #score-experiment-wells .experiment-content-buttons-aggregate div, #score-experiment-wells .experiment-content-buttons-absolute div {
+          float: left; }
+      #score-experiment-wells .experiment-content-buttons hr {
+        width: 75%; }
     #score-experiment-wells .experiment-content .control-image-grid {
       float: left;
-      min-width: 450px;
+      min-width: 24%;
       padding: 1px; }
+    #score-experiment-wells .experiment-content .control-image-grid:hover {
+      box-shadow: 0px 0px 150px #000000;
+      z-index: 2;
+      -webkit-transition: all 200ms ease-in;
+      -webkit-transform: scale(2);
+      -ms-transition: all 200ms ease-in;
+      -ms-transform: scale(2);
+      -moz-transition: all 200ms ease-in;
+      -moz-transform: scale(2);
+      transition: all 200ms ease-in;
+      transform: scale(2); }
 #score-experiment-wells .active-keyable-group {
   box-shadow: 0 0 4px #8d54c6;
   border-radius: 4px; }
-#score-experiment-wells .image-frame:hover {
-  box-shadow: 0px 0px 150px #000000;
-  z-index: 2;
-  -webkit-transition: all 200ms ease-in;
-  -webkit-transform: scale(2);
-  -ms-transition: all 200ms ease-in;
-  -ms-transform: scale(2);
-  -moz-transition: all 200ms ease-in;
-  -moz-transform: scale(2);
-  transition: all 200ms ease-in;
-  transform: scale(2); }
 
 .knockdown-clone-section h4 {
   width: 100%;

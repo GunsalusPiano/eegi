@@ -150,7 +150,7 @@ $max-image-width: 1300px
     @include box-sizing(border-box)
     background: $lightest-gray
     border-radius: 4px
-    padding: 3%
+    // padding: 3%
     margin-bottom: $whitespace * 2
 
     &.active
@@ -176,9 +176,17 @@ $max-image-width: 1300px
         width: 75%
         background: black
 
+        .relative-buttons
+          color: white
+          display: inline-flex
+          padding: 1% 0% 1% 25%
+
+          div
+            float: left
+
       &-buttons
         padding-left: $whitespace
-        width: 25%
+        width: 30%
 
         label
           display: block
@@ -202,30 +210,40 @@ $max-image-width: 1300px
             margin-bottom: 5px
 
 
+        &-aggregate,
+        &-absolute
+          padding: 2%
+          display: inline-flex
+
+          div
+            float: left
+
+        hr
+          width: 75%
+
       .control-image-grid
         float: left
-        min-width: 450px
+        min-width: 24%
         padding: 1px
         // display: inline-block
         // width: 50%
         // margin-right: -4px
         // margin-bottom: -4px
+      .control-image-grid:hover
+        box-shadow: 0px 0px 150px #000000
+        z-index: 2
+        -webkit-transition: all 200ms ease-in
+        -webkit-transform: scale(2)
+        -ms-transition: all 200ms ease-in
+        -ms-transform: scale(2)
+        -moz-transition: all 200ms ease-in
+        -moz-transform: scale(2)
+        transition: all 200ms ease-in
+        transform: scale(2)
 
   .active-keyable-group
     box-shadow: 0 0 4px $purple
     border-radius: 4px
-
-  .image-frame:hover
-    box-shadow: 0px 0px 150px #000000
-    z-index: 2
-    -webkit-transition: all 200ms ease-in
-    -webkit-transform: scale(2)
-    -ms-transition: all 200ms ease-in
-    -ms-transform: scale(2)
-    -moz-transition: all 200ms ease-in
-    -moz-transform: scale(2)
-    transition: all 200ms ease-in
-    transform: scale(2)
 
 
 /////////////////////

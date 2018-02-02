@@ -1,23 +1,9 @@
-{% extends 'base.html' %}
-{% load extra_tags %}
-
-
-{% block body_id %}score-experiment-wells{% endblock %}
-
-
-{% block page_title %}Score Experiment Wells{% endblock %}
-
-
-{% block content %}
-
-{% ifnotequal experiments None %}
+{% extends 'base.html' %} {% load extra_tags %} {% block body_id %}score-experiment-wells{% endblock %} {% block page_title %}Score Experiment Wells{% endblock %} {% block content %} {% ifnotequal experiments None %}
 
 <ul id="filters">
-  {% for k, v in request.GET.items %}
-    {% if v and k not in do_not_display %}
-    <li>{{ k }}: {{ v }}</li>
-    {% endif %}
-  {% endfor %}
+  {% for k, v in request.GET.items %} {% if v and k not in do_not_display %}
+  <li>{{ k }}: {{ v }}</li>
+  {% endif %} {% endfor %}
 
   <li><a href="#" data-modal-id="keyboard-shortcuts-modal">
       Keyboard shortcuts</a></li>
@@ -27,20 +13,14 @@
   <span id="total">
     {{ experiments|length }}
     experiment{{ experiments|pluralize }} to score
-  </span>
-
-  {% if experiments and not unscored_by_user %}
-  {% include 'pagination_status.html' with paginated=display_experiments %}
-  {% endif %}
+  </span> {% if experiments and not unscored_by_user %} {% include 'pagination_status.html' with paginated=display_experiments %} {% endif %}
 </div>
 
 {% endifnotequal %}
 
 
 <form id="score-experiment-wells-form" action="" method="post">
-  {% csrf_token %}
-
-  {% for experiment in display_experiments %}
+  {% csrf_token %} {% for experiment in display_experiments %}
   <div class="experiment">
     <div class="experiment-header">
       <a href="{{ experiment.get_absolute_url }}">
@@ -53,43 +33,72 @@
         L4440 controls</a>
 
       <a href="{{ experiment.get_link_to_n2_controls }}">
-        RNAi controls</a>
-
-      {% if experiment.is_junk %}
+        RNAi controls</a> {% if experiment.is_junk %}
       <span class="error-message">
         Warning: JUNK
-      </span>
-      {% endif %}
+      </span> {% endif %}
     </div>
 
 
     <div class="experiment-content">
       <div class="experiment-content-image">
-        {% for control in experiment.get_link_to_exact_n2_control %}
-          <div class="image-frame loading control-image-grid"
-            data-src="{% get_image_url control mode=thumbnail %}">
+        <div>
+          {% for control in experiment.get_link_to_exact_n2_control %}
+          <div class="image-frame loading control-image-grid" data-src="{% get_image_url control mode=thumbnail %}">
           </div>
-        {% endfor %}
+          {% endfor %}
+        </div>
+        <div class="relative-buttons">
+          <div>
+            {{ experiment.score_form.n2_rnai_emb_score.label }} {{ experiment.score_form.n2_rnai_emb_score }}
+          </div>
+
+          <div>
+            {{ experiment.score_form.n2_rnai_ste_score.label }} {{ experiment.score_form.n2_rnai_ste_score }}
+          </div>
+        </div>
 
       </div>
+
       <div class="experiment-content-image">
-        <div class="image-frame loading"
-            data-src="{% get_image_url experiment mode %}">
+        <div class="image-frame loading" data-src="{% get_image_url experiment mode %}">
         </div>
       </div>
 
       <div class="experiment-content-buttons">
-        {{ experiment.score_form.as_p }}
+
+
+        <div class="experiment-content-buttons-absolute">
+          <div>
+            {{ experiment.score_form.emb_score.label }} {{ experiment.score_form.emb_score }}
+          </div>
+
+          <div>
+            {{ experiment.score_form.ste_score.label }} {{ experiment.score_form.ste_score }}
+          </div>
+        </div>
+        <hr>
+        <div class="experiment-content-buttons-absolute">
+          <div>
+            {{ experiment.score_form.auxiliary_scores.label }} {{ experiment.score_form.auxiliary_scores }}
+          </div>
+        </div>
+        <hr>
+        <div class="experiment-content-buttons-aggregate">
+          <div>
+            {{ experiment.score_form.emb_relative_score.label }} {{ experiment.score_form.emb_relative_score}}
+          </div>
+
+          <div>
+            {{ experiment.score_form.ste_relative_score.label }} {{ experiment.score_form.ste_relative_score }}
+          </div>
+        </div>
+        <!-- {{ experiment.score_form.as_p }} -->
       </div>
     </div>
   </div>
-  {% endfor %}
-
-  {% if experiments %}
-  <button type="submit" class="submit">Submit</button>
-  {% endif %}
+  {% endfor %} {% if experiments %}
+  <button type="submit" class="submit">Submit</button> {% endif %}
 </form>
 
-{% include 'keyboard_shortcuts_modal.html' %}
-
-{% endblock %}
+{% include 'keyboard_shortcuts_modal.html' %} {% endblock %}
