@@ -78,12 +78,6 @@
           </div>
         </div>
         <hr>
-        <div class="experiment-content-buttons-absolute">
-          <div>
-            {{ experiment.score_form.auxiliary_scores.label }} {{ experiment.score_form.auxiliary_scores }}
-          </div>
-        </div>
-        <hr>
         <div class="experiment-content-buttons-aggregate">
           <div>
             {{ experiment.score_form.emb_relative_score.label }} {{ experiment.score_form.emb_relative_score}}
@@ -91,6 +85,12 @@
 
           <div>
             {{ experiment.score_form.ste_relative_score.label }} {{ experiment.score_form.ste_relative_score }}
+          </div>
+        </div>
+        <hr>
+        <div class="experiment-content-buttons-absolute">
+          <div>
+            {{ experiment.score_form.auxiliary_scores.label }} {{ experiment.score_form.auxiliary_scores }}
           </div>
         </div>
         <!-- {{ experiment.score_form.as_p }} -->
