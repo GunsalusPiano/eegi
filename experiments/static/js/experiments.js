@@ -15,6 +15,7 @@ const KEYS = {
   NINE: 57,
   ZERO_NUMPAD: 96,
   NINE_NUMPAD: 105,
+  TAB: 9,
 };
 
 
@@ -141,6 +142,17 @@ var ScoringKeyboardShortcuts = {
         }
 
         break;
+
+        case KEYS.TAB:
+          e.preventDefault();
+
+          if (e.shiftKey) {
+            this.navigateKeyableGroups(KEYS.UP);
+          } else {
+            this.navigateKeyableGroups(KEYS.DOWN);
+          }
+
+          break;
 
       default:
         if (this.isDigitKey(e.which)) {
