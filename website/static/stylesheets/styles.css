@@ -1397,10 +1397,10 @@ div.dt-button.processing:after {
       background: black; }
       #score-experiment-wells .experiment-content-image .relative-buttons, #score-experiment-wells .experiment-content-control-image .relative-buttons {
         color: white;
-        display: inline-flex;
-        padding: 1% 0% 1% 25%; }
+        display: inline-block;
+        margin: 1% 0% 1% 5%; }
         #score-experiment-wells .experiment-content-image .relative-buttons div, #score-experiment-wells .experiment-content-control-image .relative-buttons div {
-          float: left; }
+          padding: 2px; }
     #score-experiment-wells .experiment-content-buttons {
       padding-left: 40px;
       width: 30%; }
