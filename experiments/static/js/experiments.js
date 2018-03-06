@@ -120,52 +120,54 @@ var ScoringKeyboardShortcuts = {
   },
 
   handleKeyboardShortcut: function(e) {
-    switch(e.which) {
-      case KEYS.UP:
-        e.preventDefault();
-
-        if (e.shiftKey) {
-          this.navigateKeyableGroups(KEYS.UP);
-        } else {
-          this.navigateExperiments(KEYS.UP);
-        }
-
-        break;
-
-      case KEYS.DOWN:
-        e.preventDefault();
-
-        if (e.shiftKey) {
-          this.navigateKeyableGroups(KEYS.DOWN);
-        } else {
-          this.navigateExperiments(KEYS.DOWN);
-        }
-
-        break;
-
-        case KEYS.TAB:
+    if (!e.ctrlKey){
+      switch(e.which) {
+        case KEYS.UP:
           e.preventDefault();
 
           if (e.shiftKey) {
             this.navigateKeyableGroups(KEYS.UP);
           } else {
-            this.navigateKeyableGroups(KEYS.DOWN);
+            this.navigateExperiments(KEYS.UP);
           }
 
           break;
 
-      default:
-        if (this.isDigitKey(e.which)) {
+        case KEYS.DOWN:
           e.preventDefault();
 
-          var key = this.getDigitKey(e.which);
-
-          if (!e.shiftKey) {
-            this.score(key);
+          if (e.shiftKey) {
+            this.navigateKeyableGroups(KEYS.DOWN);
           } else {
-            this.score(key + 10);
+            this.navigateExperiments(KEYS.DOWN);
           }
-        }
+
+          break;
+
+          case KEYS.TAB:
+            e.preventDefault();
+
+            if (e.shiftKey) {
+              this.navigateKeyableGroups(KEYS.UP);
+            } else {
+              this.navigateKeyableGroups(KEYS.DOWN);
+            }
+
+            break;
+
+        default:
+          if (this.isDigitKey(e.which)) {
+            e.preventDefault();
+
+            var key = this.getDigitKey(e.which);
+
+            if (!e.shiftKey) {
+              this.score(key);
+            } else {
+              this.score(key + 10);
+            }
+          }
+      }
     }
   },
 
@@ -282,22 +284,31 @@ function addScoringKeyboardShortcutsModalListener() {
   });
 }
 
-// $(document).ready(function() {
-//   Mousetrap.bind('4', function() { console.log('4'); });
-//    Mousetrap.bind("?", function() { console.log('show shortcuts!'); });
-//    Mousetrap.bind('esc', function() { $(this).next('.experiment-content').toggle(); }, 'keyup');
-//  $("table:has(td)").mouseover(function(e) {
-//    $(this).css("cursor", "pointer");
-//  });
-//  $("table:has(td)").click(function(e) {
-//  $("table td").removeClass("highlight");
-//  var clickedCell= $(e.target).closest("td");
-//  var link= $(e.target).closest("a")
-//  clickedCell.addClass("highlight");
-//  console.log(link);
-//  // console.log(clickedCell.text());
-//  });
-// });
+function resetImages(){
+  $('.active .controls-panel').children().css('transition', 'all 200ms ease-out').css('transform','scale(1)').css('z-index','0');
+};
+
+$(document).ready(function() {
+  // Mousetrap.bind(['ctrl+4'], function() { console.log('4'); });
+  Mousetrap.bind(['ctrl+1'], function() { resetImages();
+    $('.active .controls-panel').children().eq(0).css('z-index','2').css('transition', 'all 200ms ease-in').css('transform','scale(2)');}, 'keydown');
+  Mousetrap.bind(['ctrl+2'], function() { resetImages();
+    $('.active .controls-panel').children().eq(1).css('z-index','2').css('transition', 'all 200ms ease-in').css('transform','scale(2)');}, 'keydown');
+  Mousetrap.bind(['ctrl+3'], function() { resetImages();
+    $('.active .controls-panel').children().eq(2).css('z-index','2').css('transition', 'all 200ms ease-in').css('transform','scale(2)');}, 'keydown');
+  Mousetrap.bind(['ctrl+4'], function() { resetImages();
+    $('.active .controls-panel').children().eq(3).css('z-index','2').css('transition', 'all 200ms ease-in').css('transform','scale(2)');}, 'keydown');
+  Mousetrap.bind(['ctrl+5'], function() { resetImages();
+    $('.active .controls-panel').children().eq(4).css('z-index','2').css('transition', 'all 200ms ease-in').css('transform','scale(2)');}, 'keydown');
+  Mousetrap.bind(['ctrl+6'], function() { resetImages();
+    $('.active .controls-panel').children().eq(5).css('z-index','2').css('transition', 'all 200ms ease-in').css('transform','scale(2)');}, 'keydown');
+  Mousetrap.bind(['ctrl+7'], function() { resetImages();
+    $('.active .controls-panel').children().eq(6).css('z-index','2').css('transition', 'all 200ms ease-in').css('transform','scale(2)');}, 'keydown');
+  Mousetrap.bind(['ctrl+8'], function() { resetImages();
+    $('.active .controls-panel').children().eq(7).css('z-index','2').css('transition', 'all 200ms ease-in').css('transform','scale(2)');}, 'keydown');
+  Mousetrap.bind(['esc'], function() {
+    $('.active .controls-panel').children().css('transition', 'all 200ms ease-out').css('transform','scale(1)').css('z-index','0');}, 'keydown');
+});
 
 
 $(function(){
