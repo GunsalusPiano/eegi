@@ -177,6 +177,7 @@ def blast(request):
 
             for hit in blast_out.rstrip().split('\n'):
                 hit = hit.split('\t')
+                print hit
                 start = 0
                 end = 0
                 if hit[8] > hit[9]:
@@ -205,7 +206,7 @@ def blast(request):
                             tabix[2], # method, i.e. cds
                             tabix[3], # start position
                             tabix[4], # stop position
-                            tabix[8]  # features
+                            tabix[8].replace("'","")  # features
                         ))
                         j.append(l)
             data = json.dumps(j)
