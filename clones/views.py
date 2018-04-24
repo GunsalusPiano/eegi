@@ -177,7 +177,15 @@ def blast(request):
 
             for hit in blast_out.rstrip().split('\n'):
                 hit = hit.split('\t')
-                region = hit[1]+':'+hit[8]+'-'+hit[9]
+                start = 0
+                end = 0
+                if hit[8] > hit[9]:
+                    start = hit[9]
+                    end = hit[8]
+                else:
+                    start = hit[8]
+                    end = hit[9]
+                region = hit[1]+':'+start+'-'+end
                 tabix_out, tabix_err = Popen([
                     settings.TABIX,
                     settings.TABIX_DB_DIR+'/c_elegans.PRJNA13758.WS260.annotations.sorted.gff2.gz',
