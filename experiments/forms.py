@@ -956,18 +956,21 @@ def _get_save_score(form):
         if score_code == IMPOSSIBLE:
             return
 
-        score = ManualScore(
-            experiment=experiment, score_code=score_code,
-            scorer=form.user, timestamp=time)
-        score.save()
 
-        if score_code.id in [20,47,48,49]:
+
+        # if score_code.id in [20,47,48,49]:
+        if score_code.id in [20,47,48,49,50,51,52,53]:
             for control in experiment.get_link_to_exact_n2_control():
                 control_score = ManualScore(
                     experiment=control, score_code=score_code,
                     scorer=form.user, timestamp=time
                 )
                 control_score.save()
+        else:
+            score = ManualScore(
+                experiment=experiment, score_code=score_code,
+                scorer=form.user, timestamp=time)
+            score.save()
 
     return save_score
 
