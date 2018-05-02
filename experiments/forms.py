@@ -957,6 +957,8 @@ def _get_save_score(form):
             return
 
 
+        # SQL query to delete all misassigned rows
+        # delete record from ManualScore record join Experiment on experiment_id = Experiment.id where timestamp >= '2018-04-01' and worm_strain_id != 'N2' and `score_code_id` in (47, 48, 49, 20)
 
         # if score_code.id in [20,47,48,49]:
         if score_code.id in [20,47,48,49,50,51,52,53]:
