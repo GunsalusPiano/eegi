@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 
 from experiments.helpers.data_entry import parse_batch_data_entry_gdoc
-    from experiments.models import Experiment, ExperimentPlate, ManualScore
+from experiments.models import Experiment, ExperimentPlate, ManualScore
 from experiments.forms import (
     FilterExperimentWellsForm, FilterExperimentPlatesForm,
     FilterExperimentWellsToScoreForm, get_score_form,
