@@ -1,0 +1,75 @@
+version: '2'
+services:
+  db:
+    # Latest build (or anything after 5.7) has an auth key problem that prevents the
+    # django container from accessing the db. Stupid. F'ing fix it already!
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    volumes:
+      # This imports the db dump into the newly created db in the container.
+      # To blow up the container:
+      # docker-compose down to shut everythin down
+      # docker-compose rm db to delete
+      # docker-compose build db to rebuild the db - not sure if you need to remove but didn't try
+      # Also, make sure to updated the django settings to access the database.
+      - ./gunsiano_dev_2018-12-23.sql:/docker-entrypoint-initdb.d/dump.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: mypassword
+      MYSQL_USER: eegi
+      MYSQL_PASSWORD: mypassword
+      MYSQL_DATABASE: eegi
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8001:8000"
+    expose:
+      - "8001"
+    depends_on:
+      - db
+
+
+
+# version: "2"
+# services:
+#   django:
+#     # network_mode: 'host'
+#     container_name: gunsiano_server
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     image: gunsiano_django
+#     stdin_open: true
+#     tty: true
+#     volumes:
+#       - .:/var/www/gunsiano
+#     ports:
+#       - "8000:8000"
+#     links:
+#       - db
+#     # environment:
+#     #   - DATABASE_URL=mysql://root:itsasecret@db:3306/gunsiano_django_db
+#
+#   db:
+#     container_name: mysql_database
+#     image: mysql
+#     ports:
+#       - "3306:3306"
+#     environment:
+#       MYSQL_ROOT_PASSWORD: mypassword
+#       MYSQL_USER: root
+#       MYSQL_PASSWORD: mypassword
+#       MYSQL_DATABASE: django-test
+#     # volumes:
+#     #   - /Users/alan/projects/gunsiano/dockers/gunsiano-website/mysql:/var/lib/mysql
+#   #     - ./gunsiano_dev_2018-12-23.sql:/docker-entrypoint-initdb.d/gunsiano_dev_2018-12-23.sql
+#
+#
+# ### Mac and Windows ONLY ###
+#     # environment:
+#       # host.docker.internal renders to the host IP so that it can be accessed
+#       # as localhost resolves to the container's IP.
+#       # - DATABASE_URL=host.docker.internal
