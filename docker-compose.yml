@@ -1,35 +1,35 @@
 version: '2'
 services:
-  db:
+  eegi_db:
     # Latest build (or anything after 5.7) has an auth key problem that prevents the
     # django container from accessing the db. Stupid. F'ing fix it already!
     image: mysql:5.7
     ports:
-      - "3306:3306"
-    volumes:
+            - "3306:3306"
+        #volumes:
       # This imports the db dump into the newly created db in the container.
       # To blow up the container:
       # docker-compose down to shut everythin down
       # docker-compose rm db to delete
       # docker-compose build db to rebuild the db - not sure if you need to remove but didn't try
       # Also, make sure to updated the django settings to access the database.
-      - ./gunsiano_dev_2018-12-23.sql:/docker-entrypoint-initdb.d/dump.sql
+      #- ./eegi_2019-01-06_03-00-01.sql:/docker-entrypoint-initdb.d/dump.sql
     environment:
       MYSQL_ROOT_PASSWORD: mypassword
       MYSQL_USER: eegi
       MYSQL_PASSWORD: mypassword
       MYSQL_DATABASE: eegi
-  web:
+  eegi_web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
     ports:
-      - "8001:8000"
+      - "8000:8000"
     expose:
-      - "8001"
+      - "8000"
     depends_on:
-      - db
+      - eegi_db
 
 
 
