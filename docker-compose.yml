@@ -19,6 +19,8 @@ services:
       MYSQL_USER: eegi
       MYSQL_PASSWORD: mypassword
       MYSQL_DATABASE: eegi
+    volumes:
+      - ./data/mysql_data:/var/lib/mysql
   eegi_web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -30,7 +32,20 @@ services:
       - "8000"
     depends_on:
       - eegi_db
+    restart: always
 
+  eegi_phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    depends_on:
+            - eegi_db
+    restart: always
+    environment:
+            PMA_PORT: 3306
+            PMA_HOST: eegi_db
+            PMA_USER: eegi
+            PMA_PASSWORD: mypassword
 
 
 # version: "2"

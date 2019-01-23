@@ -1,6 +1,9 @@
 # Database connection and other secret settings
 *localsettings.py
 
+# Docker data directory
+data/
+
 # Any analysis related output
 *pdf
 .R*
