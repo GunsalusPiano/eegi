@@ -12,6 +12,13 @@ urlpatterns = [
         views.vertical_experiment_plates,
         name='vertical_experiment_plates_url'),
 
+    url(r'^find-replicates-for-contact-sheet/$',
+        views.find_replicates_for_contact_sheet,
+        name='find_replicates_for_contact_sheet_url'),    
+    url(r'^replicates-contact-sheet/([\d,]+)/$',
+        views.replicates_contact_sheet,
+        name='replicates_contact_sheet_url'),
+
     url(r'^find-experiment-wells/$', views.find_experiment_wells,
         name='find_experiment_wells_url'),
     url(r'^find-experiment-plates/$', views.find_experiment_plates,

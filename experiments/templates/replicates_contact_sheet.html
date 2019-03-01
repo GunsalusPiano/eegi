@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load extra_tags %}
+
+
+{% block body_id %}replicates-contact-sheet{% endblock %}
+
+
+{% block page_title %}
+Replicates Contact Sheet:
+{{ experiment_plates|get_comma_separated_ids }}
+{% endblock %}
+
+
+{% block content %}
+<!-- Outer table is in case there are multiple experiments -->
+blah
+<table>
+    <tr>
+        <td>
+            <table class="grayscale plate-96 vertical-tiles
+        mode-{{ mode }}">
+                <thead>
+        <th>
+            <h4>
+                Interesting?
+            </h4>
+        </th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="image-frame">
+                        <input style="position: absolute; top: 50%; left: 50%;" type="checkbox" name="" id="">
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+</table>
+</td>
+{% for experiment_plate in experiment_plates %}
+<td>
+
+    <!-- Inner table is per-experiment -->
+    <table class="grayscale plate-96 vertical-tiles
+    mode-{{ mode }}">
+        <thead>
+            <tr>
+                <th class="pretty-th">
+                    <h4 class="page-subtitle">
+                        <a href="{{ experiment_plate.get_absolute_url }}">
+                            {{ experiment_plate.id }}</a>
+                    </h4>
+
+                    {% include 'experiment_plate_spans.html' %}
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for well in experiment_plate.get_wells %}
+            <tr>
+                {% include 'well.html' with is_experiment=True %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</td>
+{% endfor %}
+</tr>
+</table>
+{% endblock %}

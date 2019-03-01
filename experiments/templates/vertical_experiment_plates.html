@@ -14,37 +14,36 @@ Vertical Tile View of Experiments:
 {% block content %}
 <!-- Outer table is in case there are multiple experiments -->
 <table>
-<tr>
-{% for experiment_plate in experiment_plates %}
-<td>
+  <tr>
+    {% for experiment_plate in experiment_plates %}
+    <td>
 
-<!-- Inner table is per-experiment -->
-<table class="grayscale plate-96 vertical-tiles
+      <!-- Inner table is per-experiment -->
+      <table class="grayscale plate-96 vertical-tiles
     mode-{{ mode }}">
-  <thead>
-    <tr>
-      <th class="pretty-th">
-        <h4 class="page-subtitle">
-          <a href="{{ experiment_plate.get_absolute_url }}">
-            {{ experiment_plate.id }}</a>
-        </h4>
+        <thead>
+          <tr>
+            <th class="pretty-th">
+              <h4 class="page-subtitle">
+                <a href="{{ experiment_plate.get_absolute_url }}">
+                  {{ experiment_plate.id }}</a>
+              </h4>
 
-        {% include 'experiment_plate_spans.html' %}
-      </th>
-    </tr>
-  </thead>
+              {% include 'experiment_plate_spans.html' %}
+            </th>
+          </tr>
+        </thead>
 
-  <tbody>
-    {% for well in experiment_plate.get_wells %}
-    <tr>
-      {% include 'well.html' with is_experiment=True %}
-    </tr>
+        <tbody>
+          {% for well in experiment_plate.get_wells %}
+          <tr>
+            {% include 'well.html' with is_experiment=True %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </td>
     {% endfor %}
-  </tbody>
-</table>
-
-</td>
-{% endfor %}
-</tr>
+  </tr>
 </table>
 {% endblock %}

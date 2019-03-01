@@ -23,13 +23,15 @@ services:
       - ./data/mysql_data:/var/lib/mysql
   eegi_web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver --noreload --nothreading 0.0.0.0:8000
     volumes:
-      - .:/code
+      - .:/var/www/eegi
     ports:
       - "8000:8000"
+      - "3000:3000"
     expose:
       - "8000"
+      - "3000"
     depends_on:
       - eegi_db
     restart: always

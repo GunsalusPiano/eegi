@@ -61,25 +61,6 @@ def experiment_plate(request, pk):
     return render(request, 'experiment_plate.html', context)
 
 
-def vertical_experiment_plates(request, pks):
-    """Render the page to view experiment plate images vertically."""
-    pks = pks.split(',')
-
-    # This preserves the order of the pks
-    preserved = Case(*[When(pk=pk, then=i) for i, pk in enumerate(pks)])
-
-    plates = ExperimentPlate.objects.filter(pk__in=pks).order_by(preserved)
-
-    context = {
-        'experiment_plates': plates,
-
-        # Default to thumbnail
-        'mode': request.GET.get('mode', 'thumbnail')
-    }
-
-    return render(request, 'vertical_experiment_plates.html', context)
-
-
 def find_experiment_plates(request, context=None):
     """Render the page to find experiment plates based on filters."""
     experiment_plates = None
@@ -103,6 +84,81 @@ def find_experiment_plates(request, context=None):
     }
 
     return render(request, 'find_experiment_plates.html', context)
+
+def vertical_experiment_plates(request, pks):
+    """Render the page to view experiment plate images vertically."""
+    pks = pks.split(',')
+
+    # This preserves the order of the pks
+    preserved = Case(*[When(pk=pk, then=i) for i, pk in enumerate(pks)])
+
+    plates = ExperimentPlate.objects.filter(pk__in=pks).order_by(preserved)
+
+    context = {
+        'experiment_plates': plates,
+
+        # Default to thumbnail
+        'mode': request.GET.get('mode', 'thumbnail')
+    }
+
+    return render(request, 'vertical_experiment_plates.html', context)
+
+
+def find_replicates_for_contact_sheet(request, context=None):
+    """Render the page to find experiment plates based on filters."""
+    experiment_plates = None
+    display_plates = None
+
+    if request.GET:
+        form = FilterExperimentPlatesForm(request.GET)
+
+        if form.is_valid():
+            experiment_plates = form.process()
+            # display_plates = get_paginated(request, experiment_plates,
+            #                                EXPERIMENT_PLATES_PER_PAGE)
+
+            pks = experiment_plates.values_list('id', flat=True)
+
+            context = {
+                # 'experiment_plates': plates,
+                'experiment_plates': experiment_plates,
+
+                # Default to thumbnail
+                'mode': request.GET.get('mode', 'thumbnail')
+            }
+
+            return redirect('replicates_contact_sheet_url', pks)
+
+    else:
+        form = FilterExperimentPlatesForm()
+
+    context = {
+        'form': form,
+        'experiment_plates': experiment_plates,
+        'display_plates': display_plates,
+    }
+
+    return render(request, 'find_replicates_for_contact_sheet.html', context)
+    # return redirect(request, 'replicates_contact_sheet.html', context)
+
+
+def replicates_contact_sheet(request, pks):
+    """Render the page to view experiment plate images vertically."""
+    pks = pks.split(',')
+
+    # This preserves the order of the pks
+    preserved = Case(*[When(pk=pk, then=i) for i, pk in enumerate(pks)])
+
+    plates = ExperimentPlate.objects.filter(pk__in=pks).order_by(preserved)
+
+    context = {
+        'experiment_plates': plates,
+
+        # Default to thumbnail
+        'mode': request.GET.get('mode', 'thumbnail')
+    }
+
+    return render(request, 'replicates_contact_sheet.html', context)
 
 
 def find_experiment_wells(request):
