@@ -114,20 +114,11 @@ def find_replicates_for_contact_sheet(request, context=None):
 
         if form.is_valid():
             experiment_plates = form.process()
-            # display_plates = get_paginated(request, experiment_plates,
-            #                                EXPERIMENT_PLATES_PER_PAGE)
 
             pks = experiment_plates.values_list('id', flat=True)
+            plates = ','.join([str(pk) for pk in pks])
 
-            context = {
-                # 'experiment_plates': plates,
-                'experiment_plates': experiment_plates,
-
-                # Default to thumbnail
-                'mode': request.GET.get('mode', 'thumbnail')
-            }
-
-            return redirect('replicates_contact_sheet_url', pks)
+            return redirect('replicates_contact_sheet_url', plates)
 
     else:
         form = FilterExperimentPlatesForm()
@@ -151,11 +142,18 @@ def replicates_contact_sheet(request, pks):
 
     plates = ExperimentPlate.objects.filter(pk__in=pks).order_by(preserved)
 
+    wells = []
+
+    for row in "ABCDEFGH":
+        for col in range(1, 13):
+            wells.append(''.join([row, '_', str(col)]))
+
     context = {
         'experiment_plates': plates,
-
+        'wells': wells,
         # Default to thumbnail
         'mode': request.GET.get('mode', 'thumbnail')
+
     }
 
     return render(request, 'replicates_contact_sheet.html', context)
