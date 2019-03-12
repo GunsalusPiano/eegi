@@ -12,65 +12,82 @@ Replicates Contact Sheet:
 
 
 {% block content %}
+
+<meta id="plates" data-name="{{ experiment_plates|get_comma_separated_ids }}">
 <!-- Outer table is in case there are multiple experiments -->
 <table>
     <tr>
         <td>
-            <table class="grayscale plate-96 vertical-tiles
+            <form method="post" action="/process-contact-sheet/">
+                {%csrf_token %}
+                <table class="grayscale plate-96 vertical-tiles
         mode-{{ mode }}">
-                <thead>
-        <th class="pretty-th">
-            <h4>
-                Interesting?
-            </h4>
-        </th>
-        </thead>
-        <tbody>
-            {% for well in wells %}
-                <tr>
-                    <td style="height: 179.4px; border:solid white 2px;">
-                        <div class="well-title">
-                            {{ well }}
-                        </div>
-                        <!-- <div class="image-frame"> -->
-                        <div>
-                            <input style="position: absolute; top: 50%; left: 50%;" type="checkbox" name="{{ well }}" id="{{ well }}">
-                        </div>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-</table>
-</td>
-{% for experiment_plate in experiment_plates %}
-<td>
+                    <thead>
+                        <th class="pretty-th">
+                            <h4>
+                                Interesting?
+                            </h4>
+                        </th>
+                    </thead>
+                    <tbody>
+                        {% for field in form %}
+                            <tr>
+                                <td style="height: 179.4px; border:solid white 2px;">
+                                    <div class="well-title">
+                                        {{field.label}}
+                                    </div>
+                                    <div>
+                                        <!-- <input style="position: absolute; top: 50%; left: 50%;" type="checkbox" name="{{ well }}" id="{{ well }}"
+                                            value="{{ well }}"> -->
+                                        {{field}}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div id="form-buttons">
+                    <button type="submit" class="submit">Submit</button>
+                    <button type="button" class="reset" onclick="location.href = '{{ request.path }}'">
+                        Reset
+                    </button>
+                </div>
+            </form>
+            <!-- {% for checkbox in form.checkboxes %} -->
+                
+            <!-- {% endfor %}
+        </td>
+<!-- <button type="submit" class="submit" onclick="submitContactSheet();">Submit</button> -->
 
-    <!-- Inner table is per-experiment -->
-    <table class="grayscale plate-96 vertical-tiles
-    mode-{{ mode }}">
-        <thead>
-            <tr>
-                <th class="pretty-th">
-                    <h4 class="page-subtitle">
-                        <a href="{{ experiment_plate.get_absolute_url }}">
-                            {{ experiment_plate.id }}</a>
-                    </h4>
+        {% for experiment_plate in experiment_plates %}
+            <td>
 
-                    {% include 'experiment_plate_spans.html' %}
-                </th>
-            </tr>
-        </thead>
+                <!-- Inner table is per-experiment -->
+                <table class="grayscale plate-96 vertical-tiles
+                mode-{{ mode }}">
+                    <thead>
+                        <tr>
+                            <th class="pretty-th">
+                                <h4 class="page-subtitle">
+                                    <a href="{{ experiment_plate.get_absolute_url }}">
+                                        {{ experiment_plate.id }}</a>
+                                </h4>
 
-        <tbody>
-            {% for well in experiment_plate.get_wells %}
-            <tr>
-                {% include 'well.html' with is_experiment=True %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</td>
-{% endfor %}
-</tr>
+                                {% include 'experiment_plate_spans.html' %}
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for well in experiment_plate.get_wells %}
+                        <tr>
+                            {% include 'well.html' with is_experiment=True %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </td>
+        {% endfor %}
+    </tr>
 </table>
 {% endblock %}

@@ -13,6 +13,7 @@ from experiments.forms import (
     FilterExperimentWellsToScoreForm, get_score_form,
     AddExperimentPlateForm, ChangeExperimentPlatesForm,
     process_ChangeExperimentPlatesForm_data,
+    ProcessContactSheetForm,
 )
 from utils.http import http_response_ok, build_url
 from utils.pagination import get_paginated
@@ -135,6 +136,7 @@ def find_replicates_for_contact_sheet(request, context=None):
 
 def replicates_contact_sheet(request, pks):
     """Render the page to view experiment plate images vertically."""
+
     pks = pks.split(',')
 
     # This preserves the order of the pks
@@ -142,21 +144,38 @@ def replicates_contact_sheet(request, pks):
 
     plates = ExperimentPlate.objects.filter(pk__in=pks).order_by(preserved)
 
+    form = ProcessContactSheetForm()
+
     wells = []
 
-    for row in "ABCDEFGH":
-        for col in range(1, 13):
-            wells.append(''.join([row, '_', str(col)]))
+    # for row in "ABCDEFGH":
+    #     for col in range(1, 13):
+    #         wells.append(''.join([row, '_', str(col)]))
 
     context = {
         'experiment_plates': plates,
-        'wells': wells,
+        # 'wells': wells,
         # Default to thumbnail
+        'form': form,
         'mode': request.GET.get('mode', 'thumbnail')
 
     }
 
     return render(request, 'replicates_contact_sheet.html', context)
+
+def process_contact_sheet(request):
+    # return redirect('home_url')
+    if request.method == 'POST':
+        form = ProcessContactSheetForm(request.POST)
+
+        if form.is_valid():
+            data = form.cleaned_data
+            return render(request, 'process_contact_sheet.html', data)
+        else:
+            # form = ProcessContactSheetForm()
+            return redirect('home_url')
+    else:
+        return redirect('/find_replicates_for_contact_sheet.html')
 
 
 def find_experiment_wells(request):

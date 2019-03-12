@@ -18,6 +18,9 @@ urlpatterns = [
     url(r'^replicates-contact-sheet/([\d,]+)/$',
         views.replicates_contact_sheet,
         name='replicates_contact_sheet_url'),
+    url(r'^process-contact-sheet/$',
+        views.process_contact_sheet,
+        name='process_contact_sheet_url'),
 
     url(r'^find-experiment-wells/$', views.find_experiment_wells,
         name='find_experiment_wells_url'),

@@ -297,6 +297,16 @@ class FilterExperimentWellsForm(_FilterExperimentsBaseForm):
 
         return experiments
 
+class ProcessContactSheetForm(forms.Form):
+    
+    def __init__(self, *args, **kwargs):
+        super(ProcessContactSheetForm, self).__init__(*args,**kwargs)
+        for row in "ABCDEFGH":
+            for col in range(1, 13):
+                self.fields[row+format(col,'02d')] = forms.BooleanField(required=False)
+            
+    
+
 # This inherits the plate__pk, plate__date, plate__temperature,
 # plate__screen_stage, and worm strain from the base form.
 class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
@@ -1220,7 +1230,6 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
             'images_per_page': images_per_page,
             'unscored_by_user': unscored_by_user,
         }
-
 
 def _remove_empties_and_none(d):
     """Remove key-value pairs from dictionary if the value is '' or None."""

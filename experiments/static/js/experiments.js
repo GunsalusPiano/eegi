@@ -288,6 +288,30 @@ function resetImages(){
   $('.active .controls-panel').children().css('transition', 'all 200ms ease-out').css('transform','scale(1)').css('z-index','0');
 };
 
+function submitContactSheet(){
+  console.log("submitContactSheet");
+  console.log($("#plates").data());
+  $.each($("input:checked"), function(){
+    console.log($(this).val());
+  });
+
+  $.ajax({
+    url: "/process-contact-sheet/",
+    type: "POST",
+    data: {
+      plates: $("#plates").data(),
+      csrfmiddlewaretoken: '{{ csrf_token }}'
+    },
+    success: function(json){
+      console.log("success");
+    },
+    error: function(json){
+      console.log("error");
+    }
+  });
+
+};
+
 $(document).ready(function() {
   // Mousetrap.bind(['ctrl+4'], function() { console.log('4'); });
   Mousetrap.bind(['ctrl+1'], function() { resetImages();
@@ -323,3 +347,5 @@ $(function(){
         $(".geneClassDesc").toggleClass("seeMore");
     })
 });
+
+
