@@ -298,7 +298,7 @@ class FilterExperimentWellsForm(_FilterExperimentsBaseForm):
         return experiments
 
 class ProcessContactSheetForm(forms.Form):
-    
+
     def __init__(self, *args, **kwargs):
         super(ProcessContactSheetForm, self).__init__(*args,**kwargs)
         for row in "ABCDEFGH":

@@ -144,9 +144,40 @@ def replicates_contact_sheet(request, pks):
 
     plates = ExperimentPlate.objects.filter(pk__in=pks).order_by(preserved)
 
-    form = ProcessContactSheetForm()
+    if request.method == 'POST':
+        form = ProcessContactSheetForm(request.POST)
 
-    wells = []
+        if form.is_valid():
+            submitted = 0
+            data = form.cleaned_data
+            for well in data:
+                for plate in pks:
+                    if data[well] == True:
+                            interestingExp = Experiment.objects.get(
+                                plate_id=plate,well=well)
+                            interestingExp.is_interesting = True
+                            interestingExp.save()
+                            submitted += 1
+                    else:
+                        interestingExp = Experiment.objects.get(
+                            plate_id=plate, well=well)
+                        interestingExp.is_interesting = False
+                        interestingExp.save()
+            
+            context = {
+                'plates': pks,
+                'submitted': submitted
+            }
+                    
+            return render(request,'process_contact_sheet.html', context)
+        # if form.is_valid():
+        #     data = form.cleaned_data
+        #     return render(request, 'process_contact_sheet.html', data)
+
+    else:
+        form = ProcessContactSheetForm()
+
+    # wells = []
 
     # for row in "ABCDEFGH":
     #     for col in range(1, 13):
@@ -163,19 +194,19 @@ def replicates_contact_sheet(request, pks):
 
     return render(request, 'replicates_contact_sheet.html', context)
 
-def process_contact_sheet(request):
-    # return redirect('home_url')
-    if request.method == 'POST':
-        form = ProcessContactSheetForm(request.POST)
+# def process_contact_sheet(request):
+#     # return redirect('home_url')
+#     if request.method == 'POST':
+#         form = ProcessContactSheetForm(request.POST)
 
-        if form.is_valid():
-            data = form.cleaned_data
-            return render(request, 'process_contact_sheet.html', data)
-        else:
-            # form = ProcessContactSheetForm()
-            return redirect('home_url')
-    else:
-        return redirect('/find_replicates_for_contact_sheet.html')
+#         if form.is_valid():
+#             data = form.cleaned_data
+#             return render(request, 'process_contact_sheet.html', data)
+#         else:
+#             # form = ProcessContactSheetForm()
+#             return redirect('home_url')
+#     else:
+#         return redirect('/find_replicates_for_contact_sheet.html')
 
 
 def find_experiment_wells(request):

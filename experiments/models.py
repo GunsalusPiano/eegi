@@ -198,6 +198,7 @@ class Experiment(models.Model):
     worm_strain = models.ForeignKey(WormStrain, models.CASCADE)
     library_stock = models.ForeignKey(LibraryStock, models.CASCADE)
     is_junk = models.BooleanField(default=False, db_index=True)
+    is_interesting = models.NullBooleanField(default=False, db_index=True)
     comment = models.TextField(blank=True)
 
     class Meta:

@@ -11,7 +11,13 @@ Summary of Contact Sheet
 
 
 {% block content %}
+Found {{ submitted }} interesting wells for: 
+{% for plate in plates %}
+ {{ plate }}
+{% endfor %}
 
+<div>
+<a href="/find-replicates-for-contact-sheet"><button type="button" class="submit">Score more</button></a>
 
-
+</div>
 {% endblock %}
