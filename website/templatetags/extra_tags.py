@@ -217,3 +217,7 @@ def get_gene_class_desc(gene_id):
     except Gene.DoesNotExist:
         desc = 'NA'
     return desc
+
+# @register.filter
+# def keyvalue(dict, key):
+#     return dict[key]

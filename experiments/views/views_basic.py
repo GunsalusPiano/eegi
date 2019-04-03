@@ -183,8 +183,17 @@ def replicates_contact_sheet(request, pks):
     #     for col in range(1, 13):
     #         wells.append(''.join([row, '_', str(col)]))
 
+    experiment_images = {}
+
+    for plate in plates:
+        id = int(plate.id)
+        experiment_images[id] = {}
+        for experiment in plate.get_wells():
+            experiment_images[id][experiment.well] = experiment.get_image_url(mode='thumbnail')
+
     context = {
         'experiment_plates': plates,
+        'experiment_images': experiment_images,
         # 'wells': wells,
         # Default to thumbnail
         'form': form,

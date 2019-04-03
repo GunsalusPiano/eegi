@@ -15,79 +15,51 @@ Replicates Contact Sheet:
 
 <meta id="plates" data-name="{{ experiment_plates|get_comma_separated_ids }}">
 <!-- Outer table is in case there are multiple experiments -->
-<table>
-    <tr>
-        <td>
-            <form method="post" action="">
-                {%csrf_token %}
-                <table class="grayscale plate-96 vertical-tiles
-        mode-{{ mode }}">
-                    <thead>
-                        <th class="pretty-th">
-                            <h4>
-                                Interesting?
-                            </h4>
-                        </th>
-                    </thead>
-                    <tbody>
-                        {% for field in form %}
-                            <tr>
-                                <td style="height: 179.4px; border:solid white 2px;">
-                                    <div class="well-title">
-                                        {{field.label}}
-                                    </div>
-                                    <div>
-                                        <!-- <input style="position: absolute; top: 50%; left: 50%;" type="checkbox" name="{{ well }}" id="{{ well }}"
-                                            value="{{ well }}"> -->
-                                        {{field}}
-                                    </div>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <div id="form-buttons">
-                    <button type="submit" class="submit">Submit</button>
-                    <button type="button" class="reset" onclick="location.href = '{{ request.path }}'">
-                        Reset
-                    </button>
-                </div>
-            </form>
-            <!-- {% for checkbox in form.checkboxes %} -->
-                
-            <!-- {% endfor %}
-        </td>
-<!-- <button type="submit" class="submit" onclick="submitContactSheet();">Submit</button> -->
 
-        {% for experiment_plate in experiment_plates %}
-            <td>
+<form method="post" action="">
+    {%csrf_token %}
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    <h4>Interesting?</h4>
+                </th>
+                {% for experiment_plate in experiment_plates %}
+                <th>
+                    {{experiment_plate}}
+                </th>
+                {% endfor %}
+            </tr>
+        </thead>
 
-                <!-- Inner table is per-experiment -->
-                <table class="grayscale plate-96 vertical-tiles
-                mode-{{ mode }}">
-                    <thead>
-                        <tr>
-                            <th class="pretty-th">
-                                <h4 class="page-subtitle">
-                                    <a href="{{ experiment_plate.get_absolute_url }}">
-                                        {{ experiment_plate.id }}</a>
-                                </h4>
+        <tbody>
+            {% for field in form %}
+            <tr>
+                <td>
+                    {{ field.label }}
+                    {{ field }}
+                </td>
+                {% for experiment_plate in experiment_plates %}
+                <td>
+                    {% with experiment=experiment_images|get_dict_item:experiment_plate.id %}
+                        <img src="{{ experiment|get_dict_item:field.label }}">
+                    <!-- <img src="http://eegi.bio.nyu.edu/image/convertedImg/32412/Tile000001.jpg"> -->
+                    {% endwith %}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
 
-                                {% include 'experiment_plate_spans.html' %}
-                            </th>
-                        </tr>
-                    </thead>
+    </table>
+    <div id="form-buttons">
+        <button type="submit" class="submit">Submit</button>
+        <button type="button" class="reset" onclick="location.href = '{{ request.path }}'">
+            Reset
+        </button>
+    </div>
+</form>
 
-                    <tbody>
-                        {% for well in experiment_plate.get_wells %}
-                        <tr>
-                            {% include 'well.html' with is_experiment=True %}
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </td>
-        {% endfor %}
-    </tr>
-</table>
+
+
 {% endblock %}
