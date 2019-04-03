@@ -38,7 +38,45 @@
     Library
   </a>
 
-  <a href="{{ find_experiment_plates_url }}"
+  <div class='dropdown'>
+
+    <button onclick='dropdown()' class='dropbtn'>Search</button>
+    <div id='dropdownList' class='dropdown-content'>
+      <a href="{{ find_experiment_plates_url }}" 
+          {% ifequal request.path find_experiment_plates_url %}
+            class="active" 
+          {% endifequal %}>
+        Experiment Plates
+      </a>
+      <a href="{{ find_experiment_wells_url }}" 
+          {% ifequal request.path find_experiment_wells_url %}
+            class="active" 
+          {% endifequal %}>
+        Experiment Wells
+      </a>
+      <a href="{{ find_single_knockdown_url }}" 
+          {% ifequal request.path find_single_knockdown_url %}
+            class="active" 
+          {% endifequal %}>
+        Single Knockdown
+      </a>
+      <a href="{{ find_double_knockdown_url }}" 
+          {% ifequal request.path find_double_knockdown_url %}
+            class="active" 
+          {% endifequal %}>
+        Double Knockdown
+      </a>
+      <a href="{{ find_secondary_scores_url }}" 
+          {% ifequal request.path find_secondary_scores_url %}
+            class="active" 
+          {% endifequal %}>
+        Secondary Scores
+      </a>
+    </div>
+
+  </div>
+
+  <!-- <a href="{{ find_experiment_plates_url }}"
       {% ifequal request.path find_experiment_plates_url %}
       class="active"
       {% endifequal %}>
@@ -71,13 +109,20 @@
       class="active"
       {% endifequal %}>
     Secondary Scores
-  </a>
+  </a> -->
 
   <a href="{{ score_experiment_wells_url }}"
       {% ifequal request.path score_experiment_wells_url %}
       class="active"
       {% endifequal %}>
     Score Secondary
+  </a>
+
+  <a href="{{ find_replicates_for_contact_sheet_url }}"
+      {% ifequal request.path find_replicates_for_contact_sheet_url %}
+      class="active"
+      {% endifequal %}>
+    Replicates Contact Sheet
   </a>
 
   <div class='dropdown'>
