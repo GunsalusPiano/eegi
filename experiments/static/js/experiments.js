@@ -348,4 +348,83 @@ $(function(){
     })
 });
 
+$(function(){
+  var path = window.location.pathname;
+  var page = path.split("/");
+  if(page[1] == "replicates-contact-sheet"){
+    $(":checkbox").bootstrapToggle({
+      on: "interesting",
+      off: "lame"
+    });
+
+    var rows = "ABCDEFGH";
+    var checkboxes = [];
+
+    for (var row = 0; row <= rows.length - 1; row++){
+      for( var col = 1; col <= 12; col++){
+        if(col < 10){
+          col = "0" + col
+        }
+        checkboxes.push(rows[row]+String(col));
+      }
+    }
+
+    console.log(checkboxes);
+
+    var currentIndex;
+    
+    if(!currentIndex){
+      currentIndex = 0;
+      $("#"+checkboxes[currentIndex]).addClass('active');
+    }
+
+    function updateIndex(direction){
+
+      if (currentIndex >= 0 && currentIndex < 96){
+
+        $("#" + checkboxes[currentIndex]).removeClass('active');
+
+        if(direction === 'up'){
+          currentIndex--;
+        } else if (direction === 'down') {
+          currentIndex++;
+        }
+
+        $("#" + checkboxes[currentIndex]).addClass('active');
+
+        $('html, body').animate({
+          scrollTop: $("#" + checkboxes[currentIndex]).offset().top
+        }, 'fast');
+
+      }
+
+    }
+
+    function toggleInteresting(){
+      console.log('space');
+      console.log($("#id_" + checkboxes[currentIndex]));
+      if ($("#" + checkboxes[currentIndex]).find(":checkbox").prop('checked')){
+        $("#" + checkboxes[currentIndex]).find(":checkbox").prop('checked', false).change();
+      }else{
+        $("#" + checkboxes[currentIndex]).find(":checkbox").prop('checked', true).change();
+      }
+    }
+
+    Mousetrap.bind('down', function(e){
+      e.preventDefault();
+      updateIndex('down');
+    });
+    Mousetrap.bind('up', function (e) {
+      e.preventDefault();
+      updateIndex('up');
+    });
+    Mousetrap.bind('space', function(e){
+      e.preventDefault();
+      toggleInteresting();
+    });
+
+
+  }
+});
+
 

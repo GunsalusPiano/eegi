@@ -1642,6 +1642,12 @@ table#image-category .image-frame {
         .carousel .individual-image .image-frame .image-frame-next span {
           right: 5%; }
 
+#replicates-contact-sheet .interesting-checkbox {
+  text-align: center;
+  vertical-align: middle; }
+#replicates-contact-sheet tr.active {
+  border: 2px solid purple; }
+
 .geneDescFileSearch {
   float: right; }
 

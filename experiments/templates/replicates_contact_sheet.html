@@ -34,10 +34,16 @@ Replicates Contact Sheet:
 
         <tbody>
             {% for field in form %}
-            <tr>
-                <td>
-                    {{ field.label }}
-                    {{ field }}
+            <tr id="{{ field.label }}">
+                <td class="interesting-checkbox">
+                    <div>
+                        <div>
+                            {{ field.label }}
+                        </div>
+                        <div>
+                            {{ field }}
+                        </div>
+                    </div>
                 </td>
                 {% for experiment_plate in experiment_plates %}
                 <td>
