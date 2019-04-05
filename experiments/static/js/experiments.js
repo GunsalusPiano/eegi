@@ -369,8 +369,6 @@ $(function(){
       }
     }
 
-    console.log(checkboxes);
-
     var currentIndex;
     
     if(!currentIndex){
@@ -378,31 +376,40 @@ $(function(){
       $("#"+checkboxes[currentIndex]).addClass('active');
     }
 
+    function scroll(element){
+      $('html, body').animate({
+        scrollTop: element.offset().top
+      }, 'fast');
+    }
+
     function updateIndex(direction){
 
-      if (currentIndex >= 0 && currentIndex < 96){
+      var previousIndex = currentIndex;
+        
 
-        $("#" + checkboxes[currentIndex]).removeClass('active');
+      if(direction === 'up'){
+        currentIndex--;
+      } else if (direction === 'down') {
+        currentIndex++;
+      }
 
-        if(direction === 'up'){
-          currentIndex--;
-        } else if (direction === 'down') {
-          currentIndex++;
-        }
+      if (currentIndex >= 0 && currentIndex < 96){   
+
+        $("#" + checkboxes[previousIndex]).removeClass('active');
+
+        console.log(currentIndex);
+        scroll($("#" + checkboxes[currentIndex]));
 
         $("#" + checkboxes[currentIndex]).addClass('active');
 
-        $('html, body').animate({
-          scrollTop: $("#" + checkboxes[currentIndex]).offset().top
-        }, 'fast');
-
+      }else{
+        currentIndex = previousIndex;
       }
 
     }
 
     function toggleInteresting(){
-      console.log('space');
-      console.log($("#id_" + checkboxes[currentIndex]));
+      
       if ($("#" + checkboxes[currentIndex]).find(":checkbox").prop('checked')){
         $("#" + checkboxes[currentIndex]).find(":checkbox").prop('checked', false).change();
       }else{
