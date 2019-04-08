@@ -369,51 +369,86 @@ $(function(){
       }
     }
 
-    var currentIndex;
+    var currentRow;
+    var currentCol;
     
-    if(!currentIndex){
-      currentIndex = 0;
-      $("#"+checkboxes[currentIndex]).addClass('active');
+    if(!currentRow){
+      currentRow = 0;
+      currentCol = 0;
+      $("#"+checkboxes[currentRow]).addClass('active');
     }
 
-    function scroll(element){
+    function scrollRow(element){
       $('html, body').animate({
-        scrollTop: element.offset().top
+        scrollTop: element.offset().top - 200
       }, 'fast');
+    }
+
+
+    function toggleImage(element, scale, zindex){
+      // element = $("#" + checkboxes[currentRow] + "_" + col);
+      if (element.length){
+        element.find('img').css({'transform':'scale('+scale+')','z-index':zindex});
+        // element.find('img').addClass('blah');
+      }
+    }
+
+    function scrollCol(direction){
+      var previousCol = currentCol;
+
+      if(direction == "left"){
+        currentCol--;
+      }else if(direction == "right"){
+        currentCol++;
+      }
+
+      if (currentCol == 0 || currentCol == 9) {
+        currentCol = previousCol;
+      }
+
+      // currentElement = $("#" + checkboxes[currentRow] + "_" + currentCol);
+      // previousElement = $("#" + checkboxes[currentRow] + "_" + previousCol);
+
+      toggleImage($("#" + checkboxes[currentRow] + "_" + currentCol), 1.5,10);
+      toggleImage($("#" + checkboxes[currentRow] + "_" + previousCol), 1,'initial');
+
+      console.log("current:" + currentCol);
+      console.log("previous:" + previousCol);
+     
     }
 
     function updateIndex(direction){
 
-      var previousIndex = currentIndex;
-        
+      var previousRow = currentRow;
+      
+      toggleImage($("#" + checkboxes[currentRow] + "_" + currentCol), 1, 'initial');
 
       if(direction === 'up'){
-        currentIndex--;
+        currentRow--;
       } else if (direction === 'down') {
-        currentIndex++;
+        currentRow++;
       }
 
-      if (currentIndex >= 0 && currentIndex < 96){   
+      if (currentRow >= 0 && currentRow < 96){   
+        currentCol = 0;
+        $("#" + checkboxes[previousRow]).removeClass('active');
 
-        $("#" + checkboxes[previousIndex]).removeClass('active');
+        scrollRow($("#" + checkboxes[currentRow]));
 
-        console.log(currentIndex);
-        scroll($("#" + checkboxes[currentIndex]));
-
-        $("#" + checkboxes[currentIndex]).addClass('active');
+        $("#" + checkboxes[currentRow]).addClass('active');
 
       }else{
-        currentIndex = previousIndex;
+        currentRow = previousRow;
       }
 
     }
 
     function toggleInteresting(){
       
-      if ($("#" + checkboxes[currentIndex]).find(":checkbox").prop('checked')){
-        $("#" + checkboxes[currentIndex]).find(":checkbox").prop('checked', false).change();
+      if ($("#" + checkboxes[currentRow]).find(":checkbox").prop('checked')){
+        $("#" + checkboxes[currentRow]).find(":checkbox").prop('checked', false).change();
       }else{
-        $("#" + checkboxes[currentIndex]).find(":checkbox").prop('checked', true).change();
+        $("#" + checkboxes[currentRow]).find(":checkbox").prop('checked', true).change();
       }
     }
 
@@ -429,8 +464,16 @@ $(function(){
       e.preventDefault();
       toggleInteresting();
     });
-
-
+    Mousetrap.bind('left', function(e){
+      e.preventDefault();
+      console.log('left');
+      scrollCol('left');
+    });
+    Mousetrap.bind('right', function (e) {
+      e.preventDefault();
+      console.log('right');
+      scrollCol('right');
+    });
   }
 });
 

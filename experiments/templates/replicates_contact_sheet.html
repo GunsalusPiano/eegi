@@ -21,12 +21,12 @@ Replicates Contact Sheet:
     <table>
         <thead>
             <tr>
-                <th>
-                    <h4>Interesting?</h4>
+                <th class="pretty-th">
+                    <h4 class="page-subtitle">Interesting?</h4>
                 </th>
                 {% for experiment_plate in experiment_plates %}
-                <th>
-                    {{experiment_plate}}
+                <th class="pretty-th">
+                    <h4 class="page-subtitle">{{experiment_plate}}</h4>
                 </th>
                 {% endfor %}
             </tr>
@@ -46,12 +46,12 @@ Replicates Contact Sheet:
                     </div>
                 </td>
                 {% for experiment_plate in experiment_plates %}
-                <td>
-                    {% with experiment=experiment_images|get_dict_item:experiment_plate.id %}
-                        <img src="{{ experiment|get_dict_item:field.label }}">
-                    <!-- <img src="http://eegi.bio.nyu.edu/image/convertedImg/32412/Tile000001.jpg"> -->
-                    {% endwith %}
-                </td>
+                    <td id="{{ field.label }}_{{ forloop.counter }}">
+                        {% with experiment=experiment_images|get_dict_item:experiment_plate.id %}
+                            <img class="reps" src="{{ experiment|get_dict_item:field.label }}">
+                        <!-- <img src="http://eegi.bio.nyu.edu/image/convertedImg/32412/Tile000001.jpg"> -->
+                        {% endwith %}
+                    </td>
                 {% endfor %}
             </tr>
             {% endfor %}
