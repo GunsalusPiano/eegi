@@ -402,7 +402,7 @@ $(function(){
         currentCol++;
       }
 
-      if (currentCol == 0 || currentCol == 9) {
+      if (currentCol <= 0 || currentCol == 9) {
         currentCol = previousCol;
       }
 
