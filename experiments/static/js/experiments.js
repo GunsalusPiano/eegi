@@ -386,10 +386,8 @@ $(function(){
 
 
     function toggleImage(element, scale, zindex){
-      // element = $("#" + checkboxes[currentRow] + "_" + col);
       if (element.length){
         element.find('img').css({'transform':'scale('+scale+')','z-index':zindex});
-        // element.find('img').addClass('blah');
       }
     }
 
@@ -406,14 +404,8 @@ $(function(){
         currentCol = previousCol;
       }
 
-      // currentElement = $("#" + checkboxes[currentRow] + "_" + currentCol);
-      // previousElement = $("#" + checkboxes[currentRow] + "_" + previousCol);
-
       toggleImage($("#" + checkboxes[currentRow] + "_" + currentCol), 3,10);
       toggleImage($("#" + checkboxes[currentRow] + "_" + previousCol), 1,'initial');
-
-      console.log("current:" + currentCol);
-      console.log("previous:" + previousCol);
      
     }
 
@@ -466,12 +458,10 @@ $(function(){
     });
     Mousetrap.bind('left', function(e){
       e.preventDefault();
-      console.log('left');
       scrollCol('left');
     });
     Mousetrap.bind('right', function (e) {
       e.preventDefault();
-      console.log('right');
       scrollCol('right');
     });
   }
