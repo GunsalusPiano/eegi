@@ -380,7 +380,7 @@ $(function(){
 
     function scrollRow(element){
       $('html, body').animate({
-        scrollTop: element.offset().top - 200
+        scrollTop: element.offset().top - 450
       }, 'fast');
     }
 
@@ -409,7 +409,7 @@ $(function(){
       // currentElement = $("#" + checkboxes[currentRow] + "_" + currentCol);
       // previousElement = $("#" + checkboxes[currentRow] + "_" + previousCol);
 
-      toggleImage($("#" + checkboxes[currentRow] + "_" + currentCol), 1.5,10);
+      toggleImage($("#" + checkboxes[currentRow] + "_" + currentCol), 3,10);
       toggleImage($("#" + checkboxes[currentRow] + "_" + previousCol), 1,'initial');
 
       console.log("current:" + currentCol);
