@@ -189,7 +189,7 @@ def replicates_contact_sheet(request, pks):
         id = int(plate.id)
         experiment_images[id] = {}
         for experiment in plate.get_wells():
-            experiment_images[id][experiment.well] = experiment.get_image_url(mode='thumbnail')
+            experiment_images[id][experiment.well] = experiment.get_image_url()
 
     context = {
         'experiment_plates': plates,
