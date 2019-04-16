@@ -18,7 +18,7 @@ Replicates Contact Sheet:
 
 <form method="post" action="">
     {%csrf_token %}
-    <table>
+    <table clas="reps-table">
         <thead>
             <tr>
                 <th class="pretty-th">
@@ -48,7 +48,7 @@ Replicates Contact Sheet:
                 {% for experiment_plate in experiment_plates %}
                     <td id="{{ field.label }}_{{ forloop.counter }}">
                         {% with experiment=experiment_images|get_dict_item:experiment_plate.id %}
-                            <img class="reps" width="500" src="{{ experiment|get_dict_item:field.label }}">
+                            <img class="reps" src="{{ experiment|get_dict_item:field.label }}">
                         <!-- <img src="http://eegi.bio.nyu.edu/image/convertedImg/32412/Tile000001.jpg"> -->
                         {% endwith %}
                     </td>

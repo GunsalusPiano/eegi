@@ -1646,7 +1646,21 @@ table#image-category .image-frame {
   text-align: center;
   vertical-align: middle; }
 #replicates-contact-sheet tr.active {
-  border: 2px solid purple; }
+  position: relative;
+  z-index: 10;
+  border: 2px solid purple;
+  filter: brightness(200%); }
+#replicates-contact-sheet .reps-table {
+  table-layout: fixed;
+  text-align: center;
+  width: 100%; }
+#replicates-contact-sheet .reps {
+  position: relative;
+  height: auto;
+  max-width: 100%;
+  z-index: -1;
+  transition: transform 0.2s ease;
+  filter: brightness(50%); }
 
 .geneDescFileSearch {
   float: right; }
