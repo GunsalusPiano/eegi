@@ -170,30 +170,24 @@ def replicates_contact_sheet(request, pks):
             }
                     
             return render(request,'process_contact_sheet.html', context)
-        # if form.is_valid():
-        #     data = form.cleaned_data
-        #     return render(request, 'process_contact_sheet.html', data)
 
     else:
         form = ProcessContactSheetForm()
 
-    # wells = []
-
-    # for row in "ABCDEFGH":
-    #     for col in range(1, 13):
-    #         wells.append(''.join([row, '_', str(col)]))
-
-    experiment_images = {}
+    experiments = {}
 
     for plate in plates:
         id = int(plate.id)
-        experiment_images[id] = {}
+        experiments[id] = {}
         for experiment in plate.get_wells():
-            experiment_images[id][experiment.well] = experiment.get_image_url()
+            # if experiment.is_junk:
+            #     experiments[id][experiment.well] = 'null'
+            # else:
+                experiments[id][experiment.well] = experiment
 
     context = {
         'experiment_plates': plates,
-        'experiment_images': experiment_images,
+        'experiments': experiments,
         # 'wells': wells,
         # Default to thumbnail
         'form': form,
@@ -202,20 +196,6 @@ def replicates_contact_sheet(request, pks):
     }
 
     return render(request, 'replicates_contact_sheet.html', context)
-
-# def process_contact_sheet(request):
-#     # return redirect('home_url')
-#     if request.method == 'POST':
-#         form = ProcessContactSheetForm(request.POST)
-
-#         if form.is_valid():
-#             data = form.cleaned_data
-#             return render(request, 'process_contact_sheet.html', data)
-#         else:
-#             # form = ProcessContactSheetForm()
-#             return redirect('home_url')
-#     else:
-#         return redirect('/find_replicates_for_contact_sheet.html')
 
 
 def find_experiment_wells(request):

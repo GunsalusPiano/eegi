@@ -47,8 +47,17 @@ Replicates Contact Sheet:
                 </td>
                 {% for experiment_plate in experiment_plates %}
                     <td id="{{ field.label }}_{{ forloop.counter }}">
-                        {% with experiment=experiment_images|get_dict_item:experiment_plate.id %}
-                            <img class="reps" src="{{ experiment|get_dict_item:field.label }}">
+                        {% with experiment=experiments|get_dict_item:experiment_plate.id %}
+                            {% with exp_obj=experiment|get_dict_item:field.label %}
+                                {% if exp_obj.is_junk %}
+                                    <!-- <img style="opacity: 0;" class="reps" src="{{ experiment|get_dict_item:field.label }}"> -->
+                                    <img style="opacity: 0;" class="reps"
+                                        src="{% get_image_url exp_obj %}">
+                                {% else %}
+                                    <!-- <img class="reps" src="{{ experiment|get_dict_item:field.label }}"> -->
+                                    <img class="reps" src="{% get_image_url exp_obj %}">
+                                {% endif %}
+                            {% endwith %}
                         <!-- <img src="http://eegi.bio.nyu.edu/image/convertedImg/32412/Tile000001.jpg"> -->
                         {% endwith %}
                     </td>
