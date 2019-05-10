@@ -150,17 +150,17 @@ def replicates_contact_sheet(request, pks):
         if form.is_valid():
             submitted = 0
             data = form.cleaned_data
+            # well relates to the row in the contact sheet 
             for well in data:
                 for plate in pks:
-                    if data[well] == True:
-                            interestingExp = Experiment.objects.get(
-                                plate_id=plate,well=well)
+                    interestingExp = Experiment.objects.get(
+                        plate_id=plate, well=well)
+
+                    if data[well] == True and interestingExp.is_junk == False:
                             interestingExp.is_interesting = True
                             interestingExp.save()
                             submitted += 1
                     else:
-                        interestingExp = Experiment.objects.get(
-                            plate_id=plate, well=well)
                         interestingExp.is_interesting = False
                         interestingExp.save()
             
