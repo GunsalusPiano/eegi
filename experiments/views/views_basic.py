@@ -147,6 +147,10 @@ def replicates_contact_sheet(request, pks):
     if request.method == 'POST':
         form = ProcessContactSheetForm(request.POST)
 
+        interestingExp = ""
+        score_results = {}
+        score_results['well'] = []
+
         if form.is_valid():
             submitted = 0
             data = form.cleaned_data
@@ -160,11 +164,17 @@ def replicates_contact_sheet(request, pks):
                             interestingExp.is_interesting = True
                             interestingExp.save()
                             submitted += 1
+                            score_results['well'].append(well)
                     else:
                         interestingExp.is_interesting = False
                         interestingExp.save()
             
+            score_results['worm_strain'] = interestingExp.worm_strain
+            score_results['library_stock'] = interestingExp.library_stock
+
             context = {
+                # 'form': form,
+                'score_results': score_results,
                 'plates': pks,
                 'submitted': submitted
             }

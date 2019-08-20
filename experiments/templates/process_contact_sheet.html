@@ -11,10 +11,41 @@ Summary of Contact Sheet
 
 
 {% block content %}
-Found {{ submitted }} interesting wells for: 
-{% for plate in plates %}
- {{ plate }}
-{% endfor %}
+<div class="page-section">
+    
+    <div style="display: flex; align-items: baseline">
+        <h4 style="color: #8d54c6">Worm Strain:</h4>
+        <div style="padding-left: 3%">
+            {{ score_results.worm_strain }}
+        </div>
+        
+    </div>  
+
+    <div style="display: flex; align-items: baseline">
+        <h4 style="color: #8d54c6">Library Stock:</h4> 
+        <div style="padding-left: 3%">
+            {{ score_results.library_stock }}
+        </div>
+    </div>
+
+    <div style="display: flex; align-items: baseline">
+        <h4 style="color: #8d54c6">Plates:</h4> 
+        <div style="padding-left: 3%">
+            {% for plate in plates %}
+                {{ plate }}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div>
+        <h4 style="color: #8d54c6">Found {{ submitted }} interesting wells: </h4>
+        <ul style="padding-left: 3%">
+            {% for well in score_results.well %}
+                <li>{{ well }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 
 <div>
 <a href="/find-replicates-for-contact-sheet"><button type="button" class="submit">Score more</button></a>

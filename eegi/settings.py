@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 
 # Import local configuration
 
-from localsettings import (
+from .localsettings import (
     DEBUG, SECRET_KEY, LOCKDOWN_PASSWORDS, DATABASES, STATIC_ROOT,
     BASE_DIR_DEVSTAR_OUTPUT, BASE_DIR_IMAGE_CATEGORIES, BASE_DIR_SCORING_LISTS,
     BASE_URL_IMG, BASE_URL_THUMBNAIL, BASE_URL_DEVSTAR,
