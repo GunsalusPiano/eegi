@@ -135,6 +135,8 @@ def find_replicates_for_contact_sheet(request, context=None):
 
 
 def replicates_contact_sheet(request, pks):
+    #TODO: Filter scored already (or flag them)
+    
     """Render the page to view experiment plate images vertically."""
 
     pks = pks.split(',')

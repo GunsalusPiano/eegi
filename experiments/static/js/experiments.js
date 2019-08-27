@@ -1,4 +1,4 @@
-$(window).load(function() {
+$(window).on('load',function() {
 // carousel is the images that you can scroll through
   initializeCarousels();
   ScoringImages.init();
