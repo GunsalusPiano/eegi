@@ -88,7 +88,7 @@ var ScoringImages = {
       var imageSrc = imageFrame.attr("data-src");
       var image = $("<img>");
 
-      image.attr("src", imageSrc).load(function() {
+      image.attr("src", imageSrc).on('load',function() {
         imageFrame.removeClass("loading");
         imageFrame.prepend(image);
       });
