@@ -361,10 +361,12 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
     score_abridged_set = forms.BooleanField(required=False, initial=True, label="Score Abridged Set",
         help_text="Score manually curated set of experiments")
 
+    is_interesting = forms.BooleanField(required=False, initial=True, label='Is Interesting')
+
     field_order = [
         'score_form_key', 'scoring_list', 'images_per_page',
         'unscored_by_user', 'randomize_order', 'score_only_4_reps', 'score_abridged_set'
-        'exclude_n2', 'exclude_l4440', 'exclude_no_clone', 'is_junk',
+        'exclude_n2', 'exclude_l4440', 'exclude_no_clone', 'is_junk', 'is_interesting',
         'plate__screen_stage', 'plate__date', 'plate__date__range',
         'screen_type', 'plate__temperature', 'plate__temperature__range',
         'worm_strain', 'pk', 'plate__pk', 'plate__pk__range',
@@ -402,6 +404,8 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
         score_only_4_reps = cleaned_data.pop('score_only_4_reps')
         score_abridged_set = cleaned_data.pop('score_abridged_set')
         exclude_n2 = cleaned_data.pop('exclude_n2')
+        # is_interesting = cleaned_data.pop('is_interesting')
+        # is_junk = cleaned_data.pop('is_junk')
 
         _remove_empties_and_none(cleaned_data)
         experiments = (Experiment.objects
