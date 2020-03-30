@@ -380,6 +380,21 @@ class Experiment(models.Model):
 
         return filters
 
+    def get_experiment_replicate_plates(self):
+        """
+        Get the repliates for this experiment.
+        """
+        
+        filters = {
+            'well' : self.well,
+            'worm_strain_id' : self.worm_strain,
+            'library_stock_id' : self.library_stock,
+            'plate__date' : self.date(),
+            'plate__temperature' : self.temperature()
+        }
+
+        return Experiment.objects.filter(**filters).order_by('?')
+
     def get_link_to_n2_controls(self):
         filters = self.get_n2_control_filters()
         return build_url('find_experiment_wells_url', get=filters)
@@ -399,15 +414,15 @@ class Experiment(models.Model):
         self.is_junk = not self.is_junk
         self.save()
 
-    @classmethod
-    def get_experiment_replicate_plates(cls, filters):
-        """
-        Gets the plates that this specific experiment is replicated across
-        """
-        # return (cls.objects.filter(**filters).exclude(worm_strain_id="N2")
-        return (cls.objects.filter(**filters)
-                .order_by('?')
-                .values_list('pk', flat=True)[:4])
+    # @classmethod
+    # def get_experiment_replicate_plates(cls, filters):
+    #     """
+    #     Gets the plates that this specific experiment is replicated across
+    #     """
+    #     # return (cls.objects.filter(**filters).exclude(worm_strain_id="N2")
+    #     return (cls.objects.filter(**filters)
+    #             .order_by('?')
+    #             .values_list('pk', flat=True)[:4])
 
     @classmethod
     def get_distinct_dates(cls, filters):

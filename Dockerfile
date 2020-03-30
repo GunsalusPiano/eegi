@@ -24,6 +24,9 @@ RUN mkdir -p $PROJECT_DIR
 WORKDIR $PROJECT_DIR
 # COPY Pipfile Pipfile.lock ./
 COPY . ./
+# This is to overcome some stupid error while using MySQL-python package.
+# https://github.com/DefectDojo/django-DefectDojo/issues/407
+RUN sed '/st_mysql_options options;/a unsigned int reconnect;' /usr/include/mysql/mysql.h -i.bkp
 RUN pip install -r requirements.txt
 
 # RUN ip -4 route list match 0/0 | awk '{print $3 "host.docker.internal"}' >> /etc/hosts

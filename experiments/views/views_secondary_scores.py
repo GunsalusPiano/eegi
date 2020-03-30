@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 
-from experiments.forms import SecondaryScoresForm
+from experiments.forms import SecondaryScoresForm, ScreenSummaryForm
 
 from experiments.helpers.scores import get_average_score_weight, calculate_average_scores
 
@@ -20,6 +20,29 @@ SHERLY_ID = 4
 GISELLE_ID = 3
 
 IDS = [NOAH_ID, MALCOLM_ID, SHERLY_ID]
+
+def screen_summary(request, screen_stage, reagent, assay, interesting):
+    """
+    Inteface for searching for and exporting screen results in table format
+
+    """
+
+    if request.GET:
+        form = ScreenSummaryForm(request.GET)
+
+        if form.is_valid():
+
+            screen_type = form.cleaned_data['screen_type']
+            screen_stage = form.cleaned_data['screen_stage']
+            gene = form.cleaned_data['gene']
+
+            context = {
+                'screen_stage': screen_stage,
+                'screen_type': screen_type,
+                'gene': gene,
+            }
+            
+            return render(request, 'screen_summary.html', context)
 
 
 # def secondary_scores(request, worm, worm2, temperature, username=None):

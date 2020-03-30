@@ -425,7 +425,8 @@ def score_experiment_wells(request):
         'experiments': experiments,
         'display_experiments': display_experiments,
         'unscored_by_user': filter_data['unscored_by_user'],
-        'do_not_display': ['images_per_page', 'score_form_key', 'is_junk']
+        # 'do_not_display': ['images_per_page', 'score_form_key', 'is_junk']
+        'do_not_display': ['images_per_page', 'score_form_key']
     }
 
     return render(request, 'score_experiment_wells.html', context)

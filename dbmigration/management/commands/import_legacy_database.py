@@ -1,4 +1,5 @@
-import MySQLdb
+# import MySQLdb
+import mysql.connector
 
 from django.core.management.base import BaseCommand, CommandError
 
@@ -114,7 +115,8 @@ class Command(BaseCommand):
         require_db_write_acknowledgement()
 
         # Do the steps that involve connecting to Huey-Ling's legacy_db
-        legacy_db = MySQLdb.connect(host=LEGACY_DATABASE['HOST'],
+        # legacy_db = MySQLdb.connect(host=LEGACY_DATABASE['HOST'],
+        legacy_db = mysql.connector.connect(host=LEGACY_DATABASE['HOST'],
                                     user=LEGACY_DATABASE['USER'],
                                     passwd=LEGACY_DATABASE['PASSWORD'],
                                     db=LEGACY_DATABASE['NAME'])
@@ -126,7 +128,8 @@ class Command(BaseCommand):
 
         # This step requires connecting to Kris's legacy_db_2
         if do_last_step:
-            legacy_db_2 = MySQLdb.connect(host=LEGACY_DATABASE_2['HOST'],
+            # legacy_db_2 = MySQLdb.connect(host=LEGACY_DATABASE_2['HOST'],
+            legacy_db_2 = mysql.connector.connect(host=LEGACY_DATABASE_2['HOST'],
                                           user=LEGACY_DATABASE_2['USER'],
                                           passwd=LEGACY_DATABASE_2['PASSWORD'],
                                           db=LEGACY_DATABASE_2['NAME'])

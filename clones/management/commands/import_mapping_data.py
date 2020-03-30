@@ -1,4 +1,5 @@
-import MySQLdb
+# import MySQLdb
+import mysql.connector
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand, CommandError
@@ -33,7 +34,8 @@ class Command(BaseCommand):
     def handle(self, **options):
         require_db_write_acknowledgement()
 
-        mapping_db = MySQLdb.connect(host=MAPPING_DATABASE['HOST'],
+        # mapping_db = MySQLdb.connect(host=MAPPING_DATABASE['HOST'],
+        mapping_db = mysql.connector.connect(host=MAPPING_DATABASE['HOST'],
                                      user=MAPPING_DATABASE['USER'],
                                      passwd=MAPPING_DATABASE['PASSWORD'],
                                      db=MAPPING_DATABASE['NAME'])

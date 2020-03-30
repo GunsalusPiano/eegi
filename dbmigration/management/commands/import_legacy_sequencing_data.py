@@ -1,6 +1,7 @@
 import argparse
 import csv
-import MySQLdb
+# import MySQLdb
+import mysql.connector
 import os.path
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -62,7 +63,8 @@ class Command(BaseCommand):
         if not os.path.isdir(genewiz_root):
             raise CommandError('genewiz_root directory not found')
 
-        legacy_db = MySQLdb.connect(host=LEGACY_DATABASE['HOST'],
+        # legacy_db = MySQLdb.connect(host=LEGACY_DATABASE['HOST'],
+        legacy_db = mysql.connector.connect(host=LEGACY_DATABASE['HOST'],
                                     user=LEGACY_DATABASE['USER'],
                                     passwd=LEGACY_DATABASE['PASSWORD'],
                                     db=LEGACY_DATABASE['NAME'])

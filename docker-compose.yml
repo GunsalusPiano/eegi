@@ -1,4 +1,4 @@
-version: '2'
+version: '3.1'
 services:
   eegi_db:
     # Latest build (or anything after 5.7) has an auth key problem that prevents the
@@ -21,6 +21,7 @@ services:
       MYSQL_DATABASE: eegi
     volumes:
       - ./data/mysql_data:/var/lib/mysql
+      - ./data/db-dumps:/docker-entrypoint-initdb.d
   eegi_web:
     build: .
     command: python manage.py runserver --noreload --nothreading 0.0.0.0:8000

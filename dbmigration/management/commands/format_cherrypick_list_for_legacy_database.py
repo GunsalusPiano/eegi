@@ -1,5 +1,6 @@
 import argparse
-import MySQLdb
+# import MySQLdb
+import mysql.connector
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand, CommandError
@@ -45,7 +46,8 @@ class Command(BaseCommand):
         #   clone information.
         #
         ######################################################
-        legacy_db = MySQLdb.connect(host=LEGACY_DATABASE['HOST'],
+        # legacy_db = MySQLdb.connect(host=LEGACY_DATABASE['HOST'],
+        legacy_db = mysql.connector.connect(host=LEGACY_DATABASE['HOST'],
                                     user=LEGACY_DATABASE['USER'],
                                     passwd=LEGACY_DATABASE['PASSWORD'],
                                     db=LEGACY_DATABASE['NAME'])

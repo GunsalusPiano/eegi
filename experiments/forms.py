@@ -1558,3 +1558,19 @@ def process_ChangeExperimentPlatesForm_data(experiment_plate, data):
         experiment_plate.set_junk(data.get('is_junk'))
 
     return
+
+
+class ScreenSummaryForm(forms.Form):
+    """
+    This form is used to search scoring results that get fed into a table.
+
+
+    TODO
+        - Add radio button for interesting first pass/detailed/either
+    """
+
+    screen_stage = ScreenStageChoiceField(required=False)
+    screen_type = ScreenTypeChoiceFieldWithEmpty(required=False)
+    gene =  forms.CharField(required=False, help_text = 'Gene symbol, e.g. mbk-2', label='Limit to gene?')
+
+
