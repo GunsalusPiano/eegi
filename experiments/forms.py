@@ -1396,6 +1396,7 @@ class SuppressorScoreForm(ScoreForm):
 # This is the secondary enhancer scoring form (the one where you actually score)
 class LevelsScoreForm(ScoreForm):
 
+    mut_hits = SingleScoreField(key='MUT_HITS', required=True, label="Mutant Hits")
     emb_score = SingleScoreField(key='EMB_LEVEL', required=True, label="Emb score")
     ste_score = SingleScoreField(key='STE_LEVEL', required=True, label="Ste score")
     ste_relative_score = SingleScoreField(key='STE_REL_LEVEL', required=True, label="Ste relative score:")
@@ -1429,6 +1430,7 @@ class LevelsScoreForm(ScoreForm):
         save_score(cleaned_data.get('emb_relative_score'))
         save_score(cleaned_data.get('n2_rnai_ste_score'))
         save_score(cleaned_data.get('n2_rnai_emb_score'))
+        save_score(cleaned_data.get('mut_hits'))
         for code in cleaned_data.get('auxiliary_scores'):
             save_score(code)
 

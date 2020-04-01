@@ -2,6 +2,7 @@
 # Version: 1.0
 FROM python:2
 # Install Python and Package Libraries
+RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
 RUN apt-get update && apt-get upgrade -y && apt-get autoremove && apt-get autoclean
 RUN apt-get install -y \
     libffi-dev \
@@ -13,8 +14,9 @@ RUN apt-get install -y \
     libfreetype6-dev \
     zlib1g-dev \
     net-tools \
-    vim
-
+    vim \
+    nodejs \
+    build-essential
 
 # Project Files and Settings
 ARG PROJECT=eegi
@@ -28,6 +30,8 @@ COPY . ./
 # https://github.com/DefectDojo/django-DefectDojo/issues/407
 RUN sed '/st_mysql_options options;/a unsigned int reconnect;' /usr/include/mysql/mysql.h -i.bkp
 RUN pip install -r requirements.txt
+
+RUN npm install
 
 # RUN ip -4 route list match 0/0 | awk '{print $3 "host.docker.internal"}' >> /etc/hosts
 

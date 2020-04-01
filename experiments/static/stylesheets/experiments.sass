@@ -179,10 +179,20 @@ $max-image-width: 1300px
 
         .relative-buttons
           color: white
-          display: inline-block
+          display: inline-flex
           // padding: 1% 0% 1% 25%
           // padding: 5px
           margin: 1% 0% 1% 5%
+          position: relative
+          // width: 50%
+
+          &-n2
+            @extend .relative-buttons
+            float: left
+          
+          &-rnai
+            @extend .relative-buttons
+            float: right
 
           div
             // float: left

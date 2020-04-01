@@ -56,7 +56,7 @@ body {
     float: left;
     margin-bottom: 40px; }
     body #header #site-title {
-      margin-bottom: 13.3333333333px; }
+      margin-bottom: 13.33333px; }
   body #content {
     width: 100%;
     float: left; }
@@ -85,6 +85,7 @@ body {
   #footer #logos img {
     float: left;
     padding-right: 20px; }
+
 #footer #copyright {
   float: right;
   padding-top: 40px; }
@@ -208,7 +209,7 @@ hr {
   -o-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   padding: 40px;
-  padding-top: 26.6666666667px;
+  padding-top: 26.66667px;
   background: #f8f8f8;
   border-radius: 5px; }
   .modal-title {
@@ -296,6 +297,7 @@ form table th {
   padding-right: 5px;
   text-align: left;
   padding-right: 20px; }
+
 form table th, form table td {
   padding-bottom: 5px; }
 
@@ -344,7 +346,7 @@ button {
     border-right: 6px solid transparent;
     border-top: 6px solid white; }
   .hover_tag:after {
-    content: "";
+    content: '';
     z-index: 3;
     margin-left: -3.5px;
     bottom: -7px;
@@ -359,13 +361,14 @@ button {
     transform: rotate(0deg); }
   100% {
     transform: rotate(360deg); } }
+
 .loading {
   background: #eee; }
   .loading:before {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    content: "";
+    content: '';
     display: block;
     position: absolute;
     top: 50%;
@@ -424,15 +427,19 @@ button {
 
 #help-page h3, #help-page h4 {
   padding-bottom: 40px; }
+
 #help-page h5 {
   margin-bottom: 20px;
   font-weight: bold; }
+
 #help-page code.clear {
   display: block;
   width: 100%;
   margin: 20px 0; }
+
 #help-page #disclaimer {
   margin-bottom: 40px; }
+
 #help-page #updating-methods {
   list-style-position: inside;
   list-style: disc inside;
@@ -456,6 +463,7 @@ button {
       font-style: italic;
       font-weight: bold;
       margin-right: 4px; }
+
 #help-page section {
   max-width: 800px;
   padding: 40px 0;
@@ -933,17 +941,17 @@ table.dataTable th {
   .dataTables_wrapper .dataTables_paginate {
     float: none;
     text-align: center; }
-
   .dataTables_wrapper .dataTables_paginate {
     margin-top: 0.5em; } }
+
 @media screen and (max-width: 640px) {
   .dataTables_wrapper .dataTables_filter,
   .dataTables_wrapper .dataTables_length {
     float: none;
     text-align: center; }
-
   .dataTables_wrapper .dataTables_filter {
     margin-top: 0.5em; } }
+
 table.dataTable span.highlight {
   background-color: #FFFF88;
   border-radius: 0.28571429rem; }
@@ -955,22 +963,27 @@ table.dataTable span.column_highlight {
 @keyframes dtb-spinner {
   100% {
     transform: rotate(360deg); } }
+
 @-o-keyframes dtb-spinner {
   100% {
     -o-transform: rotate(360deg);
     transform: rotate(360deg); } }
+
 @-ms-keyframes dtb-spinner {
   100% {
     -ms-transform: rotate(360deg);
     transform: rotate(360deg); } }
+
 @-webkit-keyframes dtb-spinner {
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg); } }
+
 @-moz-keyframes dtb-spinner {
   100% {
     -moz-transform: rotate(360deg);
     transform: rotate(360deg); } }
+
 div.dt-button-info {
   position: fixed;
   top: 50%;
@@ -1222,6 +1235,7 @@ div.dt-button-background {
   div.dt-buttons {
     float: none !important;
     text-align: center; } }
+
 a.dt-button.processing,
 button.dt-button.processing,
 div.dt-button.processing {
@@ -1252,6 +1266,7 @@ div.dt-button.processing:after {
 #clones #results-header, #clones table {
   width: 100%;
   max-width: 700px; }
+
 #clones form {
   margin-bottom: 40px; }
 
@@ -1264,6 +1279,7 @@ div.dt-button.processing:after {
     margin-left: 10px; }
     #library-plates #plate-filters a:first-child {
       margin-left: 0; }
+
 #library-plates #results-header, #library-plates table {
   width: 100%;
   max-width: 700px; }
@@ -1280,13 +1296,15 @@ div.dt-button.processing:after {
 
 #experiment .links a {
   margin-right: 40px; }
+
 #experiment .image-frame {
   clear: both;
   width: 100%;
   max-width: 1300px; }
+
 #experiment #toggle-junk-form {
   display: inline-block;
-  margin-left: 13.3333333333px; }
+  margin-left: 13.33333px; }
 
 #experiment-plate .vertical-links {
   float: left; }
@@ -1302,6 +1320,7 @@ div.dt-button.processing:after {
 #experiment-plate .plate-96 td, #vertical-experiment-plates .plate-96 td {
   background: black;
   color: #e0e0e0; }
+
 #experiment-plate .plate-96 .well-caption a, #vertical-experiment-plates .plate-96 .well-caption a {
   color: #bb99dd; }
   #experiment-plate .plate-96 .well-caption a:hover, #experiment-plate .plate-96 .well-caption a.active, #vertical-experiment-plates .plate-96 .well-caption a:hover, #vertical-experiment-plates .plate-96 .well-caption a.active {
@@ -1347,6 +1366,7 @@ div.dt-button.processing:after {
 
 #find-experiment-plates .vertical-links a, #change-experiment-plates .vertical-links a {
   margin-left: 40px; }
+
 #find-experiment-plates table#experiment-results, #change-experiment-plates table#experiment-results {
   width: 100%; }
 
@@ -1360,6 +1380,7 @@ div.dt-button.processing:after {
     display: inline; }
     #score-experiment-wells #filters li:last-child {
       margin-right: 0; }
+
 #score-experiment-wells #keyboard-shortcuts-modal td {
   padding: 3px 5px; }
   #score-experiment-wells #keyboard-shortcuts-modal td:first-child {
@@ -1367,11 +1388,13 @@ div.dt-button.processing:after {
     color: #44a340; }
   #score-experiment-wells #keyboard-shortcuts-modal td:last-child {
     text-align: left; }
+
 #score-experiment-wells .experiment,
 #score-experiment-wells .experiment-header,
 #score-experiment-wells .experiment-content {
   float: left;
   width: 100%; }
+
 #score-experiment-wells .experiment {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -1395,11 +1418,16 @@ div.dt-button.processing:after {
       width: 75%;
       max-width: 75%;
       background: black; }
-      #score-experiment-wells .experiment-content-image .relative-buttons, #score-experiment-wells .experiment-content-control-image .relative-buttons {
+      #score-experiment-wells .experiment-content-image .relative-buttons, #score-experiment-wells .experiment-content-image .relative-buttons-n2, #score-experiment-wells .experiment-content-image .relative-buttons-rnai, #score-experiment-wells .experiment-content-control-image .relative-buttons, #score-experiment-wells .experiment-content-control-image .relative-buttons-n2, #score-experiment-wells .experiment-content-control-image .relative-buttons-rnai {
         color: white;
-        display: inline-block;
-        margin: 1% 0% 1% 5%; }
-        #score-experiment-wells .experiment-content-image .relative-buttons div, #score-experiment-wells .experiment-content-control-image .relative-buttons div {
+        display: inline-flex;
+        margin: 1% 0% 1% 5%;
+        position: relative; }
+        #score-experiment-wells .experiment-content-image .relative-buttons-n2, #score-experiment-wells .experiment-content-control-image .relative-buttons-n2 {
+          float: left; }
+        #score-experiment-wells .experiment-content-image .relative-buttons-rnai, #score-experiment-wells .experiment-content-control-image .relative-buttons-rnai {
+          float: right; }
+        #score-experiment-wells .experiment-content-image .relative-buttons div, #score-experiment-wells .experiment-content-image .relative-buttons-n2 div, #score-experiment-wells .experiment-content-image .relative-buttons-rnai div, #score-experiment-wells .experiment-content-control-image .relative-buttons div, #score-experiment-wells .experiment-content-control-image .relative-buttons-n2 div, #score-experiment-wells .experiment-content-control-image .relative-buttons-rnai div {
           padding: 2px; }
     #score-experiment-wells .experiment-content-buttons {
       padding-left: 40px;
@@ -1444,6 +1472,7 @@ div.dt-button.processing:after {
       -moz-transform: scale(2);
       transition: all 200ms ease-in;
       transform: scale(2); }
+
 #score-experiment-wells .active-keyable-group {
   box-shadow: 0 0 4px #8d54c6;
   border-radius: 4px; }
@@ -1485,14 +1514,19 @@ div.dt-button.processing:after {
 
 #secondary-scores .Strong {
   background: #1e6823; }
+
 #secondary-scores .Medium {
   background: #44a340; }
+
 #secondary-scores .Weak {
   background: #8cc665; }
+
 #secondary-scores .Negative {
   background: white; }
+
 #secondary-scores .Other {
   background: black; }
+
 #secondary-scores #rules {
   list-style-position: inside;
   list-style: disc inside; }
@@ -1504,6 +1538,7 @@ div.dt-button.processing:after {
       list-style-type: square; }
       #secondary-scores #rules ul ul ul {
         list-style-type: disc; }
+
 #secondary-scores #key {
   font-size: 14px;
   float: right; }
@@ -1513,6 +1548,7 @@ div.dt-button.processing:after {
       width: 10px;
       height: 10px;
       border: 1px solid #e0e0e0; }
+
 #secondary-scores #results {
   float: left;
   width: 100%; }
@@ -1549,13 +1585,14 @@ div.dt-button.processing:after {
 table#image-category td {
   padding: 20px;
   vertical-align: middle; }
+
 table#image-category .image-frame {
   width: 800px; }
 
 .image-frame {
   position: relative; }
   .image-frame:after {
-    content: "";
+    content: '';
     display: block;
     position: relative;
     padding-top: 75%; }
@@ -1645,21 +1682,24 @@ table#image-category .image-frame {
 #replicates-contact-sheet .interesting-checkbox {
   text-align: center;
   vertical-align: middle; }
+
 #replicates-contact-sheet tr.active {
   position: relative;
   z-index: 10;
   border: 2px solid purple;
   filter: brightness(200%); }
+
 #replicates-contact-sheet .reps-table {
   table-layout: fixed;
   text-align: center;
   width: 100%; }
+
 #replicates-contact-sheet .reps {
   position: relative;
   height: auto;
   max-width: 100%;
   z-index: -1;
-  transition: transform 0.2s ease;
+  transition: transform .2s ease;
   filter: brightness(50%); }
 
 .geneDescFileSearch {
@@ -1720,5 +1760,3 @@ table#image-category .image-frame {
 
 .add-object-link {
   float: right; }
-
-/*# sourceMappingURL=styles.css.map */

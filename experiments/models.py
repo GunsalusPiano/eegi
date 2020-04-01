@@ -475,6 +475,7 @@ class ManualScoreCode(models.Model):
         'STE_REL_LEVEL': [0, 16, 17, 18, 19],
         'N2_RNAi_ste': [20,47,48,49, 53], #20 being wildtype
         'N2_RNAi_emb': [20,50,51,52, 53], #20 being wildtype
+        'MUT_HITS': list(range(54,63)),   # How many mutant wells in an exp were a hit
 
 
         'ENH_LEGACY': [
