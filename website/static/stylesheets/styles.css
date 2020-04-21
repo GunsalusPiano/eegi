@@ -1417,17 +1417,17 @@ div.dt-button.processing:after {
     #score-experiment-wells .experiment-content-image, #score-experiment-wells .experiment-content-control-image {
       width: 75%;
       max-width: 75%;
-      background: black; }
-      #score-experiment-wells .experiment-content-image .relative-buttons, #score-experiment-wells .experiment-content-image .relative-buttons-n2, #score-experiment-wells .experiment-content-image .relative-buttons-rnai, #score-experiment-wells .experiment-content-control-image .relative-buttons, #score-experiment-wells .experiment-content-control-image .relative-buttons-n2, #score-experiment-wells .experiment-content-control-image .relative-buttons-rnai {
-        color: white;
+      background: white; }
+      #score-experiment-wells .experiment-content-image .consensus-buttons, #score-experiment-wells .experiment-content-image .consensus-buttons-n2, #score-experiment-wells .experiment-content-image .consensus-buttons-rnai, #score-experiment-wells .experiment-content-control-image .consensus-buttons, #score-experiment-wells .experiment-content-control-image .consensus-buttons-n2, #score-experiment-wells .experiment-content-control-image .consensus-buttons-rnai {
+        color: black;
         display: inline-flex;
         margin: 1% 0% 1% 5%;
         position: relative; }
-        #score-experiment-wells .experiment-content-image .relative-buttons-n2, #score-experiment-wells .experiment-content-control-image .relative-buttons-n2 {
+        #score-experiment-wells .experiment-content-image .consensus-buttons-n2, #score-experiment-wells .experiment-content-control-image .consensus-buttons-n2 {
           float: left; }
-        #score-experiment-wells .experiment-content-image .relative-buttons-rnai, #score-experiment-wells .experiment-content-control-image .relative-buttons-rnai {
+        #score-experiment-wells .experiment-content-image .consensus-buttons-rnai, #score-experiment-wells .experiment-content-control-image .consensus-buttons-rnai {
           float: right; }
-        #score-experiment-wells .experiment-content-image .relative-buttons div, #score-experiment-wells .experiment-content-image .relative-buttons-n2 div, #score-experiment-wells .experiment-content-image .relative-buttons-rnai div, #score-experiment-wells .experiment-content-control-image .relative-buttons div, #score-experiment-wells .experiment-content-control-image .relative-buttons-n2 div, #score-experiment-wells .experiment-content-control-image .relative-buttons-rnai div {
+        #score-experiment-wells .experiment-content-image .consensus-buttons div, #score-experiment-wells .experiment-content-image .consensus-buttons-n2 div, #score-experiment-wells .experiment-content-image .consensus-buttons-rnai div, #score-experiment-wells .experiment-content-control-image .consensus-buttons div, #score-experiment-wells .experiment-content-control-image .consensus-buttons-n2 div, #score-experiment-wells .experiment-content-control-image .consensus-buttons-rnai div {
           padding: 2px; }
     #score-experiment-wells .experiment-content-buttons {
       padding-left: 40px;

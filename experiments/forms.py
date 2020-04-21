@@ -118,7 +118,7 @@ class SingleScoreField(forms.TypedChoiceField):
         for code in ManualScoreCode.get_codes(key):
             choices.append((code.pk, str(code)))
 
-        choices.append((IMPOSSIBLE, 'Impossible to judge'))
+        choices.append((IMPOSSIBLE, 'Can\'t'))
         kwargs['choices'] = choices
 
         kwargs['coerce'] = _coerce_to_manualscorecode
@@ -1397,24 +1397,30 @@ class SuppressorScoreForm(ScoreForm):
 class LevelsScoreForm(ScoreForm):
 
     mut_hits = SingleScoreField(key='MUT_HITS', required=True, label="Mutant Hits")
-    emb_score = SingleScoreField(key='EMB_LEVEL', required=True, label="Emb score")
-    ste_score = SingleScoreField(key='STE_LEVEL', required=True, label="Ste score")
-    ste_relative_score = SingleScoreField(key='STE_REL_LEVEL', required=True, label="Ste relative score:")
-    emb_relative_score = SingleScoreField(key='EMB_REL_LEVEL', required=True, label="Emb relative score:")
-    n2_rnai_emb_score = SingleScoreField(key='N2_RNAi_emb', required=True, label="N2 rnai emb score:")
-    n2_rnai_ste_score = SingleScoreField(key='N2_RNAi_ste', required=True, label="N2 rnai ste score:")
+    # emb_score = SingleScoreField(key='EMB_LEVEL', required=True, label="Emb score")
+    # ste_score = SingleScoreField(key='STE_LEVEL', required=True, label="Ste score")
+    ste_relative_score = SingleScoreField(key='STE_REL_LEVEL', required=True, label="Ste rel.:")
+    emb_relative_score = SingleScoreField(key='EMB_REL_LEVEL', required=True, label="Emb rel.:")
+    n2_rnai_emb_score = SingleScoreField(key='N2_RNAi_emb', required=True, label="N2 emb:")
+    n2_rnai_ste_score = SingleScoreField(key='N2_RNAi_ste', required=True, label="N2 ste:")
+    mut_rnai_emb_score = SingleScoreField(key='MUT_RNAi_emb', required=True, label="mut emb:")
+    mut_rnai_ste_score = SingleScoreField(key='MUT_RNAi_ste', required=True, label="mut ste:")
     auxiliary_scores = MultiScoreField(key='AUXILIARY', required=False, label="Auxiliary scores:")
 
     def clean(self):
         cleaned_data = super(LevelsScoreForm, self).clean()
 
-        if ('emb_score' in cleaned_data and 'ste_score' in cleaned_data and
-                cleaned_data['emb_score'] == IMPOSSIBLE and
-                cleaned_data['ste_score'] == IMPOSSIBLE and
+        if (
+                # 'emb_score' in cleaned_data and 
+                # 'ste_score' in cleaned_data and
+                # cleaned_data['emb_score'] == IMPOSSIBLE and
+                # cleaned_data['ste_score'] == IMPOSSIBLE and
                 cleaned_data['ste_relative_score'] == IMPOSSIBLE and
                 cleaned_data['emb_relative_score'] == IMPOSSIBLE and
                 cleaned_data['n2_rnai_emb_score'] == IMPOSSIBLE and
                 cleaned_data['n2_rnai_ste_score'] == IMPOSSIBLE and
+                cleaned_data['mut_rnai_emb_score'] == IMPOSSIBLE and
+                cleaned_data['mut_rnai_ste_score'] == IMPOSSIBLE and
                 not cleaned_data['auxiliary_scores']):
             raise forms.ValidationError('"Impossible to judge" requires '
                                         'some auxiliary score')
@@ -1424,12 +1430,14 @@ class LevelsScoreForm(ScoreForm):
         cleaned_data = self.cleaned_data
         save_score = _get_save_score(self)
 
-        save_score(cleaned_data.get('emb_score'))
-        save_score(cleaned_data.get('ste_score'))
+        # save_score(cleaned_data.get('emb_score'))
+        # save_score(cleaned_data.get('ste_score'))
         save_score(cleaned_data.get('ste_relative_score'))
         save_score(cleaned_data.get('emb_relative_score'))
         save_score(cleaned_data.get('n2_rnai_ste_score'))
         save_score(cleaned_data.get('n2_rnai_emb_score'))
+        save_score(cleaned_data.get('mut_rnai_ste_score'))
+        save_score(cleaned_data.get('mut_rnai_emb_score'))
         save_score(cleaned_data.get('mut_hits'))
         for code in cleaned_data.get('auxiliary_scores'):
             save_score(code)
@@ -1455,18 +1463,58 @@ def _get_save_score(form):
         # delete record from ManualScore record join Experiment on experiment_id = Experiment.id where timestamp >= '2018-04-01' and worm_strain_id != 'N2' and `score_code_id` in (47, 48, 49, 20)
 
         # if score_code.id in [20,47,48,49]:
-        if score_code.id in [20,47,48,49,50,51,52,53]:
-            for control in experiment.get_link_to_exact_n2_control():
-                control_score = ManualScore(
-                    experiment=control, score_code=score_code,
-                    scorer=form.user, timestamp=time
-                )
-                control_score.save()
+
+        relevant_codes = [
+                            12, 13, 14, 15, 77,                 # emb relative scores
+                            16, 17, 18, 19, 78,                 # ste relative scores
+                            73, 47, 48, 49, 53, 74,             # N2 RNAi Ste Consensus
+                            75, 50, 51, 52, 53, 76,             # N2 RNAi Emb Consensus
+                            63, 64, 65, 66, 67,                 # Mut. RNAi Ste Consensus
+                            68, 69, 70, 71, 72,                 # Mut. RNAi Ste Consensus
+                            54, 55, 56, 57, 58, 59, 60, 61, 62  # Mut. Hits
+                        ]
+
+        if score_code.id in relevant_codes:
+
+            if score_code.id in [73, 47, 48, 49, 53, 74,
+                                 75, 50, 51, 52, 53, 76]:
+                for control in experiment.get_link_to_exact_n2_control():
+                    control_score = ManualScore(
+                        experiment=control, score_code=score_code,
+                        scorer=form.user, timestamp=time
+                    )
+                    control_score.save()
+
+            if score_code.id in [12, 13, 14, 15, 77,
+                                 16, 17, 18, 19, 78,
+                                 63, 64, 65, 66, 67,
+                                 68, 69, 70, 71, 72,
+                                 54, 55, 56, 57, 58, 59, 60, 61, 62]:
+                for exp in experiment.get_experiment_replicate_plates():
+                    exp_score = ManualScore(
+                        experiment=exp, score_code=score_code,
+                        scorer=form.user, timestamp=time
+                    )
+                    exp_score.save()
+            
         else:
             score = ManualScore(
                 experiment=experiment, score_code=score_code,
                 scorer=form.user, timestamp=time)
             score.save()
+
+        # if score_code.id in [63, 64, 65, 66, 67, 68, 69, 70]:
+        #     for exp in experiment.get_experiment_replicate_plates():
+        #         exp_score = ManualScore(
+        #             experiment=exp, score_code=score_code,
+        #             scorer=form.user, timestamp=time
+        #         )
+        #         exp_score.save()
+        # else:
+        #     score = ManualScore(
+        #         experiment=experiment, score_code=score_code,
+        #         scorer=form.user, timestamp=time)
+        #     score.save()
 
     return save_score
 

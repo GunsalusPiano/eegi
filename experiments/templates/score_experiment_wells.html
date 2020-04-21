@@ -47,7 +47,7 @@
           <div class="image-frame loading control-image-grid" data-src="{% get_image_url control mode=thumbnail %}">
           </div>
           {% endfor %}
-          <div class="relative-buttons-n2">
+          <div class="consensus-buttons-n2">
             <div>
               {{ experiment.score_form.n2_rnai_emb_score.label }} {{ experiment.score_form.n2_rnai_emb_score }}
             </div>
@@ -66,12 +66,13 @@
         </div>
         {% endfor %}
 
-        <div class="relative-buttons-rnai">
+        <div class="consensus-buttons-rnai">
           <div>
-            {{ experiment.score_form.emb_score.label }} {{ experiment.score_form.emb_score }}
+            {{ experiment.score_form.mut_rnai_emb_score.label }} {{ experiment.score_form.mut_rnai_emb_score }}
           </div>
+
           <div>
-            {{ experiment.score_form.ste_score.label }} {{ experiment.score_form.ste_score }}
+            {{ experiment.score_form.mut_rnai_ste_score.label }} {{ experiment.score_form.mut_rnai_ste_score }}
           </div>
         </div>
       </div>

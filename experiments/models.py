@@ -471,11 +471,90 @@ class ManualScoreCode(models.Model):
 
         'EMB_LEVEL': list(range(30, 41)),   # 30-40, 11 levels total
         'STE_LEVEL': list(range(41, 47)),   # 41-46, 6 levels total
-        'EMB_REL_LEVEL': [0, 12, 13, 14, 15],          # w/m/s for enhancer compared to N2+RNAi
-        'STE_REL_LEVEL': [0, 16, 17, 18, 19],
-        'N2_RNAi_ste': [20,47,48,49, 53], #20 being wildtype
-        'N2_RNAi_emb': [20,50,51,52, 53], #20 being wildtype
-        'MUT_HITS': list(range(54,63)),   # How many mutant wells in an exp were a hit
+        'EMB_REL_LEVEL': [77, 12, 13, 14, 15],          # w/m/s for enhancer compared to N2+RNAi
+        'STE_REL_LEVEL': [78, 16, 17, 18, 19],
+        'N2_RNAi_ste': [73, 47, 48, 49, 74, 53], 
+        'N2_RNAi_emb': [75, 50, 51, 52, 76, 53], 
+        'MUT_HITS': list(range(54, 63)),   # How many mutant wells in an exp were a hit
+        'MUT_RNAi_ste': [63, 64, 65, 66, 67], 
+        'MUT_RNAi_emb': [68, 69, 70, 71, 72],
+
+        '''
+        # Relative enhancement of embryonic Lethality
+        UPDATE `ManualScoreCode` SET `short_description` = 'Weak' WHERE `ManualScoreCode`.`id` = 12; 
+        UPDATE `ManualScoreCode` SET `short_description` = 'Med.' WHERE `ManualScoreCode`.`id` = 13; 
+        UPDATE `ManualScoreCode` SET `short_description` = 'Strong' WHERE `ManualScoreCode`.`id` = 14;
+        UPDATE `ManualScoreCode` SET `short_description` = 'Sup.' WHERE `ManualScoreCode`.`id` = 15; 
+        # 77
+
+        # Relative enhancement of sterility
+        UPDATE `ManualScoreCode` SET `short_description` = 'Weak' WHERE `ManualScoreCode`.`id` = 16;
+        UPDATE `ManualScoreCode` SET `short_description` = 'Med.' WHERE `ManualScoreCode`.`id` = 17;
+        UPDATE `ManualScoreCode` SET `short_description` = 'Strong' WHERE `ManualScoreCode`.`id` = 18;
+        UPDATE `ManualScoreCode` SET `short_description` = 'Sup.' WHERE `ManualScoreCode`.`id` = 19;
+        # 78
+
+        INSERT INTO `ManualScoreCode` 
+        (`id`, `description`, `short_description`, `legacy_description`) VALUES 
+
+        # Mut Ste consensus
+        ('63', 'N2 RNAi is WT for Sterility', 'WT', ''),
+        ('64', 'Weak Mutant RNAi Sterility Consensus', 'Weak', ''), 
+        ('65', 'Medium Mutant RNAi Sterility Consensus', 'Med.', ''), 
+        ('66', 'Strong Mutant RNAi Sterility Consensus', 'Strong', ''), 
+        ('67', 'No Mutant RNAi Sterility', 'Nope', ''), 
+
+        # Mut Emb consensus
+        ('68', 'N2 RNAi is WT for Embryonic Lethality', 'WT', ''),
+        ('69', 'Weak Mutant RNAi Embryonic Lethality Consensus', 'Weak', ''), 
+        ('70', 'Medium Mutant RNAi Embryonic Lethality Consensus', 'Med.', ''), 
+        ('71', 'Strong Mutant RNAi Embryonic Lethality Consensus', 'Strong', ''),
+        ('72', 'No Mutant RNAi Embryonic Lethality', 'Nope', ''),
+
+        # N2 RNAi ste consensus
+        ('73', 'N2 RNAi is Wildtype for Sterility', 'WT', ''),
+        ('74', 'No N2 RNAi Sterility', 'Nope', ''),
+
+        # N2 RNAi emb consensus
+        ('75', 'N2 RNAi is Wildtype for Embryonic Lethality', 'WT', ''),
+        ('76', 'No N2 RNAi Embryonic Lethality', 'Nope', ''),
+
+        # Relative Emb
+        ('77', 'Mutant has no Difference in emb Compared to N2', 'Same', ''),
+
+        # Relative Ste
+        ('78', 'Mutant has no Difference in ste Compared to N2', 'Same', '');    
+
+        # N2 RNAi ste consensus
+        UPDATE `ManualScoreCode` SET `short_description` = 'Weak' WHERE `ManualScoreCode`.`id` = 47; 
+        UPDATE `ManualScoreCode` SET `short_description` = 'Med.' WHERE `ManualScoreCode`.`id` = 48; 
+        UPDATE `ManualScoreCode` SET `short_description` = 'Strong' WHERE `ManualScoreCode`.`id` = 49; 
+        # 73 WT
+        # 74 NOPE
+
+        # N2 RNAi emb consensus
+        UPDATE `ManualScoreCode` SET `short_description` = 'Weak' WHERE `ManualScoreCode`.`id` = 50; 
+        UPDATE `ManualScoreCode` SET `short_description` = 'Med.' WHERE `ManualScoreCode`.`id` = 51; 
+        UPDATE `ManualScoreCode` SET `short_description` = 'Strong' WHERE `ManualScoreCode`.`id` = 52; 
+        # 75 WT
+        # 76 NOPE
+        
+        UPDATE `ManualScoreCode` SET `short_description` = 'Junked' WHERE `ManualScoreCode`.`id` = 53;         
+       
+
+        UPDATE `ManualScoreCode` SET `short_description` = '0' WHERE `ManualScoreCode`.`id` = 54;
+        UPDATE `ManualScoreCode` SET `short_description` = '1' WHERE `ManualScoreCode`.`id` = 55;
+        UPDATE `ManualScoreCode` SET `short_description` = '2' WHERE `ManualScoreCode`.`id` = 56; 
+        UPDATE `ManualScoreCode` SET `short_description` = '3' WHERE `ManualScoreCode`.`id` = 57; 
+        UPDATE `ManualScoreCode` SET `short_description` = '4' WHERE `ManualScoreCode`.`id` = 58; 
+        UPDATE `ManualScoreCode` SET `short_description` = '5' WHERE `ManualScoreCode`.`id` = 59; 
+        UPDATE `ManualScoreCode` SET `short_description` = '6' WHERE `ManualScoreCode`.`id` = 60; 
+        UPDATE `ManualScoreCode` SET `short_description` = '7' WHERE `ManualScoreCode`.`id` = 61; 
+        UPDATE `ManualScoreCode` SET `short_description` = '8' WHERE `ManualScoreCode`.`id` = 62;
+
+        UPDATE `ManualScoreCode` SET `short_description` = 'Nope' WHERE `ManualScoreCode`.`id` = 0;
+
+        '''
 
 
         'ENH_LEGACY': [
