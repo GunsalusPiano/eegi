@@ -33,6 +33,18 @@ SCORING_FORM_CHOICES = [
     ('LEVELS', 'Enhancer secondary (levels)'),
 ]
 
+MUT_HIT_CHOICES = [
+    (0,0),
+    (1,1),
+    (2,2),
+    (3,3),
+    (4,4),
+    (5,5),
+    (6,6),
+    (7,7),
+    (8,8)
+]
+
 IMPOSSIBLE = 'impossible'
 
 
@@ -358,7 +370,7 @@ class FilterExperimentWellsToScoreForm(_FilterExperimentsBaseForm):
     exclude_n2 = forms.BooleanField(
         required=False, initial=True, label='Exclude N2')
 
-    score_abridged_set = forms.BooleanField(required=False, initial=True, label="Score Abridged Set",
+    score_abridged_set = forms.BooleanField(required=False, initial=False, label="Score Abridged Set",
         help_text="Score manually curated set of experiments")
 
     is_interesting = forms.BooleanField(required=False, initial=True, label='Is Interesting')
@@ -1397,6 +1409,7 @@ class SuppressorScoreForm(ScoreForm):
 class LevelsScoreForm(ScoreForm):
 
     mut_hits = SingleScoreField(key='MUT_HITS', required=True, label="Mutant Hits")
+    # mut_hits = forms.ChoiceField(choices=MUT_HIT_CHOICES, label="Mutant Hits")
     # emb_score = SingleScoreField(key='EMB_LEVEL', required=True, label="Emb score")
     # ste_score = SingleScoreField(key='STE_LEVEL', required=True, label="Ste score")
     ste_relative_score = SingleScoreField(key='STE_REL_LEVEL', required=True, label="Ste rel.:")

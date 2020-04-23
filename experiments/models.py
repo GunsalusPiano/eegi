@@ -498,14 +498,14 @@ class ManualScoreCode(models.Model):
         (`id`, `description`, `short_description`, `legacy_description`) VALUES 
 
         # Mut Ste consensus
-        ('63', 'N2 RNAi is WT for Sterility', 'WT', ''),
+        ('63', 'Mutant RNAi is WT for Sterility', 'WT', ''),
         ('64', 'Weak Mutant RNAi Sterility Consensus', 'Weak', ''), 
         ('65', 'Medium Mutant RNAi Sterility Consensus', 'Med.', ''), 
         ('66', 'Strong Mutant RNAi Sterility Consensus', 'Strong', ''), 
         ('67', 'No Mutant RNAi Sterility', 'Nope', ''), 
 
         # Mut Emb consensus
-        ('68', 'N2 RNAi is WT for Embryonic Lethality', 'WT', ''),
+        ('68', 'Mutant RNAi is WT for Embryonic Lethality', 'WT', ''),
         ('69', 'Weak Mutant RNAi Embryonic Lethality Consensus', 'Weak', ''), 
         ('70', 'Medium Mutant RNAi Embryonic Lethality Consensus', 'Med.', ''), 
         ('71', 'Strong Mutant RNAi Embryonic Lethality Consensus', 'Strong', ''),
