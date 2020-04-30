@@ -1477,57 +1477,52 @@ def _get_save_score(form):
 
         # if score_code.id in [20,47,48,49]:
 
-        relevant_codes = [
-                            12, 13, 14, 15, 77,                 # emb relative scores
-                            16, 17, 18, 19, 78,                 # ste relative scores
-                            73, 47, 48, 49, 53, 74,             # N2 RNAi Ste Consensus
-                            75, 50, 51, 52, 53, 76,             # N2 RNAi Emb Consensus
-                            63, 64, 65, 66, 67,                 # Mut. RNAi Ste Consensus
-                            68, 69, 70, 71, 72,                 # Mut. RNAi Ste Consensus
-                            54, 55, 56, 57, 58, 59, 60, 61, 62  # Mut. Hits
-                        ]
+        aux = [-14, -13, -12, -11, -10, -19, -9, -7, -5, -4, -3, -2, 7, 8, 10, 11]
+        emb_rel = [12, 13, 14, 15, 77]
+        ste_rel = [16, 17, 18, 19, 78]
+        n2_rnai_ste_cons = [73, 47, 48, 49, 53, 74]
+        n2_rnai_emb_cons = [75, 50, 51, 52, 53, 76]
+        mut_rnai_ste_cons = [63, 64, 65, 66, 67]
+        mut_rnai_emb_cons = [68, 69, 70, 71, 72]
+        mut_hits = [54, 55, 56, 57, 58, 59, 60, 61, 62]
 
-        if score_code.id in relevant_codes:
+        n2_scores = n2_rnai_ste_cons + n2_rnai_emb_cons
+        mut_scores = aux + emb_rel + ste_rel + mut_rnai_ste_cons + mut_rnai_emb_cons + mut_hits
 
-            if score_code.id in [73, 47, 48, 49, 53, 74,
-                                 75, 50, 51, 52, 53, 76]:
-                for control in experiment.get_link_to_exact_n2_control():
-                    control_score = ManualScore(
-                        experiment=control, score_code=score_code,
-                        scorer=form.user, timestamp=time
-                    )
-                    control_score.save()
+        if score_code.id in n2_scores:
+            for control in experiment.get_link_to_exact_n2_control():
+                control_score = ManualScore(
+                    experiment=control, score_code=score_code,
+                    scorer=form.user, timestamp=time
+                )
+                control_score.save()
 
-            if score_code.id in [12, 13, 14, 15, 77,
-                                 16, 17, 18, 19, 78,
-                                 63, 64, 65, 66, 67,
-                                 68, 69, 70, 71, 72,
-                                 54, 55, 56, 57, 58, 59, 60, 61, 62]:
-                for exp in experiment.get_experiment_replicate_plates():
-                    exp_score = ManualScore(
-                        experiment=exp, score_code=score_code,
-                        scorer=form.user, timestamp=time
-                    )
-                    exp_score.save()
-            
+        elif score_code.id in mut_scores:
+            for exp in experiment.get_experiment_replicate_plates():
+                exp_score = ManualScore(
+                    experiment=exp, score_code=score_code,
+                    scorer=form.user, timestamp=time
+                )
+                exp_score.save()
+        
         else:
             score = ManualScore(
                 experiment=experiment, score_code=score_code,
                 scorer=form.user, timestamp=time)
             score.save()
 
-        # if score_code.id in [63, 64, 65, 66, 67, 68, 69, 70]:
-        #     for exp in experiment.get_experiment_replicate_plates():
-        #         exp_score = ManualScore(
-        #             experiment=exp, score_code=score_code,
-        #             scorer=form.user, timestamp=time
-        #         )
-        #         exp_score.save()
-        # else:
-        #     score = ManualScore(
-        #         experiment=experiment, score_code=score_code,
-        #         scorer=form.user, timestamp=time)
-        #     score.save()
+            # if score_code.id in [63, 64, 65, 66, 67, 68, 69, 70]:
+            #     for exp in experiment.get_experiment_replicate_plates():
+            #         exp_score = ManualScore(
+            #             experiment=exp, score_code=score_code,
+            #             scorer=form.user, timestamp=time
+            #         )
+            #         exp_score.save()
+            # else:
+            #     score = ManualScore(
+            #         experiment=experiment, score_code=score_code,
+            #         scorer=form.user, timestamp=time)
+            #     score.save()
 
     return save_score
 

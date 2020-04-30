@@ -476,8 +476,8 @@ class ManualScoreCode(models.Model):
         'N2_RNAi_ste': [73, 47, 48, 49, 74, 53], 
         'N2_RNAi_emb': [75, 50, 51, 52, 76, 53], 
         'MUT_HITS': list(range(54, 63)),   # How many mutant wells in an exp were a hit
-        'MUT_RNAi_ste': [63, 64, 65, 66, 67], 
-        'MUT_RNAi_emb': [68, 69, 70, 71, 72],
+        'MUT_RNAi_ste': [67, 63, 64, 65, 66], 
+        'MUT_RNAi_emb': [72, 68, 69, 70, 71],
 
         '''
         # Relative enhancement of embryonic Lethality
