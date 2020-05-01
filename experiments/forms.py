@@ -33,18 +33,6 @@ SCORING_FORM_CHOICES = [
     ('LEVELS', 'Enhancer secondary (levels)'),
 ]
 
-MUT_HIT_CHOICES = [
-    (0,0),
-    (1,1),
-    (2,2),
-    (3,3),
-    (4,4),
-    (5,5),
-    (6,6),
-    (7,7),
-    (8,8)
-]
-
 IMPOSSIBLE = 'impossible'
 
 
@@ -125,12 +113,17 @@ class SingleScoreField(forms.TypedChoiceField):
     making the field required and while not setting an initial value.
     """
 
-    def __init__(self, key, **kwargs):
+    def __init__(self, key, junk_to_last=False, **kwargs):
         choices = []
+        cant = (IMPOSSIBLE, 'Can\'t')
         for code in ManualScoreCode.get_codes(key):
             choices.append((code.pk, str(code)))
 
-        choices.append((IMPOSSIBLE, 'Can\'t'))
+        if junk_to_last:
+            choices.insert(len(choices) - 1, cant)
+        else:
+            choices.append((IMPOSSIBLE, 'Can\'t'))
+
         kwargs['choices'] = choices
 
         kwargs['coerce'] = _coerce_to_manualscorecode
@@ -1414,8 +1407,8 @@ class LevelsScoreForm(ScoreForm):
     # ste_score = SingleScoreField(key='STE_LEVEL', required=True, label="Ste score")
     ste_relative_score = SingleScoreField(key='STE_REL_LEVEL', required=True, label="Ste rel.:")
     emb_relative_score = SingleScoreField(key='EMB_REL_LEVEL', required=True, label="Emb rel.:")
-    n2_rnai_emb_score = SingleScoreField(key='N2_RNAi_emb', required=True, label="N2 emb:")
-    n2_rnai_ste_score = SingleScoreField(key='N2_RNAi_ste', required=True, label="N2 ste:")
+    n2_rnai_emb_score = SingleScoreField(key='N2_RNAi_emb', required=True, label="N2 emb:", junk_to_last=True)
+    n2_rnai_ste_score = SingleScoreField(key='N2_RNAi_ste', required=True, label="N2 ste:", junk_to_last=True)
     mut_rnai_emb_score = SingleScoreField(key='MUT_RNAi_emb', required=True, label="mut emb:")
     mut_rnai_ste_score = SingleScoreField(key='MUT_RNAi_ste', required=True, label="mut ste:")
     auxiliary_scores = MultiScoreField(key='AUXILIARY', required=False, label="Auxiliary scores:")
@@ -1477,13 +1470,14 @@ def _get_save_score(form):
 
         # if score_code.id in [20,47,48,49]:
 
-        aux = [-14, -13, -12, -11, -10, -19, -9, -7, -5, -4, -3, -2, 7, 8, 10, 11]
-        emb_rel = [12, 13, 14, 15, 77]
-        ste_rel = [16, 17, 18, 19, 78]
-        n2_rnai_ste_cons = [73, 47, 48, 49, 53, 74]
-        n2_rnai_emb_cons = [75, 50, 51, 52, 53, 76]
-        mut_rnai_ste_cons = [63, 64, 65, 66, 67]
-        mut_rnai_emb_cons = [68, 69, 70, 71, 72]
+        aux = [-14, -13, -12, -11, -10, -19, -9, 
+               -7, -5, -4, -3, -2, 7, 8, 10, 11]
+        emb_rel = [12, 13, 14, 15, 73]
+        ste_rel = [16, 17, 18, 19, 74]
+        n2_rnai_ste_cons = [71, 47, 48, 49, 53]
+        n2_rnai_emb_cons = [72, 50, 51, 52, 53]
+        mut_rnai_ste_cons = [63, 64, 65, 66]
+        mut_rnai_emb_cons = [67, 68, 69, 70]
         mut_hits = [54, 55, 56, 57, 58, 59, 60, 61, 62]
 
         n2_scores = n2_rnai_ste_cons + n2_rnai_emb_cons

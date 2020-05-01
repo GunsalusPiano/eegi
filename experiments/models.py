@@ -471,13 +471,13 @@ class ManualScoreCode(models.Model):
 
         'EMB_LEVEL': list(range(30, 41)),   # 30-40, 11 levels total
         'STE_LEVEL': list(range(41, 47)),   # 41-46, 6 levels total
-        'EMB_REL_LEVEL': [77, 12, 13, 14, 15],          # w/m/s for enhancer compared to N2+RNAi
-        'STE_REL_LEVEL': [78, 16, 17, 18, 19],
-        'N2_RNAi_ste': [73, 47, 48, 49, 74, 53], 
-        'N2_RNAi_emb': [75, 50, 51, 52, 76, 53], 
+        'EMB_REL_LEVEL': [73, 12, 13, 14, 15],          # w/m/s for enhancer compared to N2+RNAi
+        'STE_REL_LEVEL': [74, 16, 17, 18, 19],
+        'N2_RNAi_ste': [71, 47, 48, 49, 53], 
+        'N2_RNAi_emb': [72, 50, 51, 52, 53], 
         'MUT_HITS': list(range(54, 63)),   # How many mutant wells in an exp were a hit
-        'MUT_RNAi_ste': [67, 63, 64, 65, 66], 
-        'MUT_RNAi_emb': [72, 68, 69, 70, 71],
+        'MUT_RNAi_ste': [63, 64, 65, 66], 
+        'MUT_RNAi_emb': [67, 68, 69, 70],
 
         '''
         # Relative enhancement of embryonic Lethality
@@ -498,46 +498,40 @@ class ManualScoreCode(models.Model):
         (`id`, `description`, `short_description`, `legacy_description`) VALUES 
 
         # Mut Ste consensus
-        ('63', 'Mutant RNAi is WT for Sterility', 'WT', ''),
+        ('63', 'Mutant RNAi is WT for Sterility Consensus', 'WT', ''),
         ('64', 'Weak Mutant RNAi Sterility Consensus', 'Weak', ''), 
         ('65', 'Medium Mutant RNAi Sterility Consensus', 'Med.', ''), 
         ('66', 'Strong Mutant RNAi Sterility Consensus', 'Strong', ''), 
-        ('67', 'No Mutant RNAi Sterility', 'Nope', ''), 
 
         # Mut Emb consensus
-        ('68', 'Mutant RNAi is WT for Embryonic Lethality', 'WT', ''),
-        ('69', 'Weak Mutant RNAi Embryonic Lethality Consensus', 'Weak', ''), 
-        ('70', 'Medium Mutant RNAi Embryonic Lethality Consensus', 'Med.', ''), 
-        ('71', 'Strong Mutant RNAi Embryonic Lethality Consensus', 'Strong', ''),
-        ('72', 'No Mutant RNAi Embryonic Lethality', 'Nope', ''),
+        ('67', 'Mutant RNAi is WT for Embryonic Lethality Consensus', 'WT', ''),
+        ('68', 'Weak Mutant RNAi Embryonic Lethality Consensus', 'Weak', ''), 
+        ('69', 'Medium Mutant RNAi Embryonic Lethality Consensus', 'Med.', ''), 
+        ('70', 'Strong Mutant RNAi Embryonic Lethality Consensus', 'Strong', ''),
 
         # N2 RNAi ste consensus
-        ('73', 'N2 RNAi is Wildtype for Sterility', 'WT', ''),
-        ('74', 'No N2 RNAi Sterility', 'Nope', ''),
+        ('71', 'N2 RNAi is Wildtype for Sterility Consensus', 'WT', ''),
 
         # N2 RNAi emb consensus
-        ('75', 'N2 RNAi is Wildtype for Embryonic Lethality', 'WT', ''),
-        ('76', 'No N2 RNAi Embryonic Lethality', 'Nope', ''),
+        ('72', 'N2 RNAi is Wildtype for Embryonic Lethality Consensus', 'WT', ''),
 
         # Relative Emb
-        ('77', 'Mutant has no Difference in emb Compared to N2', 'Same', ''),
+        ('73', 'Mutant has no Difference in emb Compared to N2', 'Same', ''),
 
         # Relative Ste
-        ('78', 'Mutant has no Difference in ste Compared to N2', 'Same', '');    
+        ('74', 'Mutant has no Difference in ste Compared to N2', 'Same', '');    
 
         # N2 RNAi ste consensus
         UPDATE `ManualScoreCode` SET `short_description` = 'Weak' WHERE `ManualScoreCode`.`id` = 47; 
         UPDATE `ManualScoreCode` SET `short_description` = 'Med.' WHERE `ManualScoreCode`.`id` = 48; 
         UPDATE `ManualScoreCode` SET `short_description` = 'Strong' WHERE `ManualScoreCode`.`id` = 49; 
         # 73 WT
-        # 74 NOPE
 
         # N2 RNAi emb consensus
         UPDATE `ManualScoreCode` SET `short_description` = 'Weak' WHERE `ManualScoreCode`.`id` = 50; 
         UPDATE `ManualScoreCode` SET `short_description` = 'Med.' WHERE `ManualScoreCode`.`id` = 51; 
         UPDATE `ManualScoreCode` SET `short_description` = 'Strong' WHERE `ManualScoreCode`.`id` = 52; 
         # 75 WT
-        # 76 NOPE
         
         UPDATE `ManualScoreCode` SET `short_description` = 'Junked' WHERE `ManualScoreCode`.`id` = 53;         
        
